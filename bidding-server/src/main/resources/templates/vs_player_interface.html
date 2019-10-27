@@ -54,14 +54,14 @@
                 if (!data.status.isActive) {
                     switch (data.status) {
                         case 'BLUE_WON':
-                            // window.alert('VICTORY! \n' +
-                            //     '\nAcquired ' + data.acquiredAmount +
-                            //     'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
-                            //     'Cash left: ' + data.balance + '\n' +
-                            //     '\nOpponent lost with ' + data.opponentAcquiredAmount + ' QUs and ' +
-                            //     data.opponentBalance + ' cash.' +
-                            //     '\n\nYou will now be redirected to the menu.');
-                            // window.location.replace('/');
+                            window.alert('VICTORY! \n' +
+                                '\nAcquired ' + data.acquiredAmount +
+                                'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
+                                'Cash left: ' + data.balance + '\n' +
+                                '\nOpponent lost with ' + data.opponentAcquiredAmount + ' QUs and ' +
+                                data.opponentBalance + ' cash.' +
+                                '\n\nYou will now be redirected to the menu.');
+                            window.location.replace('/');
                             break;
                         case 'RED_WON':
                             window.alert('DEFEAT! \n' +
