@@ -2,11 +2,14 @@ package com.nathan22177.bidder;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Transient;
 
 import org.hibernate.Session;
 import org.springframework.util.Assert;
 
+import com.nathan22177.enums.Player;
 import com.nathan22177.game.Conditions;
 
 import lombok.Getter;
@@ -17,6 +20,9 @@ public class BidderPlayer extends AbstractBidder {
 
     @Embedded
     String username;
+
+    @Enumerated(EnumType.STRING)
+    Player player;
 
     @Transient
     Session session;
