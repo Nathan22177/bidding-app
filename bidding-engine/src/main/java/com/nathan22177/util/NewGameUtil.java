@@ -14,4 +14,8 @@ public class NewGameUtil {
     public static PlayerVersusPlayerGame createNewGameAgainstThePlayer(BidderPlayer bluePlayer) {
         return new PlayerVersusPlayerGame(Conditions.getRandomConditions(), bluePlayer);
     }
+
+    public static boolean redPlayerIsEmpty(PlayerVersusPlayerGame game) {
+        return game.getRedPlayer() == null;
+    }
 }
