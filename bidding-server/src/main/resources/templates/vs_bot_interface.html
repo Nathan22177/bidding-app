@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Day-ahead auction simulator</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Nathan22177"/>
+    <meta name="referrer" content="no-referrer"/>
+    <meta name="referrer" content="never"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script th:src="@{/require.js}"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type='text/javascript'
+            src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+        var upperLimit = [[${blue.balance}]];
+
+        require(['jquery'], function ($) {
+            function resolveRoundsCountdown(data) {
+                var color;
+                if (data.roundsLeft > 2) {
+                    color = 'green';
+                } else {
+                    color = 'red';
+                }
+                $("#roundsLeft").css('color', color).text(data.roundsLeft);
+            }
+
+            function checkIfGameHasEnded(data) {
+                if (!data.status.isActive) {
+                    switch (data.status) {
+                        case 'BLUE_WON':
+                            window.alert('VICTORY! \n' +
+                                '\nAcquired ' + data.acquiredAmount +
+                                'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
+                                'Cash left: ' + data.balance + '\n' +
+                                '\nOpponent lost with ' + data.opponentAcquiredAmount + ' QUs and ' +
+                                data.opponentBalance + ' cash.' +
+                                '\n\nYou will now be redirected to the menu.');
+                            window.location.replace('/');
+                            break;
+                        case 'RED_WON':
+                            window.alert('DEFEAT! \n' +
+                                '\nAcquired ' + data.acquiredAmount +
+                                'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
+                                'Cash left: ' + data.balance + '\n' +
+                                '\nOpponent won with ' + data.opponentAcquiredAmount + ' QUs and ' +
+                                data.opponentBalance + ' cash.' +
+                                '\n\nYou will now be redirected to the menu.');
+                            window.location.replace('/');
+                            break;
+                        case 'DRAW':
+                            window.alert('DRAW! \n' +
+                                '\nBoth acquired ' + data.acquiredAmount +
+                                'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
+                                'Both left with ' + data.balnce + ' of cash.' +
+                                '\nYou will now be redirected to the menu.');
+                            window.location.replace('/');
+                            break;
+                        case 'ENDED_PREMATURELY':
+                            window.alert('Something went wrong. \n\nYou will now be redirected to the menu.');
+                            window.location.replace('/');
+                            break;
+                        case 'MATCHMAKING':
+                            window.alert('Waiting for another player.');
+                            break;
+                    }
+                }
+            }
+
+            function placeBid() {
+                var bid = parseInt($("#bid").val(), 10);
+                var balance = parseInt($("#balance").text(), 10);
+                if (bid > balance) {
+                    window.alert("You can't bet more money than you possess");
+                    upperLimit = balance;
+                    $("#bid").val(0);
+                    return;
+                }
+                if (bid < 0) {
+                    window.alert("Bid must be positive number");
+                    $("#bid").val(0);
+                    return;
+                }
+                var mapping = '/vs_bot/' + [[${gameId}]] + '/' + bid;
+                $.get(mapping, function (data) {
+                    if (data) {
+                        $("#balance").text(data.balance);
+                        $("#acquiredAmount").text(data.acquiredAmount);
+                        $("#bid").val('');
+                        if (data.biddingRound) {
+                            var lastOwn = data.biddingRound.ownBid;
+                            var lastOpponents = data.biddingRound.opponentBid;
+                            var won = lastOwn > lastOpponents;
+                            var entry = "<p>Your bid: " + lastOwn + "&nbsp; Opponents bid: " + lastOpponents + "</p>";
+                            $("#history").append(entry);
+                        }
+                        $("#bid").val(0);
+                        resolveRoundsCountdown(data);
+                        checkIfGameHasEnded(data);
+                    }
+                });
+            }
+
+            $("#bidBtn").click(function () {
+                checkIfGameHasEnded([[${state}]]);
+                placeBid();
+            });
+
+            $(document).ready(function () {
+                var state = [[${state}]];
+                checkIfGameHasEnded(state);
+                $("#bid").val(0);
+                $(".mask").inputmask('numeric', {rightAlign: false, min: 0, max: upperLimit});
+                resolveRoundsCountdown(state);
+            });
+        });
+    </script>
+    <style>
+        .btn {
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        p {
+            word-wrap: break-word;
+        }
+
+        .btn:hover {
+            background-color: RoyalBlue;
+        }
+
+        .btn:not(:disabled):not(.disabled).active, .btn:not(:disabled):not(.disabled):active, .show > .btn {
+            color: #fff;
+            background-color: RoyalBlue;
+            border-color: RoyalBlue;
+        }
+
+        .jumbotron {
+            height: 100vh;
+            margin-bottom: -500px;
+        }
+
+        .place {
+            background: #11998e;
+            background: -webkit-linear-gradient(to right, #11998e, #38ef7d);
+            background: linear-gradient(to right, #11998e, #38ef7d);
+        }
+
+        .inline {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3"><p th:text="${'Playing against ' + red.title}"></p></h1>
+        <p class="lead">Try to win as much QU as possible. But be careful! If you overspend the opponent might gain an
+            upper hand on what's left. So don't run out of money!</p>
+        <div class="row">
+            <div class="col-sm-3">
+                <h2 class="display-4">Inventory</h2>
+                <span>Balance: &nbsp;<p class="inline" id="balance" th:text="${blue.balance}"></p></span>
+                <span>&nbsp;&nbsp;Acquired QU: &nbsp;<p class="inline" id="acquiredAmount"
+                                                              th:text="${blue.acquiredAmount}"></p></span>
+                <h2 class="display-4">Conditions</h2>
+                <span>Start balance: &nbsp;<p class="inline" th:text="${blue.conditions.cash}"></p></span>
+
+                <span>&nbsp;&nbsp;Overall quantity: <p class="inline"
+                                                             th:text="${blue.conditions.quantity}"></p></span>
+            </div>
+            <div class="col-sm-4">
+                <h4 class="display-4">History</h4>
+                <th:block th:if="${history != null}" th:each="bid: ${history}">
+                    <p th:text="'Your bid: ' + ${bid.ownBid} + '&nbsp; Opponents bid: ' + ${bid.opponentBid}"></p>
+                </th:block>
+                <p th:id="history"></p>
+            </div>
+            <div class="col-sm-4">
+                <h4 class="display-4">Rounds left:&nbsp;<p class="inline" style="color: green" th:id="roundsLeft"></p></h4>
+                <input class="mask form-control form-control-lg"
+                       placeholder="Your bid"
+                       th:type="text" id="bid">
+                <button id="bidBtn" style="margin-top: 8px; width: 100%" class="btn place">Place &nbsp;<i
+                        class="fas fa-money-bill-wave"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://kit.fontawesome.com/539bdd1ce4.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+        integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+        crossorigin="anonymous"></script>
+</body>
+</html>
