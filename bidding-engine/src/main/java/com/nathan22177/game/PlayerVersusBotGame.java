@@ -23,7 +23,7 @@ public class PlayerVersusBotGame extends AbstractGame implements Game{
     public PlayerVersusBotGame(Conditions conditions, Opponent opponent) {
         this.conditions = conditions;
         this.redPlayer = new BidderBot(conditions, opponent);
-        this.bluePlayer = new BidderPlayer(conditions);
+        this.bluePlayer = new BidderPlayer(conditions, "local");
         this.status = Status.WAITING_FOR_BIDS;
     }
 

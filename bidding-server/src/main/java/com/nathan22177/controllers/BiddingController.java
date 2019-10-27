@@ -1,17 +1,17 @@
 package com.nathan22177.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.nathan22177.game.PlayerVersusBotGame;
+import com.nathan22177.game.PlayerVersusPlayerGame;
+import com.nathan22177.game.dto.StateDTO;
 import com.nathan22177.service.BiddingService;
 import com.nathan22177.util.CollectorUtils;
-import com.nathan22177.game.PlayerVersusBotGame;
-import com.nathan22177.game.dto.StateDTO;
 
 @Controller
 public class BiddingController {
@@ -37,6 +37,17 @@ public class BiddingController {
     @GetMapping("/vs_bot/{gameId}")
     public String loadVersusBotGame(Model model, @PathVariable Long gameId) {
         PlayerVersusBotGame game = service.loadVersusBotGame(gameId);
+        model.addAttribute("red", game.getRedPlayer());
+        model.addAttribute("blue", game.getBluePlayer());
+        model.addAttribute("gameId", game.getId());
+        model.addAttribute("history", game.getBluePlayer().getBiddingHistory());
+        model.addAttribute("state", new StateDTO(game));
+        return "vs_bot_interface";
+    }
+
+    @GetMapping("/vs_player/{gameId}")
+    public String loadVersusPlayerGame(Model model, @PathVariable Long gameId) {
+        PlayerVersusPlayerGame game = service.loadVersusPlayerGame(gameId);
         model.addAttribute("red", game.getRedPlayer());
         model.addAttribute("blue", game.getBluePlayer());
         model.addAttribute("gameId", game.getId());

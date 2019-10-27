@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EntityScan(basePackages = {"com.nathan22177"})
-@EnableJpaRepositories("com.nathan22177.repository")
+@EnableJpaRepositories("com.nathan22177.repositories")
 public class BiddingServerApplication {
 
 	public static void main(String[] args) {

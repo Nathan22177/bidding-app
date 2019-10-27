@@ -19,10 +19,12 @@
             src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
     <script type="text/javascript" th:inline="javascript">
         var upperLimit = [[${blue.balance}]];
-        let ws = new WebSocket("ws://" + location.hostname + ":" + location.port + "/chat");
+        var state = [[${state}]];
+        let ws = new WebSocket("ws://" + location.hostname + ":" + location.port + "/pvp" + state.gameId + "/" + state.bluePlayerUsername);
 
         require(['jquery'], function ($) {
-            function updateAuction(data) {
+            function updateGameInfo(msg) {
+                let data = JSON.parse(msg);
                 if (data) {
                     $("#balance").text(data.balance);
                     $("#acquiredAmount").text(data.acquiredAmount);
@@ -30,7 +32,6 @@
                     if (data.biddingRound) {
                         var lastOwn = data.biddingRound.ownBid;
                         var lastOpponents = data.biddingRound.opponentBid;
-                        var won = lastOwn > lastOpponents;
                         var entry = "<p>Your bid: " + lastOwn + "&nbsp; Opponents bid: " + lastOpponents + "</p>";
                         $("#history").append(entry);
                     }
@@ -94,33 +95,31 @@
 
             function placeBid() {
                 var bid = parseInt($("#bid").val(), 10);
+                $("#bid").val(0);
                 var balance = parseInt($("#balance").text(), 10);
                 if (bid > balance) {
                     window.alert("You can't bet more money than you possess");
-                    $("#bid").val(0);
                     return;
                 }
                 if (bid < 0) {
                     window.alert("Bid must be positive number");
-                    $("#bid").val(0);
                     return;
                 }
-
+                ws.send(bid);
             }
 
             $("#bidBtn").click(function () {
-                checkIfGameHasEnded([[${state}]]);
+                checkIfGameHasEnded(state);
                 placeBid();
             });
 
             $(document).ready(function () {
-                var state = [[${state}]];
                 checkIfGameHasEnded(state);
                 $("#bid").val(0);
                 $(".mask").inputmask('numeric', {rightAlign: false, min: 0, max: upperLimit});
                 resolveRoundsCountdown(state);
                 var msg = ws.onmessage;
-                updateAuction(msg);
+                updateGameInfo(msg);
             });
         });
     </script>

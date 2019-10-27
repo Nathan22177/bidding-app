@@ -1,4 +1,4 @@
-package com.nathan22177.repository;
+package com.nathan22177.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
