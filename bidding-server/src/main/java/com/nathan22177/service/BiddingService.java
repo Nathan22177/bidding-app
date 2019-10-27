@@ -28,10 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class BiddingClientService {
-
-    @Value("${server.url}")
-    String serverUrl;
+public class BiddingService {
 
     @Autowired
     RestTemplate restTemplate;
@@ -50,19 +47,6 @@ public class BiddingClientService {
         PlayerVersusBotGame game = NewGameUtil.createNewGameAgainstTheBot(Opponent.valueOf(opponent));
         repository.saveAndFlush(game);
         return game.getId();
-    }
-
-    public boolean isServerUp() {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serverUrl + "/check_if_server_is_up");
-        boolean serverIsUp;
-        try {
-            ResponseEntity response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null, String.class);
-            serverIsUp = response.getStatusCode().is2xxSuccessful();
-        } catch (RestClientException exception) {
-            log.error("The server is down: " + exception);
-            serverIsUp = false;
-        }
-        return serverIsUp;
     }
 
     public PlayerVersusBotGame loadVersusBotGame(Long gameId) {

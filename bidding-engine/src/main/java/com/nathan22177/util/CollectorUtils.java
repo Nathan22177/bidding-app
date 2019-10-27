@@ -1,4 +1,4 @@
-package com.nathan22177.utils;
+package com.nathan22177.util;
 
 import java.util.Collections;
 import java.util.stream.Collector;

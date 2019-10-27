@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.nathan22177.service.BiddingClientService;
-import com.nathan22177.utils.CollectorUtils;
+import com.nathan22177.service.BiddingService;
+import com.nathan22177.util.CollectorUtils;
 import com.nathan22177.game.PlayerVersusBotGame;
 import com.nathan22177.game.dto.StateDTO;
 
 @Controller
-public class BiddingClientController {
+public class BiddingController {
 
     @Autowired
-    private final BiddingClientService  service;
+    private final BiddingService service;
 
-    public BiddingClientController(BiddingClientService service) {
+    public BiddingController(BiddingService service) {
         this.service = service;
     }
 
@@ -60,16 +60,8 @@ public class BiddingClientController {
                 .orElseThrow(() -> new RuntimeException("There are no bots available. Something is wrong."));
     }
 
-    @GetMapping("/check_if_server_is_up")
-    private ResponseEntity checkIfServerIsUp(Model model) {
-        Boolean serverIsUp = service.isServerUp();
-        return ResponseEntity.ok(serverIsUp);
-    }
-
     @GetMapping("/")
     public String menu(Model model) {
-        boolean serverIsUp = service.isServerUp();
-        model.addAttribute("serverIsUp", serverIsUp);
         model.addAttribute("bots", service.getAvailableOpponents());
         model.addAttribute("listOfGamesVersusBots", service.getStartedGamesVersusBots());
         return "index";
