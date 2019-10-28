@@ -18,7 +18,7 @@ import lombok.Setter;
 public class PlayerVersusBotGame extends AbstractGame implements Game{
 
     @OneToOne(cascade = CascadeType.ALL)
-    BidderBot redPlayer;
+    private BidderBot redPlayer;
 
     public PlayerVersusBotGame(Conditions conditions, Opponent opponent) {
         this.conditions = conditions;

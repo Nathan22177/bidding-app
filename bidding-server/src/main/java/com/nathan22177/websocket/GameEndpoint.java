@@ -56,13 +56,14 @@ public class GameEndpoint {
                         gameSession.getSession().getBasicRemote().sendObject(bid);
                     } catch (IOException | EncodeException e) {
                         log.error("failed to broadcast bid for gameId: " + gameSession.getGameId());
+                        e.printStackTrace();
                     }
                 });
 
     }
 
     @OnClose
-    public void onClose(Session session) throws IOException {
+    public void onClose(Session session) {
         gameSessions.removeIf(gameSession -> gameSession.getSession().equals(session));
         //TODO notify other player that player left the game
     }
