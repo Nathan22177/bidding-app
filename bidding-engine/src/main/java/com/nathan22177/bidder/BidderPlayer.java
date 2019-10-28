@@ -24,9 +24,6 @@ public class BidderPlayer extends AbstractBidder {
     @Enumerated(EnumType.STRING)
     Player player;
 
-    @Transient
-    Session session;
-
     public BidderPlayer(Conditions conditions, String username) {
         Assert.isTrue(conditions.getQuantity() % 2 == 0 && conditions.getQuantity() > 0, "Quantity must be a positive and even number.");
         Assert.isTrue(conditions.getCash() > 0, "Cash must be positive number.");

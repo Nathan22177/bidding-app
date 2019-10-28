@@ -26,4 +26,14 @@ public class PlayerVersusPlayerGame extends AbstractGame implements Game{
     public BidderPlayer getRedPlayer() {
         return this.redPlayer;
     }
+
+    public BidderPlayer getPlayerByUsername(String username) {
+        if (getBluePlayer().getUsername().equals(username)) {
+            return getBluePlayer();
+        }
+        if (getRedPlayer().getUsername().equals(username)) {
+            return getRedPlayer();
+        }
+        throw new IllegalArgumentException("No such player in this game. Username: " + username + "; gameId: " + getId());
+    }
 }
