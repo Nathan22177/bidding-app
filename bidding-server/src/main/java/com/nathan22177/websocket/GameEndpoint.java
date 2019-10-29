@@ -3,10 +3,10 @@ package com.nathan22177.websocket;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
-import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -26,8 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ServerEndpoint(value = "pvp/{gameId}/{username}",
-        encoders = BidEncoder.class,
-        decoders = BidDecoder.class)
+        encoders = EventEncoder.class,
+        decoders = EventDecoder.class)
 public class GameEndpoint {
 
     private static Set<GameSession> gameSessions = new HashSet<>();
@@ -39,23 +39,24 @@ public class GameEndpoint {
     public void onOpen(Session session, @PathParam("gameId") Long gameId, @PathParam("username") String username) throws IOException {
         PlayerVersusPlayerGame game = versusPlayerRepository.getOne(gameId);
         BidderPlayer player = game.getPlayerByUsername(username);
-        GameSession gameSession = new GameSession(gameId, session, username, player.getPlayer());
-        gameSessions.add(gameSession);
+        GameSession newGameSession = new GameSession(gameId, session, username, player.getPlayer());
+        broadcast(new Event(newGameSession.getGameId(), EventType.PLAYER_JOINED));
+        gameSessions.add(newGameSession);
     }
 
     @OnMessage
-    public void onMessage(Bid bid) {
-        broadcast(bid);
+    public void onMessage(Event event) {
+        broadcast(event);
     }
 
-    private static void broadcast(Bid bid) {
+    private static void broadcast(Event event) {
         gameSessions.stream()
-                .filter(gameSessions -> gameSessions.getGameId().equals(bid.getGameId()))
+                .filter(gameSessions -> gameSessions.getGameId().equals(event.getGameId()))
                 .forEach(gameSession -> {
                     try {
-                        gameSession.getSession().getBasicRemote().sendObject(bid);
+                        gameSession.getSession().getBasicRemote().sendObject(event);
                     } catch (IOException | EncodeException e) {
-                        log.error("failed to broadcast bid for gameId: " + gameSession.getGameId());
+                        log.error("failed to broadcast event for gameId: " + gameSession.getGameId());
                         e.printStackTrace();
                     }
                 });
@@ -64,8 +65,18 @@ public class GameEndpoint {
 
     @OnClose
     public void onClose(Session session) {
-        gameSessions.removeIf(gameSession -> gameSession.getSession().equals(session));
-        //TODO notify other player that player left the game
+        GameSession closingSession = getBySession(session);
+        gameSessions.remove(closingSession);
+        broadcast(new Event(closingSession.getGameId(), EventType.PLAYER_LEFT));
+
+    }
+
+    private GameSession getBySession(Session session) {
+        return gameSessions.stream().filter(gameSession -> gameSession.getSession().equals(session)).findFirst().orElse(null);
+    }
+
+    private Set<GameSession> getAffectedGameSessions(GameSession session) {
+        return gameSessions.stream().filter(gameSession -> gameSession.getGameId().equals(session.getGameId())).collect(Collectors.toSet());
     }
 
     @Getter
@@ -75,14 +86,34 @@ public class GameEndpoint {
         Session session;
         String username;
         Player player;
+
     }
 
     @Getter
     @AllArgsConstructor
     static class Bid {
-        Long gameId;
         int bid;
-        String username;
+        Player player;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    static class Event {
+        Long gameId;
+        EventType type;
+        Bid bid;
+
+        Event(Long gameId, EventType type) {
+            this.gameId = gameId;
+            this.type = type;
+        }
+    }
+
+
+    enum EventType {
+        PLAYER_JOINED,
+        BID,
+        PLAYER_LEFT
     }
 
 }

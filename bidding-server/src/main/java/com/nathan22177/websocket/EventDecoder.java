@@ -6,7 +6,7 @@ import javax.websocket.EndpointConfig;
 
 import com.google.gson.Gson;
 
-public class BidDecoder implements Decoder.Text<GameEndpoint.Bid> {
+public class EventDecoder implements Decoder.Text<GameEndpoint.Event> {
 
     private static Gson gson = new Gson();
 
@@ -19,8 +19,8 @@ public class BidDecoder implements Decoder.Text<GameEndpoint.Bid> {
     }
 
     @Override
-    public GameEndpoint.Bid decode(String s) {
-        return gson.fromJson(s, GameEndpoint.Bid.class);
+    public GameEndpoint.Event decode(String s) {
+        return gson.fromJson(s, GameEndpoint.Event.class);
     }
 
     @Override
