@@ -6,13 +6,11 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Transient;
 
 import org.springframework.util.Assert;
 
-import com.nathan22177.enums.Opponent;
+import com.nathan22177.enums.Bot;
 import com.nathan22177.game.Conditions;
-import com.nathan22177.strategies.BiddingStrategy;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,26 +24,26 @@ public class BidderBot extends AbstractBidder {
      * Strategy that defines how to bid.
      * */
     @Enumerated(EnumType.STRING)
-    private Opponent opponent;
+    private Bot bot;
     @Embedded
     private String title;
 
     private final Random random = new Random();
 
 
-    public BidderBot(Conditions conditions, Opponent opponent) {
+    public BidderBot(Conditions conditions, Bot bot) {
         Assert.isTrue(conditions.getQuantity() % 2 == 0 && conditions.getQuantity() > 0, "Quantity must be a positive and even number.");
         Assert.isTrue(conditions.getCash() > 0, "Cash must be positive number.");
         setConditions(conditions);
         setBalance(conditions.getCash());
         setAcquiredAmount(0);
-        this.opponent = opponent;
-        this.title = opponent.getTitle();
+        this.bot = bot;
+        this.title = bot.getTitle();
     }
 
 
     public int getNextBid() {
-        return this.opponent.getStrategy().getBiddingAmount(this);
+        return this.bot.getStrategy().getBiddingAmount(this);
     }
 
     /**

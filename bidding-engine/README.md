@@ -9,7 +9,7 @@
 * [StrategyUtil](src/main/java/com/nathan22177/util/StrategyUtil.java) - class that provides static methods to formulate and implement strategies.
 
 ## The [NathanStrategy](src/main/java/com/nathan22177/strategies/NathanStrategy.java) was tested against the following strategies:
-* [CopycatStrategy](src/main/java/com/nathan22177/strategies/CopycatStrategy.java) - bids it's opponent's last bid plus one if has an advantage, else skips round.
+* [CopycatStrategy](src/main/java/com/nathan22177/strategies/CopycatStrategy.java) - bids it's bot's last bid plus one if has an advantage, else skips round.
 * [FairStrategy](src/main/java/com/nathan22177/strategies/FairStrategy.java) - always bids mean price of 2 QU's.
 * [RisingStrategy](src/main/java/com/nathan22177/strategies/RisingStrategy.java) - gradually raises bid so that would go with empty balance at the end.
 * [SafeStrategy](src/main/java/com/nathan22177/strategies/SafeStrategy.java) - waits for advantage then bids median plus 2.

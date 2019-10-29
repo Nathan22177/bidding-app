@@ -143,7 +143,7 @@
                         </button>
                         <div class="dropdown-menu" style="width: 200px" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" th:each="bot : ${bots}"
-                               th:href="${'play_vs_bot/' + bot.key}"
+                               th:href="${'start_new_game_vs_bot/' + bot.key}"
                                th:text="${bot.value.title}"></a>
                         </div>
                     </div>
@@ -157,7 +157,7 @@
                         <div class="dropdown-menu" style="width: 600px" aria-labelledby="dropdownMenuButton2">
                             <a class="dropdown-item" th:each="game : ${listOfGamesVersusBots}"
                                th:href="${'vs_bot/' + game.id}"
-                               th:text="${'vs. ' + game.opponent + '; id: ' + game.id + '; rounds.left: ' + game.roundsLeft}"></a>
+                               th:text="${'vs. ' + game.bot + '; id: ' + game.id + '; rounds.left: ' + game.roundsLeft}"></a>
                         </div>
                     </div>
                 </div>

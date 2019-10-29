@@ -6,8 +6,7 @@ import javax.persistence.OneToOne;
 
 import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.bidder.BidderPlayer;
-import com.nathan22177.collection.BiddingRound;
-import com.nathan22177.enums.Opponent;
+import com.nathan22177.enums.Bot;
 import com.nathan22177.enums.Status;
 import com.nathan22177.util.EndGameUtil;
 
@@ -20,9 +19,9 @@ public class PlayerVersusBotGame extends AbstractGame implements Game{
     @OneToOne(cascade = CascadeType.ALL)
     private BidderBot redPlayer;
 
-    public PlayerVersusBotGame(Conditions conditions, Opponent opponent) {
+    public PlayerVersusBotGame(Conditions conditions, Bot bot) {
         this.conditions = conditions;
-        this.redPlayer = new BidderBot(conditions, opponent);
+        this.redPlayer = new BidderBot(conditions, bot);
         this.bluePlayer = new BidderPlayer(conditions, "local");
         this.status = Status.WAITING_FOR_BIDS;
     }

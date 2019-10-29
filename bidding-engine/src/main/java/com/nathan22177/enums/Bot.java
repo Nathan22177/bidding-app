@@ -1,9 +1,5 @@
 package com.nathan22177.enums;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.nathan22177.strategies.BiddingStrategy;
 import com.nathan22177.strategies.CopycatStrategy;
 import com.nathan22177.strategies.FairStrategy;
@@ -17,16 +13,11 @@ import com.nathan22177.strategies.WinnerIncrementStrategy;
 import lombok.Getter;
 
 @Getter
-public enum Opponent {
+public enum Bot {
     /***
      * Random strategy
      * */
     RANDOM_BOT("RANDOM", null),
-
-    /***
-     * Another user playing trough web interface
-     * */
-    ANOTHER_PLAYER("Real human", null),
 
     /***
      * Bids it's opponent's last bid plus one if has advantage, else skips round.
@@ -74,12 +65,7 @@ public enum Opponent {
     private final String name;
     private final BiddingStrategy strategy;
 
-
-    public static final List<Opponent> botOptions = Arrays.stream(Opponent.values())
-            .filter(opponent -> opponent != ANOTHER_PLAYER)
-            .collect(Collectors.toList());
-
-    Opponent(String title, BiddingStrategy strategy) {
+    Bot(String title, BiddingStrategy strategy) {
         this.title = title;
         this.strategy = strategy;
         this.name = this.toString();

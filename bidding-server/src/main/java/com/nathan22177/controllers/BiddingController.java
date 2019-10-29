@@ -24,7 +24,7 @@ public class BiddingController {
         this.service = service;
     }
 
-    @GetMapping("/play_vs_bot/{opponent}")
+    @GetMapping("/start_new_game_vs_bot/{opponent}")
     public String startVersusBotGame(Model model, @PathVariable String opponent) {
         if (opponent.contains("RANDOM")) {
             opponent = getRandomOpponent();
@@ -35,7 +35,7 @@ public class BiddingController {
         return "redirect:/vs_bot/" + gameId;
     }
 
-    @GetMapping("/play_vs_another_player/{username}")
+    @GetMapping("/start_new_game_vs_another_player/{username}")
     public String startVersusPlayerGame(Model model, @PathVariable String username) {
         Long gameId = service.createNewGameAgainstAnotherPlayer(username);
         model.addAttribute("gameId", gameId);

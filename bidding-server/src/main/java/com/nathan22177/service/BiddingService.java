@@ -1,5 +1,6 @@
 package com.nathan22177.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -12,10 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nathan22177.bidder.BidderPlayer;
+import com.nathan22177.enums.Bot;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.repositories.VersusBotRepository;
-import com.nathan22177.enums.Opponent;
 import com.nathan22177.game.PlayerVersusBotGame;
 import com.nathan22177.game.dto.GamesDTO;
 import com.nathan22177.game.dto.StateDTO;
@@ -40,12 +40,12 @@ public class BiddingService {
     @Autowired
     VersusPlayerRepository versusPlayerRepository;
 
-    public Map<String, Opponent> getAvailableOpponents() {
-        return Opponent.botOptions.stream().collect(Collectors.toMap(Opponent::getName, Function.identity()));
+    public Map<String, Bot> getAvailableOpponents() {
+        return Arrays.stream(Bot.values()).collect(Collectors.toMap(Bot::getName, Function.identity()));
     }
 
     public Long createNewGameAgainstTheBot(String opponent) {
-        PlayerVersusBotGame game = NewGameUtil.createNewGameAgainstTheBot(Opponent.valueOf(opponent));
+        PlayerVersusBotGame game = NewGameUtil.createNewGameAgainstTheBot(Bot.valueOf(opponent));
         versusBotRepository.saveAndFlush(game);
         return game.getId();
     }
