@@ -6,12 +6,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.nathan22177.enums.Bot;
 import com.nathan22177.enums.Player;
 import com.nathan22177.game.PlayerVersusBotGame;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.game.dto.StateDTO;
 import com.nathan22177.service.BiddingService;
 import com.nathan22177.util.CollectorUtils;
+import com.nathan22177.util.NewGameUtil;
 
 @Controller
 public class BiddingController {
@@ -22,13 +24,12 @@ public class BiddingController {
         this.service = service;
     }
 
-    @GetMapping("/start_new_game_vs_bot/{opponent}")
-    public String startVersusBotGame(Model model, @PathVariable String opponent) {
-        if (opponent.contains("RANDOM")) {
-            opponent = getRandomOpponent();
+    @GetMapping("/start_new_game_vs_bot/{bot}")
+    public String startVersusBotGame(Model model, @PathVariable String bot) {
+        if (bot.contains("RANDOM")) {
+            bot = NewGameUtil.getRandomBot();
         }
-        model.addAttribute("opponent", service.getAvailableOpponents().get(opponent));
-        Long gameId = service.createNewGameAgainstTheBot(opponent);
+        Long gameId = service.createNewGameAgainstTheBot(Bot.valueOf(bot));
         model.addAttribute("gameId", gameId);
         return "redirect:/vs_bot/" + gameId;
     }
@@ -67,18 +68,11 @@ public class BiddingController {
         return "vs_player_interface";
     }
 
-    private String getRandomOpponent() {
-        return service.getAvailableOpponents().keySet()
-                .stream()
-                .filter(key -> !key.equalsIgnoreCase("RANDOM"))
-                .collect(CollectorUtils.toShuffledStream())
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("There are no bots available. Something is wrong."));
-    }
+
 
     @GetMapping("/")
     public String menu(Model model) {
-        model.addAttribute("bots", service.getAvailableOpponents());
+        model.addAttribute("bots", NewGameUtil.getAvailableBots());
         model.addAttribute("listOfGamesVersusBots", service.getStartedGamesVersusBots());
         return "index";
     }

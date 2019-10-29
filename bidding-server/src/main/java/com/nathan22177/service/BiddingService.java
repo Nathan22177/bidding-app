@@ -42,12 +42,10 @@ public class BiddingService {
         this.versusPlayerRepository = versusPlayerRepository;
     }
 
-    public Map<String, Bot> getAvailableOpponents() {
-        return Arrays.stream(Bot.values()).collect(Collectors.toMap(Bot::getName, Function.identity()));
-    }
 
-    public Long createNewGameAgainstTheBot(String opponent) {
-        PlayerVersusBotGame game = NewGameUtil.createNewGameAgainstTheBot(Bot.valueOf(opponent));
+
+    public Long createNewGameAgainstTheBot(Bot bot) {
+        PlayerVersusBotGame game = NewGameUtil.createNewGameAgainstTheBot(bot);
         versusBotRepository.saveAndFlush(game);
         return game.getId();
     }
