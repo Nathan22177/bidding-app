@@ -4,8 +4,9 @@ import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
 import com.google.gson.Gson;
+import com.nathan22177.websocket.messages.incoming.IncomingMessage;
 
-public class EventDecoder implements Decoder.Text<GameEndpoint.Event> {
+public class IncomingMessageDecoder implements Decoder.Text<IncomingMessage> {
 
     private static Gson gson = new Gson();
 
@@ -18,8 +19,8 @@ public class EventDecoder implements Decoder.Text<GameEndpoint.Event> {
     }
 
     @Override
-    public GameEndpoint.Event decode(String s) {
-        return gson.fromJson(s, GameEndpoint.Event.class);
+    public IncomingMessage decode(String s) {
+        return gson.fromJson(s, IncomingMessage.class);
     }
 
     @Override

@@ -1,12 +1,10 @@
 package com.nathan22177.collection;
 
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,12 +16,12 @@ public class BiddingRound {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    private int ownBid;
-    private int opponentBid;
+    private int blueBid;
+    private int redBid;
 
-    public BiddingRound(int own, int opponent){
-        this.ownBid = own;
-        this.opponentBid = opponent;
+    public BiddingRound(int red, int blue){
+        this.blueBid = red;
+        this.redBid = blue;
     }
 
     /**

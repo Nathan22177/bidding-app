@@ -2,6 +2,7 @@ package com.nathan22177.websocket;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,25 +16,28 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.util.Assert;
 
 import com.nathan22177.bidder.BidderPlayer;
+import com.nathan22177.collection.BiddingRound;
+import com.nathan22177.enums.MessageType;
 import com.nathan22177.enums.Player;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.repositories.VersusPlayerRepository;
+import com.nathan22177.websocket.messages.incoming.IncomingMessage;
+import com.nathan22177.websocket.messages.outgoing.OutgoingMessage;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ServerEndpoint(value = "pvp/{gameId}/{username}",
-        encoders = EventEncoder.class,
-        decoders = EventDecoder.class)
+        encoders = OutgoingMessageEncoder.class,
+        decoders = IncomingMessageDecoder.class)
 public class GameEndpoint {
 
     private static Set<GameSession> gameSessions = new HashSet<>();
-    private static Set<Event> bids = new HashSet<>();
+    private static Set<IncomingMessage> bids = new HashSet<>();
 
 
     @Autowired
@@ -44,43 +48,38 @@ public class GameEndpoint {
         PlayerVersusPlayerGame game = versusPlayerRepository.getOne(gameId);
         BidderPlayer player = game.getPlayerByUsername(username);
         GameSession newGameSession = new GameSession(gameId, session, username, player.getPlayer());
-        broadcast(new Event(newGameSession.getGameId(), EventType.PLAYER_JOINED));
+        broadcast(new OutgoingMessage(newGameSession.getGameId(), MessageType.PLAYER_JOINED));
         gameSessions.add(newGameSession);
     }
 
     @OnMessage
-    public void onMessage(Event event) {
-        Assert.isTrue(event.getType() == EventType.BID, "The only messages we're accepting are bids.");
-        Optional<Event> otherPlayersBid = getOtherPlayersBid(event);
-        if (otherPlayersBid.isPresent()){
-            Event blueBid = event.getPlayer().equals(Player.BLUE) ? event : otherPlayersBid.get();
-            Event redBid = event.getPlayer().equals(Player.RED) ? event : otherPlayersBid.get();
-            broadcast(getEventForBroadcasting(blueBid, redBid));
+    public void onMessage(IncomingMessage incomingMessage) {
+        Optional<IncomingMessage> otherPlayersBid = getOtherPlayersBid(incomingMessage);
+        if (otherPlayersBid.isPresent()) {
+            IncomingMessage blueBid = incomingMessage.getPlayer().equals(Player.BLUE) ? incomingMessage : otherPlayersBid.get();
+            IncomingMessage redBid = incomingMessage.getPlayer().equals(Player.RED) ? incomingMessage : otherPlayersBid.get();
+            broadcastBids(blueBid, redBid);
             bids.remove(otherPlayersBid.get());
         } else {
-            bids.add(event);
+            bids.add(incomingMessage);
         }
     }
 
-    private static Event getEventForBroadcasting(Event blueBid, Event redBid) {
-        return new Event(blueBid.getGameId(), EventType.BID, blueBid.getBlueBid(), redBid.getRedBid());
-    }
 
-
-    private static Optional<Event> getOtherPlayersBid(Event event) {
+    private static Optional<IncomingMessage> getOtherPlayersBid(IncomingMessage incomingMessage) {
         return bids
                 .stream()
-                .filter(bid -> bid.getGameId().equals(event.getGameId())
-                        && !bid.getPlayer().equals(event.getPlayer()))
+                .filter(bid -> bid.getGameId().equals(incomingMessage.getGameId())
+                        && !bid.getPlayer().equals(incomingMessage.getPlayer()))
                 .findAny();
     }
 
-    private static void broadcast(Event event) {
+    private static void broadcast(OutgoingMessage outgoingEvent) {
         gameSessions.stream()
-                .filter(gameSessions -> gameSessions.getGameId().equals(event.getGameId()))
+                .filter(gameSessions -> gameSessions.getGameId().equals(outgoingEvent.getGameId()))
                 .forEach(gameSession -> {
                     try {
-                        gameSession.getSession().getBasicRemote().sendObject(event);
+                        gameSession.getSession().getBasicRemote().sendObject(outgoingEvent);
                     } catch (IOException | EncodeException e) {
                         log.error("failed to broadcast event for gameId: " + gameSession.getGameId());
                         e.printStackTrace();
@@ -89,11 +88,42 @@ public class GameEndpoint {
 
     }
 
-    @OnClose
+    private static void broadcastBids(IncomingMessage blueBid, IncomingMessage redBid) {
+        Set<GameSession> affectedSessions = gameSessions.stream()
+                .filter(gameSessions -> gameSessions.getGameId().equals(blueBid.getGameId()))
+                .collect(Collectors.toSet());
+        Assert.isTrue(affectedSessions.size() == 2, "There should be only two sessions per game.");
+        Session redSession = Objects.requireNonNull(affectedSessions.stream()
+                .filter(gameSession -> gameSession.getPlayer().equals(Player.RED))
+                .findFirst().orElse(null))
+                .getSession();
+        Session blueSession = Objects.requireNonNull(affectedSessions.stream()
+                .filter(gameSession -> gameSession.getPlayer().equals(Player.BLUE))
+                .findFirst().orElse(null))
+                .getSession();
+        try {
+            blueSession.getBasicRemote().sendObject(getOutGoingMessageForBids(blueBid, redBid));
+        } catch (IOException | EncodeException e) {
+            log.error("failed to broadcast bids to blue player of gameId: " + blueBid.getGameId());
+            e.printStackTrace();
+        }
+        try {
+            redSession.getBasicRemote().sendObject(getOutGoingMessageForBids(redBid, blueBid));
+        } catch (IOException | EncodeException e) {
+            log.error("failed to broadcast bids to red player of gameId: " + redBid.getGameId());
+            e.printStackTrace();
+        }
+    }
+
+    public static OutgoingMessage getOutGoingMessageForBids(IncomingMessage own, IncomingMessage opponents) {
+        return new OutgoingMessage(own.getGameId(), MessageType.BID, new BiddingRound(own.getBid(), opponents.getBid()));
+    }
+
+        @OnClose
     public void onClose(Session session) {
         GameSession closingSession = getBySession(session);
         gameSessions.remove(closingSession);
-        broadcast(new Event(closingSession.getGameId(), EventType.PLAYER_LEFT));
+        broadcast(new OutgoingMessage(closingSession.getGameId(), MessageType.PLAYER_LEFT));
 
     }
 
@@ -103,44 +133,6 @@ public class GameEndpoint {
 
     private Set<GameSession> getAffectedGameSessions(GameSession session) {
         return gameSessions.stream().filter(gameSession -> gameSession.getGameId().equals(session.getGameId())).collect(Collectors.toSet());
-    }
-
-    @Getter
-    @AllArgsConstructor
-    private static class GameSession {
-        Long gameId;
-        Session session;
-        String username;
-        Player player;
-    }
-
-
-    @Getter
-    @AllArgsConstructor
-    static class Event {
-        Long gameId;
-        EventType type;
-        int blueBid;
-        int redBid;
-        Player player;
-
-        Event(Long gameId, EventType type) {
-            this.gameId = gameId;
-            this.type = type;
-        }
-
-        Event(Long gameId, EventType type, int blueBid, int redBid) {
-            this.gameId = gameId;
-            this.type = type;
-            this.blueBid = blueBid;
-            this.redBid = redBid;
-        }
-    }
-
-    enum EventType {
-        PLAYER_JOINED,
-        BID,
-        PLAYER_LEFT
     }
 
 }

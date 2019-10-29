@@ -36,7 +36,7 @@ public class StrategyUtil {
 
 
         double[] bids = history.stream()
-                .flatMap(biddingRound -> Stream.of(biddingRound.getOwnBid(), biddingRound.getOpponentBid()))
+                .flatMap(biddingRound -> Stream.of(biddingRound.getBlueBid(), biddingRound.getRedBid()))
                 .mapToDouble(val -> val)
                 .sorted()
                 .toArray();
@@ -62,7 +62,7 @@ public class StrategyUtil {
      * */
     public static int getOpponentBalance(BidderBot bidder) {
         return bidder.getBiddingHistory() != null && bidder.getBiddingHistory().size() > 0
-                ? bidder.getConditions().getCash() - bidder.getBiddingHistory().stream().mapToInt(BiddingRound::getOpponentBid).sum()
+                ? bidder.getConditions().getCash() - bidder.getBiddingHistory().stream().mapToInt(BiddingRound::getRedBid).sum()
                 : bidder.getConditions().getCash();
     }
 
@@ -82,7 +82,7 @@ public class StrategyUtil {
     public static List<Integer> getLastNBids(int n, BidderBot bidder) {
         return bidder.getBiddingHistory()
                 .stream()
-                .map(BiddingRound::getOwnBid)
+                .map(BiddingRound::getBlueBid)
                 .skip(bidder.getBiddingHistory().size() - n)
                 .collect(Collectors.toList());
     }
@@ -94,7 +94,7 @@ public class StrategyUtil {
     public static List<Integer> getLastNOpponentBids(int n, BidderBot bidder) {
         return bidder.getBiddingHistory()
                 .stream()
-                .map(BiddingRound::getOpponentBid)
+                .map(BiddingRound::getRedBid)
                 .skip(bidder.getBiddingHistory().size() - n)
                 .collect(Collectors.toList());
     }
@@ -130,7 +130,7 @@ public class StrategyUtil {
      * */
     public static int getPreviousWinnerBid(BidderBot bidder) {
         return bidder.getBiddingHistory() != null && bidder.getBiddingHistory().size() > 0
-                ? Stream.of(bidder.getBiddingHistory().get(bidder.getBiddingHistory().size() - 1).getOwnBid(), bidder.getBiddingHistory().get(bidder.getBiddingHistory().size()-1).getOpponentBid())
+                ? Stream.of(bidder.getBiddingHistory().get(bidder.getBiddingHistory().size() - 1).getBlueBid(), bidder.getBiddingHistory().get(bidder.getBiddingHistory().size()-1).getRedBid())
                 .mapToInt(value -> value)
                 .max()
                 .orElse(0)
@@ -165,7 +165,7 @@ public class StrategyUtil {
         }
         List<Integer> bids = bidder.getBiddingHistory()
                 .stream()
-                .map(BiddingRound::getOpponentBid)
+                .map(BiddingRound::getRedBid)
                 .sorted(Collections.reverseOrder())
                 .collect(Collectors.toList());
 
@@ -178,7 +178,7 @@ public class StrategyUtil {
      * @return bid
      * */
     public static int getLastOpponentBid(BidderBot bidder) {
-        return bidder.getBiddingHistory().get(bidder.getBiddingHistory().size()-1).getOpponentBid();
+        return bidder.getBiddingHistory().get(bidder.getBiddingHistory().size()-1).getRedBid();
     }
 
     /***
@@ -197,7 +197,7 @@ public class StrategyUtil {
             return false;
         }
 
-        int lastBid = bidder.getBiddingHistory().get(bidder.getBiddingHistory().size()-1).getOpponentBid();
+        int lastBid = bidder.getBiddingHistory().get(bidder.getBiddingHistory().size()-1).getRedBid();
         return getLastNOpponentBids(n, bidder).stream().sorted(Collections.reverseOrder()).skip(1).allMatch(bid -> bid == lastBid);
     }
 }
