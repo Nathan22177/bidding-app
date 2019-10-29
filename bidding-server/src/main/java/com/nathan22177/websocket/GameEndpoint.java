@@ -2,6 +2,7 @@ package com.nathan22177.websocket;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
 import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.enums.Player;
@@ -31,6 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 public class GameEndpoint {
 
     private static Set<GameSession> gameSessions = new HashSet<>();
+    private static Set<Event> bids = new HashSet<>();
+
 
     @Autowired
     VersusPlayerRepository versusPlayerRepository;
@@ -46,7 +50,29 @@ public class GameEndpoint {
 
     @OnMessage
     public void onMessage(Event event) {
-        broadcast(event);
+        Assert.isTrue(event.getType() == EventType.BID, "The only messages we're accepting are bids.");
+        Optional<Event> otherPlayersBid = getOtherPlayersBid(event);
+        if (otherPlayersBid.isPresent()){
+            Event blueBid = event.getPlayer().equals(Player.BLUE) ? event : otherPlayersBid.get();
+            Event redBid = event.getPlayer().equals(Player.RED) ? event : otherPlayersBid.get();
+            broadcast(getEventForBroadcasting(blueBid, redBid));
+            bids.remove(otherPlayersBid.get());
+        } else {
+            bids.add(event);
+        }
+    }
+
+    private static Event getEventForBroadcasting(Event blueBid, Event redBid) {
+        return new Event(blueBid.getGameId(), EventType.BID, blueBid.getBlueBid(), redBid.getRedBid());
+    }
+
+
+    private static Optional<Event> getOtherPlayersBid(Event event) {
+        return bids
+                .stream()
+                .filter(bid -> bid.getGameId().equals(event.getGameId())
+                        && !bid.getPlayer().equals(event.getPlayer()))
+                .findAny();
     }
 
     private static void broadcast(Event event) {
@@ -86,29 +112,30 @@ public class GameEndpoint {
         Session session;
         String username;
         Player player;
-
     }
 
-    @Getter
-    @AllArgsConstructor
-    static class Bid {
-        int bid;
-        Player player;
-    }
 
     @Getter
     @AllArgsConstructor
     static class Event {
         Long gameId;
         EventType type;
-        Bid bid;
+        int blueBid;
+        int redBid;
+        Player player;
 
         Event(Long gameId, EventType type) {
             this.gameId = gameId;
             this.type = type;
         }
-    }
 
+        Event(Long gameId, EventType type, int blueBid, int redBid) {
+            this.gameId = gameId;
+            this.type = type;
+            this.blueBid = blueBid;
+            this.redBid = redBid;
+        }
+    }
 
     enum EventType {
         PLAYER_JOINED,

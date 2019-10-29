@@ -1,6 +1,5 @@
 package com.nathan22177.websocket;
 
-import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
