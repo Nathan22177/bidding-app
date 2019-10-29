@@ -3,6 +3,7 @@ package com.nathan22177.service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.enums.Bot;
+import com.nathan22177.enums.Status;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.repositories.VersusBotRepository;
 import com.nathan22177.game.PlayerVersusBotGame;
@@ -49,9 +52,20 @@ public class BiddingService {
         return game.getId();
     }
 
-    public Long createNewGameAgainstAnotherPlayer(String username) {
-        PlayerVersusPlayerGame game = NewGameUtil.createNewGameAgainstThePlayer(username);
-        versusPlayerRepository.saveAndFlush(game);
+    public Long getPendingGameOrCreateNewOne(String username) {
+        Optional<PlayerVersusPlayerGame> pendingGame = versusPlayerRepository
+                .findAll()
+                .stream()
+                .filter(game -> game.getStatus() == Status.MATCHMAKING && game.getRedPlayer() == null)
+                .findFirst();
+        PlayerVersusPlayerGame game;
+        if (pendingGame.isPresent()) {
+            game = pendingGame.get();
+            pendingGame.get().setRedPlayer(new BidderPlayer(game.getConditions(), username));
+        } else {
+            game = NewGameUtil.createNewGameAgainstThePlayer(username);
+            versusPlayerRepository.saveAndFlush(game);
+        }
         return game.getId();
     }
 

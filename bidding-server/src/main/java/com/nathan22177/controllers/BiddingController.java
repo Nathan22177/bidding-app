@@ -1,6 +1,5 @@
 package com.nathan22177.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,6 @@ import com.nathan22177.util.CollectorUtils;
 @Controller
 public class BiddingController {
 
-    @Autowired
     private final BiddingService service;
 
     public BiddingController(BiddingService service) {
@@ -35,13 +33,6 @@ public class BiddingController {
         return "redirect:/vs_bot/" + gameId;
     }
 
-    @GetMapping("/start_new_game_vs_another_player/{username}")
-    public String startVersusPlayerGame(Model model, @PathVariable String username) {
-        Long gameId = service.createNewGameAgainstAnotherPlayer(username);
-        model.addAttribute("gameId", gameId);
-        return "redirect:/vs_player/" + gameId + "/" + username;
-    }
-
     @GetMapping("/vs_bot/{gameId}")
     public String loadVersusBotGame(Model model, @PathVariable Long gameId) {
         PlayerVersusBotGame game = service.loadVersusBotGame(gameId);
@@ -53,6 +44,19 @@ public class BiddingController {
         return "vs_bot_interface";
     }
 
+    @GetMapping("/vs_bot/{gameId}/{bid}")
+    @ResponseBody
+    public StateDTO placeBidVersusBot(@PathVariable Long gameId, @PathVariable Integer bid) {
+        return service.placeBidVersusBot(gameId, bid);
+    }
+
+    @GetMapping("/start_new_game_vs_another_player/{username}")
+    public String startVersusPlayerGame(Model model, @PathVariable String username) {
+        Long gameId = service.getPendingGameOrCreateNewOne(username);
+        model.addAttribute("gameId", gameId);
+        return "redirect:/vs_player/" + gameId + "/" + username;
+    }
+
     @GetMapping("/vs_player/{gameId}/{username}")
     public String loadVersusPlayerGame(Model model, @PathVariable Long gameId, @PathVariable String username) {
         PlayerVersusPlayerGame game = service.loadVersusPlayerGame(gameId);
@@ -61,12 +65,6 @@ public class BiddingController {
         model.addAttribute("history", game.getBluePlayer().getBiddingHistory());
         model.addAttribute("state", new StateDTO(game));
         return "vs_player_interface";
-    }
-
-    @GetMapping("/vs_bot/{gameId}/{bid}")
-    @ResponseBody
-    public StateDTO placeBidVersusBot(@PathVariable Long gameId, @PathVariable Integer bid) {
-        return service.placeBidVersusBot(gameId, bid);
     }
 
     private String getRandomOpponent() {
