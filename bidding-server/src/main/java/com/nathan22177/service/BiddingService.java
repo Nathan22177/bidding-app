@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.repositories.VersusBotRepository;
 import com.nathan22177.enums.Opponent;
@@ -46,6 +47,12 @@ public class BiddingService {
     public Long createNewGameAgainstTheBot(String opponent) {
         PlayerVersusBotGame game = NewGameUtil.createNewGameAgainstTheBot(Opponent.valueOf(opponent));
         versusBotRepository.saveAndFlush(game);
+        return game.getId();
+    }
+
+    public Long createNewGameAgainstAnotherPlayer(String username) {
+        PlayerVersusPlayerGame game = NewGameUtil.createNewGameAgainstThePlayer(username);
+        versusPlayerRepository.saveAndFlush(game);
         return game.getId();
     }
 

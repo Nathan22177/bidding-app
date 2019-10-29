@@ -1,6 +1,5 @@
 package com.nathan22177.util;
 
-import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.enums.Opponent;
 import com.nathan22177.game.Conditions;
 import com.nathan22177.game.PlayerVersusBotGame;
@@ -11,11 +10,7 @@ public class NewGameUtil {
         return new PlayerVersusBotGame(Conditions.getRandomConditions(), opponent);
     }
 
-    public static PlayerVersusPlayerGame createNewGameAgainstThePlayer(BidderPlayer bluePlayer) {
-        return new PlayerVersusPlayerGame(Conditions.getRandomConditions(), bluePlayer);
-    }
-
-    public static boolean redPlayerIsEmpty(PlayerVersusPlayerGame game) {
-        return game.getRedPlayer() == null;
+    public static PlayerVersusPlayerGame createNewGameAgainstThePlayer(String username) {
+        return new PlayerVersusPlayerGame(Conditions.getRandomConditions(), username);
     }
 }

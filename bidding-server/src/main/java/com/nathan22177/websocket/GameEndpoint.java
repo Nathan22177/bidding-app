@@ -23,6 +23,7 @@ import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.collection.BiddingRound;
 import com.nathan22177.enums.MessageType;
 import com.nathan22177.enums.Player;
+import com.nathan22177.enums.Status;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.repositories.VersusPlayerRepository;
 import com.nathan22177.websocket.messages.incoming.IncomingMessage;
@@ -54,14 +55,17 @@ public class GameEndpoint {
 
     @OnMessage
     public void onMessage(IncomingMessage incomingMessage) {
+        PlayerVersusPlayerGame game = versusPlayerRepository.getOne(incomingMessage.getGameId());
         Optional<IncomingMessage> otherPlayersBid = getOtherPlayersBid(incomingMessage);
         if (otherPlayersBid.isPresent()) {
             IncomingMessage blueBid = incomingMessage.getPlayer().equals(Player.BLUE) ? incomingMessage : otherPlayersBid.get();
             IncomingMessage redBid = incomingMessage.getPlayer().equals(Player.RED) ? incomingMessage : otherPlayersBid.get();
             broadcastBids(blueBid, redBid);
+            game.playersPlaceTheirBids(blueBid.getBid(), redBid.getBid());
             bids.remove(otherPlayersBid.get());
         } else {
             bids.add(incomingMessage);
+            game.setStatus(incomingMessage.getPlayer() == Player.BLUE ? Status.WAITING_FOR_RED : Status.WAITING_FOR_BLUE);
         }
     }
 
@@ -93,14 +97,17 @@ public class GameEndpoint {
                 .filter(gameSessions -> gameSessions.getGameId().equals(blueBid.getGameId()))
                 .collect(Collectors.toSet());
         Assert.isTrue(affectedSessions.size() == 2, "There should be only two sessions per game.");
+
         Session redSession = Objects.requireNonNull(affectedSessions.stream()
                 .filter(gameSession -> gameSession.getPlayer().equals(Player.RED))
                 .findFirst().orElse(null))
                 .getSession();
+
         Session blueSession = Objects.requireNonNull(affectedSessions.stream()
                 .filter(gameSession -> gameSession.getPlayer().equals(Player.BLUE))
                 .findFirst().orElse(null))
                 .getSession();
+
         try {
             blueSession.getBasicRemote().sendObject(getOutGoingMessageForBids(blueBid, redBid));
         } catch (IOException | EncodeException e) {
@@ -119,7 +126,7 @@ public class GameEndpoint {
         return new OutgoingMessage(own.getGameId(), MessageType.BID, new BiddingRound(own.getBid(), opponents.getBid()));
     }
 
-        @OnClose
+    @OnClose
     public void onClose(Session session) {
         GameSession closingSession = getBySession(session);
         gameSessions.remove(closingSession);

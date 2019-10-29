@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 import com.nathan22177.bidder.BidderPlayer;
+import com.nathan22177.collection.BiddingRound;
+import com.nathan22177.enums.Status;
+import com.nathan22177.util.EndGameUtil;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,9 +20,9 @@ public class PlayerVersusPlayerGame extends AbstractGame implements Game{
     @OneToOne(cascade = CascadeType.ALL)
     BidderPlayer redPlayer;
 
-    public PlayerVersusPlayerGame(Conditions conditions, BidderPlayer bluePlayer) {
+    public PlayerVersusPlayerGame(Conditions conditions, String username) {
         this.conditions = conditions;
-        this.bluePlayer = bluePlayer;
+        this.bluePlayer = new BidderPlayer(conditions, username);
     }
 
     @Override
@@ -35,5 +38,22 @@ public class PlayerVersusPlayerGame extends AbstractGame implements Game{
             return getRedPlayer();
         }
         throw new IllegalArgumentException("No such player in this game. Username: " + username + "; gameId: " + getId());
+    }
+
+    public void playersPlaceTheirBids(Integer bluesBid, Integer redsBid) {
+        resolveBids(bluesBid, redsBid);
+        if (EndGameUtil.theGameHasEnded(this)) {
+            EndGameUtil.resolveGamesEnd(this);
+        }
+    }
+
+    private void resolveBids(int bluesBid, int redsBid) {
+        BidderPlayer bluePlayer = getBluePlayer();
+        BidderPlayer redPlayer = getRedPlayer();
+        bluePlayer.placeBidAndWithdraw(bluesBid);
+        redPlayer.placeBidAndWithdraw(redsBid);
+        bluePlayer.resolveBidsAndAppendHistory(bluesBid, redsBid);
+        redPlayer.resolveBidsAndAppendHistory(redsBid, bluesBid);
+        setStatus(Status.WAITING_FOR_BIDS);
     }
 }

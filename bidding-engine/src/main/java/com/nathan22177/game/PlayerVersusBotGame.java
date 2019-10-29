@@ -27,13 +27,12 @@ public class PlayerVersusBotGame extends AbstractGame implements Game{
         this.status = Status.WAITING_FOR_BIDS;
     }
 
-    public BiddingRound playerPlacesBidVersusBot(Integer bluesBid) {
+    public void playerPlacesBidVersusBot(Integer bluesBid) {
         int redsBid = getRedPlayer().getNextBid();
         resolveBidsVersusBot(bluesBid, redsBid);
         if (EndGameUtil.theGameHasEnded(this)) {
             EndGameUtil.resolveGamesEnd(this);
         }
-        return getRedPlayer().getBiddingHistory().get(getRedPlayer().getBiddingHistory().size() - 1);
     }
 
     private void resolveBidsVersusBot(int bluesBid, int redsBid) {

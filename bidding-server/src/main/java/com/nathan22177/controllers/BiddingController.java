@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.nathan22177.enums.Player;
 import com.nathan22177.game.PlayerVersusBotGame;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.game.dto.StateDTO;
@@ -34,6 +35,13 @@ public class BiddingController {
         return "redirect:/vs_bot/" + gameId;
     }
 
+    @GetMapping("/play_vs_another_player/{username}")
+    public String startVersusPlayerGame(Model model, @PathVariable String username) {
+        Long gameId = service.createNewGameAgainstAnotherPlayer(username);
+        model.addAttribute("gameId", gameId);
+        return "redirect:/vs_player/" + gameId + "/" + username;
+    }
+
     @GetMapping("/vs_bot/{gameId}")
     public String loadVersusBotGame(Model model, @PathVariable Long gameId) {
         PlayerVersusBotGame game = service.loadVersusBotGame(gameId);
@@ -45,15 +53,14 @@ public class BiddingController {
         return "vs_bot_interface";
     }
 
-    @GetMapping("/vs_player/{gameId}")
-    public String loadVersusPlayerGame(Model model, @PathVariable Long gameId) {
+    @GetMapping("/vs_player/{gameId}/{username}")
+    public String loadVersusPlayerGame(Model model, @PathVariable Long gameId, @PathVariable String username) {
         PlayerVersusPlayerGame game = service.loadVersusPlayerGame(gameId);
-        model.addAttribute("red", game.getRedPlayer());
-        model.addAttribute("blue", game.getBluePlayer());
+        model.addAttribute("player", game.getBluePlayer().getUsername().equals(username) ? Player.BLUE : Player.RED);
         model.addAttribute("gameId", game.getId());
         model.addAttribute("history", game.getBluePlayer().getBiddingHistory());
         model.addAttribute("state", new StateDTO(game));
-        return "vs_bot_interface";
+        return "vs_player_interface";
     }
 
     @GetMapping("/vs_bot/{gameId}/{bid}")
