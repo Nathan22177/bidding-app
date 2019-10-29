@@ -28,17 +28,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BiddingService {
 
-    @Autowired
-    RestTemplate restTemplate;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
+    private final
     VersusBotRepository versusBotRepository;
 
-    @Autowired
+    private final
     VersusPlayerRepository versusPlayerRepository;
+
+    public BiddingService(VersusBotRepository versusBotRepository, VersusPlayerRepository versusPlayerRepository) {
+        this.versusBotRepository = versusBotRepository;
+        this.versusPlayerRepository = versusPlayerRepository;
+    }
 
     public Map<String, Bot> getAvailableOpponents() {
         return Arrays.stream(Bot.values()).collect(Collectors.toMap(Bot::getName, Function.identity()));
