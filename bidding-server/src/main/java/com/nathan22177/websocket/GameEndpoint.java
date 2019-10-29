@@ -21,7 +21,7 @@ import org.springframework.util.Assert;
 import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.collection.BiddingRound;
 import com.nathan22177.enums.MessageType;
-import com.nathan22177.enums.Player;
+import com.nathan22177.enums.Side;
 import com.nathan22177.enums.Status;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.repositories.VersusPlayerRepository;
@@ -47,7 +47,7 @@ public class GameEndpoint {
     public void onOpen(Session session, @PathParam("gameId") Long gameId, @PathParam("username") String username) throws IOException {
         PlayerVersusPlayerGame game = versusPlayerRepository.getOne(gameId);
         BidderPlayer player = game.getPlayerByUsername(username);
-        GameSession newGameSession = new GameSession(gameId, session, username, player.getPlayer());
+        GameSession newGameSession = new GameSession(gameId, session, username, player.getSide());
         broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.PLAYER_JOINED));
         gameSessions.add(newGameSession);
     }
@@ -57,14 +57,14 @@ public class GameEndpoint {
         PlayerVersusPlayerGame game = versusPlayerRepository.getOne(incomingMessage.getGameId());
         Optional<IncomingMessage> otherPlayersBid = getOtherPlayersBid(incomingMessage);
         if (otherPlayersBid.isPresent()) {
-            IncomingMessage blueBid = incomingMessage.getPlayer().equals(Player.BLUE) ? incomingMessage : otherPlayersBid.get();
-            IncomingMessage redBid = incomingMessage.getPlayer().equals(Player.RED) ? incomingMessage : otherPlayersBid.get();
+            IncomingMessage blueBid = incomingMessage.getSide().equals(Side.BLUE) ? incomingMessage : otherPlayersBid.get();
+            IncomingMessage redBid = incomingMessage.getSide().equals(Side.RED) ? incomingMessage : otherPlayersBid.get();
             broadcastBids(blueBid, redBid);
             game.playersPlaceTheirBids(blueBid.getBid(), redBid.getBid());
             bids.remove(otherPlayersBid.get());
         } else {
             bids.add(incomingMessage);
-            game.setStatus(incomingMessage.getPlayer() == Player.BLUE ? Status.WAITING_FOR_RED : Status.WAITING_FOR_BLUE);
+            game.setStatus(incomingMessage.getSide() == Side.BLUE ? Status.WAITING_FOR_RED : Status.WAITING_FOR_BLUE);
         }
     }
 
@@ -73,7 +73,7 @@ public class GameEndpoint {
         return bids
                 .stream()
                 .filter(bid -> bid.getGameId().equals(incomingMessage.getGameId())
-                        && !bid.getPlayer().equals(incomingMessage.getPlayer()))
+                        && !bid.getSide().equals(incomingMessage.getSide()))
                 .findAny();
     }
 
@@ -98,12 +98,12 @@ public class GameEndpoint {
         Assert.isTrue(affectedSessions.size() == 2, "There should be only two sessions per game.");
 
         Session redSession = Objects.requireNonNull(affectedSessions.stream()
-                .filter(gameSession -> gameSession.getPlayer().equals(Player.RED))
+                .filter(gameSession -> gameSession.getSide().equals(Side.RED))
                 .findFirst().orElse(null))
                 .getSession();
 
         Session blueSession = Objects.requireNonNull(affectedSessions.stream()
-                .filter(gameSession -> gameSession.getPlayer().equals(Player.BLUE))
+                .filter(gameSession -> gameSession.getSide().equals(Side.BLUE))
                 .findFirst().orElse(null))
                 .getSession();
 

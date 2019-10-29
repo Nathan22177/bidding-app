@@ -15,18 +15,17 @@
     <script th:src="@{/require.js}"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" th:inline="javascript">
-        var username;
+        let username;
         require(['jquery'], function ($) {
-
             function startPvpGame() {
             username = window.prompt('Enter your pvp username.');
             window.location.replace('/start_new_game_vs_another_player/' + username);
             }
 
-
             $("#pvpBtn").click(function () {
                startPvpGame();
             });
+
             $(document).ready(function () {
             });
         });
@@ -137,7 +136,7 @@
                 <div>
                     <p></p>
                     <div>
-                        <button id="pvpBtn" class="btn pvp"> vs. another player
+                        <button id="pvpBtn" class="btn pvp"> vs. another side
                             &nbsp;<i class="fa fa-user"></i></button>
                     </div>
                     <p></p>

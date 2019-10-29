@@ -16,12 +16,12 @@ public class BiddingRound {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    private int blueBid;
-    private int redBid;
+    private int ownBid;
+    private int opponentBid;
 
-    public BiddingRound(int red, int blue){
-        this.blueBid = red;
-        this.redBid = blue;
+    public BiddingRound(int own, int other){
+        this.ownBid = own;
+        this.opponentBid = other;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.nathan22177.biddingcommon;
+package com.nathan22177.biddingclient;
 
 import java.util.Arrays;
 import java.util.LinkedList;

@@ -18,11 +18,11 @@
     <script type='text/javascript'
             src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
     <script type="text/javascript" th:inline="javascript">
-        var upperLimit = [[${blue.balance}]];
+        let upperLimit = [[${blue.balance}]];
 
         require(['jquery'], function ($) {
             function resolveRoundsCountdown(data) {
-                var color;
+                let color;
                 if (data.roundsLeft > 2) {
                     color = 'green';
                 } else {
@@ -67,15 +67,15 @@
                             window.location.replace('/');
                             break;
                         case 'MATCHMAKING':
-                            window.alert('Waiting for another player.');
+                            window.alert('Waiting for another side.');
                             break;
                     }
                 }
             }
 
             function placeBid() {
-                var bid = parseInt($("#bid").val(), 10);
-                var balance = parseInt($("#balance").text(), 10);
+                let bid = parseInt($("#bid").val(), 10);
+                let balance = parseInt($("#balance").text(), 10);
                 if (bid > balance) {
                     window.alert("You can't bet more money than you possess");
                     upperLimit = balance;
@@ -87,17 +87,15 @@
                     $("#bid").val(0);
                     return;
                 }
-                var mapping = '/vs_bot/' + [[${gameId}]] + '/' + bid;
+                let mapping = '/vs_bot/' + [[${gameId}]] + '/' + bid;
                 $.get(mapping, function (data) {
                     if (data) {
                         $("#balance").text(data.balance);
                         $("#acquiredAmount").text(data.acquiredAmount);
-                        $("#bid").val('');
                         if (data.biddingRound) {
-                            var lastOwn = data.biddingRound.ownBid;
-                            var lastOpponents = data.biddingRound.opponentBid;
-                            var won = lastOwn > lastOpponents;
-                            var entry = "<p>Your bid: " + lastOwn + "&nbsp; Opponents bid: " + lastOpponents + "</p>";
+                            let lastOwn = data.biddingRound.ownBid;
+                            let lastOpponents = data.biddingRound.opponentBid;
+                            let entry = "<p>Your bid: " + lastOwn + "&nbsp; Opponents bid: " + lastOpponents + "</p>";
                             $("#history").append(entry);
                         }
                         $("#bid").val(0);
@@ -113,7 +111,7 @@
             });
 
             $(document).ready(function () {
-                var state = [[${state}]];
+                let state = [[${state}]];
                 checkIfGameHasEnded(state);
                 $("#bid").val(0);
                 $(".mask").inputmask('numeric', {rightAlign: false, min: 0, max: upperLimit});

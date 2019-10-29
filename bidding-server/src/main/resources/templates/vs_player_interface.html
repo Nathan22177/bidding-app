@@ -18,31 +18,37 @@
     <script type='text/javascript'
             src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
     <script type="text/javascript" th:inline="javascript">
-        var upperLimit = [[${blue.balance}]];
-        var state = [[${state}]];
-        let ws = new WebSocket("ws://" + location.hostname + ":" + location.port + "/pvp/" + state.gameId + "/" + state.bluePlayerUsername);
+        let upperLimit = [[${blue.balance}]];
+        let state = [[${state}]];
+        let side = [[${side}]];
+        ws = new WebSocket("ws://" + location.hostname + ":" + location.port + "/pvp/" + state.gameId + "/" + state.bluePlayerUsername);
+
+        class Bid {
+
+        }
 
         require(['jquery'], function ($) {
             function updateGameInfo(msg) {
                 let data = JSON.parse(msg);
-                if (data) {
-                    $("#balance").text(data.balance);
-                    $("#acquiredAmount").text(data.acquiredAmount);
-                    $("#bid").val('');
-                    if (data.biddingRound) {
-                        var lastOwn = data.biddingRound.ownBid;
-                        var lastOpponents = data.biddingRound.opponentBid;
-                        var entry = "<p>Your bid: " + lastOwn + "&nbsp; Opponents bid: " + lastOpponents + "</p>";
-                        $("#history").append(entry);
-                    }
-                    $("#bid").val(0);
-                    resolveRoundsCountdown(data);
-                    checkIfGameHasEnded(data);
-                }
+
+                // if (data) {
+                //     $("#balance").text(data.balance);
+                //     $("#acquiredAmount").text(data.acquiredAmount);
+                //     $("#bid").val('');
+                //     if (data.biddingRound) {
+                //         var lastOwn = data.biddingRound.ownBid;
+                //         var lastOpponents = data.biddingRound.opponentBid;
+                //         var entry = "<p>Your bid: " + lastOwn + "&nbsp; Opponents bid: " + lastOpponents + "</p>";
+                //         $("#history").append(entry);
+                //     }
+                //     $("#bid").val(0);
+                //     resolveRoundsCountdown(data);
+                //     checkIfGameHasEnded(data);
+                // }
             }
 
             function resolveRoundsCountdown(data) {
-                var color;
+                let color;
                 if (data.roundsLeft > 2) {
                     color = 'green';
                 } else {
@@ -83,20 +89,18 @@
                             window.location.replace('/');
                             break;
                         case 'ENDED_PREMATURELY':
+                        default:
                             window.alert('Something went wrong. \n\nYou will now be redirected to the menu.');
                             window.location.replace('/');
-                            break;
-                        case 'MATCHMAKING':
-                            window.alert('Waiting for another player.');
                             break;
                     }
                 }
             }
 
             function placeBid() {
-                var bid = parseInt($("#bid").val(), 10);
+                let bid = parseInt($("#bid").val(), 10);
                 $("#bid").val(0);
-                var balance = parseInt($("#balance").text(), 10);
+                let balance = parseInt($("#balance").text(), 10);
                 if (bid > balance) {
                     window.alert("You can't bet more money than you possess");
                     return;
@@ -118,8 +122,6 @@
                 $("#bid").val(0);
                 $(".mask").inputmask('numeric', {rightAlign: false, min: 0, max: upperLimit});
                 resolveRoundsCountdown(state);
-                var msg = ws.onmessage;
-                updateGameInfo(msg);
             });
         });
     </script>

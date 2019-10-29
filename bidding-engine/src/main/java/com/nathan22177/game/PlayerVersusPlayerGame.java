@@ -56,4 +56,9 @@ public class PlayerVersusPlayerGame extends AbstractGame implements Game{
         redPlayer.resolveBidsAndAppendHistory(redsBid, bluesBid);
         setStatus(Status.WAITING_FOR_BIDS);
     }
+
+    /**
+     * Used by JPA.
+     */
+    public PlayerVersusPlayerGame(){}
 }

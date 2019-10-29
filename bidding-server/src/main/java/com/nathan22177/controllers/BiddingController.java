@@ -7,12 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.nathan22177.enums.Bot;
-import com.nathan22177.enums.Player;
+import com.nathan22177.enums.Side;
 import com.nathan22177.game.PlayerVersusBotGame;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.game.dto.StateDTO;
 import com.nathan22177.service.BiddingService;
-import com.nathan22177.util.CollectorUtils;
 import com.nathan22177.util.NewGameUtil;
 
 @Controller
@@ -61,10 +60,13 @@ public class BiddingController {
     @GetMapping("/vs_player/{gameId}/{username}")
     public String loadVersusPlayerGame(Model model, @PathVariable Long gameId, @PathVariable String username) {
         PlayerVersusPlayerGame game = service.loadVersusPlayerGame(gameId);
-        model.addAttribute("player", game.getBluePlayer().getUsername().equals(username) ? Player.BLUE : Player.RED);
+        Side side = game.getBluePlayer().getUsername().equals(username) ? Side.BLUE : Side.RED;
+        model.addAttribute("player", side);
         model.addAttribute("gameId", game.getId());
-        model.addAttribute("history", game.getBluePlayer().getBiddingHistory());
-        model.addAttribute("state", new StateDTO(game));
+        model.addAttribute("history", side == Side.BLUE
+                ? game.getBluePlayer().getBiddingHistory()
+                : game.getRedPlayer().getBiddingHistory());
+        model.addAttribute("state", new StateDTO(game, side));
         return "vs_player_interface";
     }
 

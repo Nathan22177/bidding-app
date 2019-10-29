@@ -1,6 +1,6 @@
 package com.nathan22177.websocket.messages.incoming;
 
-import com.nathan22177.enums.Player;
+import com.nathan22177.enums.Side;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,5 +10,5 @@ import lombok.Getter;
 public class IncomingMessage {
         Long gameId;
         int bid;
-        Player player;
+        Side side;
 }

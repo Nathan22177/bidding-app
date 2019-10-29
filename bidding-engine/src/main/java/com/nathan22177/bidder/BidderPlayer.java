@@ -7,7 +7,7 @@ import javax.persistence.Enumerated;
 
 import org.springframework.util.Assert;
 
-import com.nathan22177.enums.Player;
+import com.nathan22177.enums.Side;
 import com.nathan22177.game.Conditions;
 
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class BidderPlayer extends AbstractBidder {
     String username;
 
     @Enumerated(EnumType.STRING)
-    Player player;
+    Side side;
 
     public BidderPlayer(Conditions conditions, String username) {
         Assert.isTrue(conditions.getQuantity() % 2 == 0 && conditions.getQuantity() > 0, "Quantity must be a positive and even number.");
