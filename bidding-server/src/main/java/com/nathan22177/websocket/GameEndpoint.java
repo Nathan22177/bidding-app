@@ -115,7 +115,7 @@ public class GameEndpoint {
         }
     }
 
-    public static OutgoingMessage getOutGoingMessageForBids(IncomingMessage own, IncomingMessage opponents) {
+    private static OutgoingMessage getOutGoingMessageForBids(IncomingMessage own, IncomingMessage opponents) {
         return new OutgoingMessage(own.getGameId(), MessageType.BID, new BiddingRound(own.getBid(), opponents.getBid()));
     }
 
@@ -129,10 +129,6 @@ public class GameEndpoint {
 
     private GameSession getBySession(Session session) {
         return gameSessions.stream().filter(gameSession -> gameSession.getSession().equals(session)).findFirst().orElse(null);
-    }
-
-    private Set<GameSession> getAffectedGameSessions(GameSession session) {
-        return gameSessions.stream().filter(gameSession -> gameSession.getGameId().equals(session.getGameId())).collect(Collectors.toSet());
     }
 
 }

@@ -4,9 +4,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Transient;
 
-import org.hibernate.Session;
 import org.springframework.util.Assert;
 
 import com.nathan22177.enums.Player;
