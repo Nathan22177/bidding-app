@@ -20,7 +20,7 @@
     <script type="text/javascript" th:inline="javascript">
         var upperLimit = [[${blue.balance}]];
         var state = [[${state}]];
-        let ws = new WebSocket("ws://" + location.hostname + ":" + location.port + "/pvp" + state.gameId + "/" + state.bluePlayerUsername);
+        let ws = new WebSocket("ws://" + location.hostname + ":" + location.port + "/pvp/" + state.gameId + "/" + state.bluePlayerUsername);
 
         require(['jquery'], function ($) {
             function updateGameInfo(msg) {

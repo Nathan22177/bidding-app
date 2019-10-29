@@ -16,7 +16,6 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.util.Assert;
 
 import com.nathan22177.bidder.BidderPlayer;
@@ -49,7 +48,7 @@ public class GameEndpoint {
         PlayerVersusPlayerGame game = versusPlayerRepository.getOne(gameId);
         BidderPlayer player = game.getPlayerByUsername(username);
         GameSession newGameSession = new GameSession(gameId, session, username, player.getPlayer());
-        broadcast(new OutgoingMessage(newGameSession.getGameId(), MessageType.PLAYER_JOINED));
+        broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.PLAYER_JOINED));
         gameSessions.add(newGameSession);
     }
 
@@ -78,7 +77,7 @@ public class GameEndpoint {
                 .findAny();
     }
 
-    private static void broadcast(OutgoingMessage outgoingEvent) {
+    private static void broadcastStatusChange(OutgoingMessage outgoingEvent) {
         gameSessions.stream()
                 .filter(gameSessions -> gameSessions.getGameId().equals(outgoingEvent.getGameId()))
                 .forEach(gameSession -> {
@@ -130,7 +129,7 @@ public class GameEndpoint {
     public void onClose(Session session) {
         GameSession closingSession = getBySession(session);
         gameSessions.remove(closingSession);
-        broadcast(new OutgoingMessage(closingSession.getGameId(), MessageType.PLAYER_LEFT));
+        broadcastStatusChange(new OutgoingMessage(closingSession.getGameId(), MessageType.PLAYER_LEFT));
 
     }
 
