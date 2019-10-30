@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+>
 <head>
     <title>Day-ahead auction simulator</title>
     <meta charset="utf-8">
@@ -166,7 +166,7 @@
                         <div class="dropdown-menu" style="width: 600px" aria-labelledby="dropdownMenuButton2">
                             <a class="dropdown-item" th:each="game : ${listOfGamesVersusBots}"
                                th:href="${'vs_bot/' + game.id}"
-                               th:text="${'vs. ' + game.bot + '; id: ' + game.id + '; rounds.left: ' + game.roundsLeft}"></a>
+                               th:text="${'(' + game.id + ')' + ' vs. ' + game.opponent + '; rounds.left: ' + game.roundsLeft + '; balance: ' + game.balance + '; acquired: ' + game.acquired + '.'}"></a>
                         </div>
                     </div>
                 </div>

@@ -70,8 +70,6 @@ public class BiddingController {
         return "vs_player_interface";
     }
 
-
-
     @GetMapping("/")
     public String menu(Model model) {
         model.addAttribute("bots", NewGameUtil.getAvailableBots());
