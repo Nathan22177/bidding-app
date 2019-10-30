@@ -3,6 +3,7 @@ package com.nathan22177.game;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.bidder.BidderPlayer;
@@ -14,6 +15,7 @@ import lombok.Setter;
 
 @Setter
 @Entity
+@Table(name = "player_versus_bot_game")
 public class PlayerVersusBotGame extends AbstractGame implements Game{
 
     @OneToOne(cascade = CascadeType.ALL)

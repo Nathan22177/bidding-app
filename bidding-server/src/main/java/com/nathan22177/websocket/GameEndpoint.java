@@ -24,6 +24,7 @@ import com.nathan22177.enums.MessageType;
 import com.nathan22177.enums.Side;
 import com.nathan22177.enums.Status;
 import com.nathan22177.game.PlayerVersusPlayerGame;
+import com.nathan22177.game.dto.StateDTO;
 import com.nathan22177.repositories.VersusPlayerRepository;
 import com.nathan22177.websocket.messages.incoming.IncomingMessage;
 import com.nathan22177.websocket.messages.outgoing.OutgoingMessage;
@@ -41,7 +42,7 @@ public class GameEndpoint {
 
 
     @Autowired
-    VersusPlayerRepository versusPlayerRepository;
+    static VersusPlayerRepository versusPlayerRepository;
 
     @OnOpen
     public void onOpen(Session session, @PathParam("gameId") Long gameId, @PathParam("username") String username) throws IOException {
@@ -59,8 +60,8 @@ public class GameEndpoint {
         if (otherPlayersBid.isPresent()) {
             IncomingMessage blueBid = incomingMessage.getSide().equals(Side.BLUE) ? incomingMessage : otherPlayersBid.get();
             IncomingMessage redBid = incomingMessage.getSide().equals(Side.RED) ? incomingMessage : otherPlayersBid.get();
-            broadcastBids(blueBid, redBid);
             game.playersPlaceTheirBids(blueBid.getBid(), redBid.getBid());
+            broadcastBids(blueBid, redBid);
             bids.remove(otherPlayersBid.get());
         } else {
             bids.add(incomingMessage);
@@ -106,23 +107,23 @@ public class GameEndpoint {
                 .filter(gameSession -> gameSession.getSide().equals(Side.BLUE))
                 .findFirst().orElse(null))
                 .getSession();
-
+        PlayerVersusPlayerGame game = versusPlayerRepository.getOne(blueBid.getGameId());
         try {
-            blueSession.getBasicRemote().sendObject(getOutGoingMessageForBids(blueBid, redBid));
+            blueSession.getBasicRemote().sendObject(getOutGoingMessageForBids(game, Side.BLUE));
         } catch (IOException | EncodeException e) {
             log.error("failed to broadcast bids to blue player of gameId: " + blueBid.getGameId());
             e.printStackTrace();
         }
         try {
-            redSession.getBasicRemote().sendObject(getOutGoingMessageForBids(redBid, blueBid));
+            redSession.getBasicRemote().sendObject(getOutGoingMessageForBids(game, Side.RED));
         } catch (IOException | EncodeException e) {
             log.error("failed to broadcast bids to red player of gameId: " + redBid.getGameId());
             e.printStackTrace();
         }
     }
 
-    private static OutgoingMessage getOutGoingMessageForBids(IncomingMessage own, IncomingMessage opponents) {
-        return new OutgoingMessage(own.getGameId(), MessageType.BID, new BiddingRound(own.getBid(), opponents.getBid()));
+    private static OutgoingMessage getOutGoingMessageForBids(PlayerVersusPlayerGame game, Side side) {
+        return new OutgoingMessage(game.getId(), MessageType.BID, new StateDTO(game, side));
     }
 
     @OnClose

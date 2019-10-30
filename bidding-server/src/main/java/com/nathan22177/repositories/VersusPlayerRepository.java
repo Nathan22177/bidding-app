@@ -9,6 +9,6 @@ import com.nathan22177.game.PlayerVersusPlayerGame;
 
 public interface VersusPlayerRepository extends JpaRepository<PlayerVersusPlayerGame, Long> {
 
-    @Query("select game from player_versus_bot_game game where game.status = 'MATCHMAKING' and game.red_player is null")
+    @Query("select game from PlayerVersusPlayerGame game where game.status = 'MATCHMAKING' and game.redPlayer is null")
     List<PlayerVersusPlayerGame> findPendingGames();
 }

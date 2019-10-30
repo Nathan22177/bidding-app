@@ -9,6 +9,6 @@ import com.nathan22177.game.PlayerVersusBotGame;
 
 public interface VersusBotRepository extends JpaRepository<PlayerVersusBotGame, Long> {
 
-    @Query("select game from player_versus_bot_game game where game.status is not null and game.status.active = TRUE")
+    @Query("select game from PlayerVersusBotGame game where game.status is not NULL and game.status='WAITING_FOR_BIDS'")
     List<PlayerVersusBotGame> findActiveGames();
 }
