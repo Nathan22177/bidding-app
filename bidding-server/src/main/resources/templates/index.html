@@ -18,12 +18,14 @@
         let username;
         require(['jquery'], function ($) {
             function startPvpGame() {
-            username = window.prompt('Enter your pvp username.');
-            window.location.replace('/start_new_game_vs_another_player/' + username);
+                username = window.prompt('Enter your pvp username.');
+                if (username) {
+                    window.location.replace('/start_new_game_vs_another_player/' + username);
+                }
             }
 
             $("#pvpBtn").click(function () {
-               startPvpGame();
+                startPvpGame();
             });
 
             $(document).ready(function () {
@@ -136,7 +138,7 @@
                 <div>
                     <p></p>
                     <div>
-                        <button id="pvpBtn" class="btn pvp"> vs. another side
+                        <button id="pvpBtn" class="btn pvp"> vs. another player
                             &nbsp;<i class="fa fa-user"></i></button>
                     </div>
                     <p></p>

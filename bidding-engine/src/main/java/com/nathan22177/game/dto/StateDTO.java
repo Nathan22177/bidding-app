@@ -55,11 +55,14 @@ public class StateDTO {
         this.biddingRound = getBiddingRound(player);
         this.conditions = game.getConditions();
         this.status = game.getStatus();
-        this.opponentBalance = opponent.getBalance();
-        this.opponentAcquiredAmount = opponent.getAcquiredAmount();
+        if (opponent != null) {
+            this.opponentBalance = opponent.getBalance();
+            this.opponentAcquiredAmount = opponent.getAcquiredAmount();
+            this.opponentsUsername = opponent.getUsername();
+        }
         this.roundsLeft = (game.getConditions().getQuantity() / 2) - player.getBiddingHistory().size();
         this.ownUsername = player.getUsername();
-        this.opponentsUsername = opponent.getUsername();
+
     }
 
     BiddingRound getBiddingRound(AbstractBidder player) {

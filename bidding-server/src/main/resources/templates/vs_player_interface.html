@@ -166,20 +166,20 @@
 <body>
 <div class="jumbotron">
     <div class="container">
-        <h1 class="display-3"><p th:text="${'Playing against ' + red.title}"></p></h1>
+        <h1 class="display-3"><p th:id="opponentUsername"></p></h1>
         <p class="lead">Try to win as much QU as possible. But be careful! If you overspend the bot might gain an
             upper hand on what's left. So don't run out of money!</p>
         <div class="row">
             <div class="col-sm-3">
                 <h2 class="display-4">Inventory</h2>
-                <span>Balance: &nbsp;<p class="inline" id="balance" th:text="${blue.balance}"></p></span>
+                <span>Balance: &nbsp;<p class="inline" id="balance" th:text="${player.balance}"></p></span>
                 <span>&nbsp;&nbsp;Acquired QU: &nbsp;<p class="inline" id="acquiredAmount"
-                                                        th:text="${blue.acquiredAmount}"></p></span>
+                                                        th:text="${player.acquiredAmount}"></p></span>
                 <h2 class="display-4">Conditions</h2>
-                <span>Start balance: &nbsp;<p class="inline" th:text="${blue.conditions.cash}"></p></span>
+                <span>Start balance: &nbsp;<p class="inline" th:text="${player.conditions.cash}"></p></span>
 
                 <span>&nbsp;&nbsp;Overall quantity: <p class="inline"
-                                                       th:text="${blue.conditions.quantity}"></p></span>
+                                                       th:text="${player.conditions.quantity}"></p></span>
             </div>
             <div class="col-sm-4">
                 <h4 class="display-4">History</h4>

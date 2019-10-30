@@ -61,7 +61,8 @@ public class BiddingController {
     public String loadVersusPlayerGame(Model model, @PathVariable Long gameId, @PathVariable String username) {
         PlayerVersusPlayerGame game = service.loadVersusPlayerGame(gameId);
         Side side = game.getBluePlayer().getUsername().equals(username) ? Side.BLUE : Side.RED;
-        model.addAttribute("player", side);
+        model.addAttribute("side", side);
+        model.addAttribute("player", game.getBluePlayer());
         model.addAttribute("gameId", game.getId());
         model.addAttribute("history", side == Side.BLUE
                 ? game.getBluePlayer().getBiddingHistory()
