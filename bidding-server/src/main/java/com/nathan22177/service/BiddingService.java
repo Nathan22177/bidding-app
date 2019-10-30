@@ -52,9 +52,8 @@ public class BiddingService {
 
     public Long getPendingGameOrCreateNewOne(String username) {
         Optional<PlayerVersusPlayerGame> pendingGame = versusPlayerRepository
-                .findAll()
+                .findPendingGames()
                 .stream()
-                .filter(game -> game.getStatus() == Status.MATCHMAKING && game.getRedPlayer() == null)
                 .findFirst();
         PlayerVersusPlayerGame game;
         if (pendingGame.isPresent()) {
@@ -83,6 +82,6 @@ public class BiddingService {
     }
 
     public List<GamesDTO> getStartedGamesVersusBots() {
-        return versusBotRepository.findAll().stream().filter(game -> game.getStatus().isActive()).map(GamesDTO::new).collect(Collectors.toList());
+        return versusBotRepository.findActiveGames().stream().map(GamesDTO::new).collect(Collectors.toList());
     }
 }
