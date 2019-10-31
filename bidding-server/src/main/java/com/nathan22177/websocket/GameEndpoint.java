@@ -16,12 +16,11 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import com.nathan22177.bidder.BidderPlayer;
+import com.nathan22177.config.CustomSpringConfigurator;
 import com.nathan22177.enums.MessageType;
 import com.nathan22177.enums.Side;
 import com.nathan22177.enums.Status;
@@ -36,18 +35,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ServerEndpoint(value = "/pvp/{gameId}/{username}",
         encoders = OutgoingMessageEncoder.class,
-        decoders = IncomingMessageDecoder.class)
+        decoders = IncomingMessageDecoder.class,
+        configurator = CustomSpringConfigurator.class)
 public class GameEndpoint {
 
     private static Set<GameSession> gameSessions = new HashSet<>();
     private static Set<IncomingMessage> bids = new HashSet<>();
 
-
     @Autowired
-    static VersusPlayerRepository versusPlayerRepository;
+    private VersusPlayerRepository versusPlayerRepository;
+
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("gameId") Long gameId, @PathParam("username") String username) throws IOException {
+    public void onOpen(Session session, @PathParam("gameId") Long gameId, @PathParam("username") String username) {
         PlayerVersusPlayerGame game = versusPlayerRepository.getOne(gameId);
         BidderPlayer player = game.getPlayerByUsername(username);
         GameSession newGameSession = new GameSession(gameId, session, username, player.getSide());
@@ -99,7 +99,7 @@ public class GameEndpoint {
 
     }
 
-    private static void broadcastBids(IncomingMessage blueBid, IncomingMessage redBid) {
+    private void broadcastBids(IncomingMessage blueBid, IncomingMessage redBid) {
         Set<GameSession> affectedSessions = gameSessions.stream()
                 .filter(gameSessions -> gameSessions.getGameId().equals(blueBid.getGameId()))
                 .collect(Collectors.toSet());
