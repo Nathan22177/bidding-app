@@ -25,26 +25,35 @@
 
         require(['jquery'], function ($) {
             socket.onmessage = function (message) {
-                switch (message.type) {
+                switch (message.data.type) {
                     case 'PLAYER_JOINED' :
-                        startGame(message);
+                        startGame();
                         break;
                     case 'BID' :
-                        updateGameInfo(message);
+                        updateGameInfo(message.data);
                         break;
                     case 'PLAYER_LEFT':
-                        resolveSuddenEnd(message);
+                        resolveSuddenEnd(message.data);
                         break;
                     case 'WAITING_FOR_OPPONENT' :
-                        waitingForOpponent(message);
+                        waitingForOpponent();
                         break;
                     default :
-                        window.alert('Unknown type found: ' + message.type);
+                        window.alert('Unknown type found: ' + message.data.type);
                 }
             };
 
-            function waitingForOpponent(message) {
-                let data = JSON.parse(message);
+            function startGame() {
+                $('#waiting').hide();
+                $('#interface').show();
+            }
+
+            function resolveSuddenEnd() {
+                window.alert('Opponent left the game. Walkover! \n\nYou will now be redirected to the menu.');
+                window.location.replace('/');
+            }
+
+            function waitingForOpponent() {
                 $('#interface').hide();
             }
 
@@ -126,11 +135,11 @@
                         case 'DRAW':
                             resolveDraw(data);
                             break;
-                        // case 'ENDED_PREMATURELY':
-                        // default:
-                        //     window.alert('Something went wrong. \n\nYou will now be redirected to the menu.');
-                        //     window.location.replace('/');
-                        //     break;
+                        case 'ENDED_PREMATURELY':
+                        default:
+                            window.alert('Something went wrong. \n\nYou will now be redirected to the menu.');
+                            window.location.replace('/');
+                            break;
                     }
                 }
             }
