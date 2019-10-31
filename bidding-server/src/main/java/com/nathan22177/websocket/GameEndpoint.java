@@ -48,7 +48,12 @@ public class GameEndpoint {
         PlayerVersusPlayerGame game = versusPlayerRepository.getOne(gameId);
         BidderPlayer player = game.getPlayerByUsername(username);
         GameSession newGameSession = new GameSession(gameId, session, username, player.getSide());
-        broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.PLAYER_JOINED));
+        if (player.getSide() == Side.BLUE) {
+            broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.WAITING_FOR_OPPONENT_TO_JOIN));
+        } else {
+            game.setStatus(Status.WAITING_FOR_BIDS);
+            broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.PLAYER_JOINED));
+        }
         gameSessions.add(newGameSession);
     }
 
@@ -119,6 +124,7 @@ public class GameEndpoint {
             log.error("failed to broadcast bids to red player of gameId: " + redBid.getGameId());
             e.printStackTrace();
         }
+        game.setStatus(Status.WAITING_FOR_BIDS);
     }
 
     private static OutgoingMessage getOutGoingMessageForBids(PlayerVersusPlayerGame game, Side side) {

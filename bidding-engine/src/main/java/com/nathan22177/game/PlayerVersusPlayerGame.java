@@ -26,6 +26,7 @@ public class PlayerVersusPlayerGame extends AbstractGame implements Game{
     public PlayerVersusPlayerGame(Conditions conditions, String username) {
         this.conditions = conditions;
         this.bluePlayer = new BidderPlayer(conditions, username, Side.BLUE);
+        setStatus(Status.MATCHMAKING);
     }
 
     @Override
