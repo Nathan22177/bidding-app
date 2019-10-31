@@ -10,10 +10,6 @@
     <meta name="referrer" content="never"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script th:src="@{/require.js}"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <style>
         p {
             word-wrap: break-word;
@@ -24,30 +20,23 @@
             margin-bottom: -500px;
         }
 
+        .error-img {
+            background-color: transparent;
+        }
 
     </style>
 </head>
 <body>
 <div class="jumbotron">
     <div class="container">
-        <div class="row">
-            <div class="col-sm-6">
-                <h1 class="display-3"><p>ERROR 500</p></h1>
-                <p class="lead">Things are a little <span>unstable</span> here</p>
-                <p class="lead">I suggest come back later</p>
-            </div>
-            <div class="col-sm-4">
-                <img src="https://dejawoo.de/wp-content/uploads/2019/04/broken-server-300x300.png" alt="500" class="img-thumbnail">
-            </div>
-        </div>
+        <h1 class="display-3"><p>ERROR 500</p></h1>
+        <p class="lead">Oops, something went wrong on the server</p>
+        <p class="lead">I suggest come back later</p>
     </div>
 </div>
 <script src="https://kit.fontawesome.com/539bdd1ce4.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
-        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
         crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
         integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"

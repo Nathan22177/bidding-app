@@ -8,6 +8,7 @@ import javax.persistence.Table;
 import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.enums.Bot;
+import com.nathan22177.enums.Side;
 import com.nathan22177.enums.Status;
 import com.nathan22177.util.EndGameUtil;
 
@@ -24,7 +25,7 @@ public class PlayerVersusBotGame extends AbstractGame implements Game{
     public PlayerVersusBotGame(Conditions conditions, Bot bot) {
         this.conditions = conditions;
         this.redPlayer = new BidderBot(conditions, bot);
-        this.bluePlayer = new BidderPlayer(conditions, "local");
+        this.bluePlayer = new BidderPlayer(conditions, "local", Side.BLUE);
         this.status = Status.WAITING_FOR_BIDS;
     }
 

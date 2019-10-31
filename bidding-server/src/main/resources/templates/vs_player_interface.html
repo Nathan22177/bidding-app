@@ -18,16 +18,31 @@
     <script type='text/javascript'
             src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
     <script type="text/javascript" th:inline="javascript">
-        let upperLimit = [[${blue.balance}]];
+        let upperLimit = [[${player.balance}]];
         let state = [[${state}]];
         let side = [[${side}]];
-        ws = new WebSocket("ws://" + location.hostname + ":" + location.port + "/pvp/" + state.gameId + "/" + state.bluePlayerUsername);
-
-        class Bid {
-
-        }
+        socket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/pvp/" + state.gameId + "/" + state.ownUsername);
 
         require(['jquery'], function ($) {
+            function socket.onmessage = function (message) {
+                switch (message.type) {
+                    case 'PLAYER_JOINED' :
+                        startGame(message);
+                        break;
+                    case 'BID' :
+                        updateGameInfo(message);
+                        break;
+                    case 'PLAYER_LEFT':
+                        resolveSuddenEnd(message);
+                        break;
+                    case 'WAIT' :
+                        waitingForOpponent(message);
+                        break;
+                    default :
+                        window.alert('Unknown type found: ' + message.type);
+                }
+            };
+
             function updateGameInfo(msg) {
                 let data = JSON.parse(msg);
 
@@ -57,36 +72,54 @@
                 $("#roundsLeft").css('color', color).text(data.roundsLeft);
             }
 
+            function resolveWin(data) {
+                window.alert('VICTORY! \n' +
+                    '\nAcquired ' + data.acquiredAmount +
+                    'QUs out of ' + [[${player.conditions.quantity}]] + '\n' +
+                    'Cash left: ' + data.balance + '\n' +
+                    '\nOpponent lost with ' + data.opponentAcquiredAmount + ' QUs and ' +
+                    data.opponentBalance + ' cash.' +
+                    '\n\nYou will now be redirected to the menu.');
+                window.location.replace('/');
+            }
+
+            function resolveDefeat(data) {
+                window.alert('DEFEAT! \n' +
+                    '\nAcquired ' + data.acquiredAmount +
+                    'QUs out of ' + [[${player.conditions.quantity}]] + '\n' +
+                    'Cash left: ' + data.balance + '\n' +
+                    '\nOpponent won with ' + data.opponentAcquiredAmount + ' QUs and ' +
+                    data.opponentBalance + ' cash.' +
+                    '\n\nYou will now be redirected to the menu.');
+                window.location.replace('/');
+            }
+
+            function resolveDraw() {
+                window.alert('DRAW! \n' +
+                    '\nBoth acquired ' + data.acquiredAmount +
+                    'QUs out of ' + [[${player.conditions.quantity}]] + '\n' +
+                    'Both left with ' + data.balnce + ' of cash.' +
+                    '\nYou will now be redirected to the menu.');
+                window.location.replace('/');
+            }
+
             function checkIfGameHasEnded(data) {
                 if (!data.status.isActive) {
                     switch (data.status) {
                         case 'BLUE_WON':
-                            window.alert('VICTORY! \n' +
-                                '\nAcquired ' + data.acquiredAmount +
-                                'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
-                                'Cash left: ' + data.balance + '\n' +
-                                '\nOpponent lost with ' + data.opponentAcquiredAmount + ' QUs and ' +
-                                data.opponentBalance + ' cash.' +
-                                '\n\nYou will now be redirected to the menu.');
-                            window.location.replace('/');
+                            if (side.toString() === 'BLUE')
+                                resolveWin(data);
+                            else
+                                resolveDefeat(data);
                             break;
                         case 'RED_WON':
-                            window.alert('DEFEAT! \n' +
-                                '\nAcquired ' + data.acquiredAmount +
-                                'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
-                                'Cash left: ' + data.balance + '\n' +
-                                '\nOpponent won with ' + data.opponentAcquiredAmount + ' QUs and ' +
-                                data.opponentBalance + ' cash.' +
-                                '\n\nYou will now be redirected to the menu.');
-                            window.location.replace('/');
+                            if (side.toString() === 'RED')
+                                resolveWin(data);
+                            else
+                                resolveDefeat(data);
                             break;
                         case 'DRAW':
-                            window.alert('DRAW! \n' +
-                                '\nBoth acquired ' + data.acquiredAmount +
-                                'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
-                                'Both left with ' + data.balnce + ' of cash.' +
-                                '\nYou will now be redirected to the menu.');
-                            window.location.replace('/');
+                            resolveDraw(data);
                             break;
                         case 'ENDED_PREMATURELY':
                         default:
@@ -109,7 +142,7 @@
                     window.alert("Bid must be positive number");
                     return;
                 }
-                ws.send(bid);
+                socket.send(bid);
             }
 
             $("#bidBtn").click(function () {

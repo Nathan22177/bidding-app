@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import com.nathan22177.bidder.BidderPlayer;
-import com.nathan22177.collection.BiddingRound;
 import com.nathan22177.enums.MessageType;
 import com.nathan22177.enums.Side;
 import com.nathan22177.enums.Status;
@@ -129,6 +128,7 @@ public class GameEndpoint {
     @OnClose
     public void onClose(Session session) {
         GameSession closingSession = getBySession(session);
+        versusPlayerRepository.getOne(closingSession.getGameId()).setStatus(Status.ENDED_PREMATURELY);
         gameSessions.remove(closingSession);
         broadcastStatusChange(new OutgoingMessage(closingSession.getGameId(), MessageType.PLAYER_LEFT));
 

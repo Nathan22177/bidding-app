@@ -7,6 +7,7 @@ import javax.persistence.Table;
 
 import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.collection.BiddingRound;
+import com.nathan22177.enums.Side;
 import com.nathan22177.enums.Status;
 import com.nathan22177.util.EndGameUtil;
 
@@ -24,7 +25,7 @@ public class PlayerVersusPlayerGame extends AbstractGame implements Game{
 
     public PlayerVersusPlayerGame(Conditions conditions, String username) {
         this.conditions = conditions;
-        this.bluePlayer = new BidderPlayer(conditions, username);
+        this.bluePlayer = new BidderPlayer(conditions, username, Side.BLUE);
     }
 
     @Override

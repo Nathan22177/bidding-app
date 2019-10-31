@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.enums.Bot;
+import com.nathan22177.enums.Side;
 import com.nathan22177.enums.Status;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.repositories.VersusBotRepository;
@@ -58,7 +59,8 @@ public class BiddingService {
         PlayerVersusPlayerGame game;
         if (pendingGame.isPresent()) {
             game = pendingGame.get();
-            pendingGame.get().setRedPlayer(new BidderPlayer(game.getConditions(), username));
+            pendingGame.get().setRedPlayer(new BidderPlayer(game.getConditions(), username, Side.RED));
+            pendingGame.get().getRedPlayer().setSide(Side.RED);
         } else {
             game = NewGameUtil.createNewGameAgainstThePlayer(username);
             versusPlayerRepository.saveAndFlush(game);
