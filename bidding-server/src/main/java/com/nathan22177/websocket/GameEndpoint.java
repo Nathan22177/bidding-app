@@ -16,7 +16,10 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.enums.MessageType;
@@ -31,7 +34,7 @@ import com.nathan22177.websocket.messages.outgoing.OutgoingMessage;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@ServerEndpoint(value = "pvp/{gameId}/{username}",
+@ServerEndpoint(value = "/pvp/{gameId}/{username}",
         encoders = OutgoingMessageEncoder.class,
         decoders = IncomingMessageDecoder.class)
 public class GameEndpoint {
@@ -49,7 +52,7 @@ public class GameEndpoint {
         BidderPlayer player = game.getPlayerByUsername(username);
         GameSession newGameSession = new GameSession(gameId, session, username, player.getSide());
         if (player.getSide() == Side.BLUE) {
-            broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.WAITING_FOR_OPPONENT_TO_JOIN));
+            broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.WAITING_FOR_OPPONENT));
         } else {
             game.setStatus(Status.WAITING_FOR_BIDS);
             broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.PLAYER_JOINED));

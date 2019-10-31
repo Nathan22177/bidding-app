@@ -24,7 +24,7 @@
         socket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/pvp/" + state.gameId + "/" + state.ownUsername);
 
         require(['jquery'], function ($) {
-            function socket.onmessage = function (message) {
+            socket.onmessage = function (message) {
                 switch (message.type) {
                     case 'PLAYER_JOINED' :
                         startGame(message);
@@ -35,7 +35,7 @@
                     case 'PLAYER_LEFT':
                         resolveSuddenEnd(message);
                         break;
-                    case 'WAIT' :
+                    case 'WAITING_FOR_OPPONENT' :
                         waitingForOpponent(message);
                         break;
                     default :
@@ -43,8 +43,13 @@
                 }
             };
 
-            function updateGameInfo(msg) {
-                let data = JSON.parse(msg);
+            function waitingForOpponent(message) {
+                let data = JSON.parse(message);
+                $('#interface').hide();
+            }
+
+            function updateGameInfo(message) {
+                let data = JSON.parse(message);
 
                 // if (data) {
                 //     $("#balance").text(data.balance);
@@ -121,11 +126,11 @@
                         case 'DRAW':
                             resolveDraw(data);
                             break;
-                        case 'ENDED_PREMATURELY':
-                        default:
-                            window.alert('Something went wrong. \n\nYou will now be redirected to the menu.');
-                            window.location.replace('/');
-                            break;
+                        // case 'ENDED_PREMATURELY':
+                        // default:
+                        //     window.alert('Something went wrong. \n\nYou will now be redirected to the menu.');
+                        //     window.location.replace('/');
+                        //     break;
                     }
                 }
             }
@@ -199,36 +204,39 @@
 <body>
 <div class="jumbotron">
     <div class="container">
-        <h1 class="display-3"><p th:id="opponentUsername"></p></h1>
-        <p class="lead">Try to win as much QU as possible. But be careful! If you overspend the bot might gain an
-            upper hand on what's left. So don't run out of money!</p>
-        <div class="row">
-            <div class="col-sm-3">
-                <h2 class="display-4">Inventory</h2>
-                <span>Balance: &nbsp;<p class="inline" id="balance" th:text="${player.balance}"></p></span>
-                <span>&nbsp;&nbsp;Acquired QU: &nbsp;<p class="inline" id="acquiredAmount"
-                                                        th:text="${player.acquiredAmount}"></p></span>
-                <h2 class="display-4">Conditions</h2>
-                <span>Start balance: &nbsp;<p class="inline" th:text="${player.conditions.cash}"></p></span>
+        <div id="interface" style="display: none">
+            <h1 class="display-3"><p th:id="opponentUsername"></p></h1>
+            <p class="lead">Try to win as much QU as possible. But be careful! If you overspend the bot might gain an
+                upper hand on what's left. So don't run out of money!</p>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h2 class="display-4">Inventory</h2>
+                    <span>Balance: &nbsp;<p class="inline" id="balance" th:text="${player.balance}"></p></span>
+                    <span>&nbsp;&nbsp;Acquired QU: &nbsp;<p class="inline" id="acquiredAmount"
+                                                            th:text="${player.acquiredAmount}"></p></span>
+                    <h2 class="display-4">Conditions</h2>
+                    <span>Start balance: &nbsp;<p class="inline" th:text="${player.conditions.cash}"></p></span>
 
-                <span>&nbsp;&nbsp;Overall quantity: <p class="inline"
-                                                       th:text="${player.conditions.quantity}"></p></span>
-            </div>
-            <div class="col-sm-4">
-                <h4 class="display-4">History</h4>
-                <th:block th:if="${history != null}" th:each="bid: ${history}">
-                    <p th:text="'Your bid: ' + ${bid.ownBid} + '&nbsp; Opponents bid: ' + ${bid.opponentBid}"></p>
-                </th:block>
-                <p th:id="history"></p>
-            </div>
-            <div class="col-sm-4">
-                <h4 class="display-4">Rounds left:&nbsp;<p class="inline" style="color: green" th:id="roundsLeft"></p>
-                </h4>
-                <input class="mask form-control form-control-lg"
-                       placeholder="Your bid"
-                       th:type="text" id="bid">
-                <button id="bidBtn" style="margin-top: 8px; width: 100%" class="btn place">Place &nbsp;<i
-                        class="fas fa-money-bill-wave"></i></button>
+                    <span>&nbsp;&nbsp;Overall quantity: <p class="inline"
+                                                           th:text="${player.conditions.quantity}"></p></span>
+                </div>
+                <div class="col-sm-4">
+                    <h4 class="display-4">History</h4>
+                    <th:block th:if="${history != null}" th:each="bid: ${history}">
+                        <p th:text="'Your bid: ' + ${bid.ownBid} + '&nbsp; Opponents bid: ' + ${bid.opponentBid}"></p>
+                    </th:block>
+                    <p th:id="history"></p>
+                </div>
+                <div class="col-sm-4">
+                    <h4 class="display-4">Rounds left:&nbsp;<p class="inline" style="color: green"
+                                                               th:id="roundsLeft"></p>
+                    </h4>
+                    <input class="mask form-control form-control-lg"
+                           placeholder="Your bid"
+                           th:type="text" id="bid">
+                    <button id="bidBtn" style="margin-top: 8px; width: 100%" class="btn place">Place &nbsp;<i
+                            class="fas fa-money-bill-wave"></i></button>
+                </div>
             </div>
         </div>
     </div>
