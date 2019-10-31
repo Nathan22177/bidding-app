@@ -4,9 +4,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.transaction.Transactional;
 
 import com.nathan22177.bidder.BidderPlayer;
-import com.nathan22177.collection.BiddingRound;
 import com.nathan22177.enums.Side;
 import com.nathan22177.enums.Status;
 import com.nathan22177.util.EndGameUtil;
@@ -34,6 +34,7 @@ public class PlayerVersusPlayerGame extends AbstractGame implements Game{
         return this.redPlayer;
     }
 
+    @Transactional
     public BidderPlayer getPlayerByUsername(String username) {
         if (getBluePlayer().getUsername().equals(username)) {
             return getBluePlayer();

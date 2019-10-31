@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -17,7 +18,6 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.config.CustomSpringConfigurator;
@@ -27,6 +27,7 @@ import com.nathan22177.enums.Status;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.game.dto.StateDTO;
 import com.nathan22177.repositories.VersusPlayerRepository;
+import com.nathan22177.services.VersusPlayerService;
 import com.nathan22177.websocket.messages.incoming.IncomingMessage;
 import com.nathan22177.websocket.messages.outgoing.OutgoingMessage;
 
@@ -43,12 +44,12 @@ public class GameEndpoint {
     private static Set<IncomingMessage> bids = new HashSet<>();
 
     @Autowired
-    private VersusPlayerRepository versusPlayerRepository;
+    private VersusPlayerService vsPlayerService;
 
 
     @OnOpen
     public void onOpen(Session session, @PathParam("gameId") Long gameId, @PathParam("username") String username) {
-        PlayerVersusPlayerGame game = versusPlayerRepository.getOne(gameId);
+        PlayerVersusPlayerGame game = vsPlayerService.loadVersusPlayerGame(gameId);
         BidderPlayer player = game.getPlayerByUsername(username);
         GameSession newGameSession = new GameSession(gameId, session, username, player.getSide());
         if (player.getSide() == Side.BLUE) {
@@ -62,7 +63,7 @@ public class GameEndpoint {
 
     @OnMessage
     public void onMessage(IncomingMessage incomingMessage) {
-        PlayerVersusPlayerGame game = versusPlayerRepository.getOne(incomingMessage.getGameId());
+        PlayerVersusPlayerGame game = vsPlayerService.loadVersusPlayerGame(incomingMessage.getGameId());
         Optional<IncomingMessage> otherPlayersBid = getOtherPlayersBid(incomingMessage);
         if (otherPlayersBid.isPresent()) {
             IncomingMessage blueBid = incomingMessage.getSide().equals(Side.BLUE) ? incomingMessage : otherPlayersBid.get();
@@ -114,7 +115,7 @@ public class GameEndpoint {
                 .filter(gameSession -> gameSession.getSide().equals(Side.BLUE))
                 .findFirst().orElse(null))
                 .getSession();
-        PlayerVersusPlayerGame game = versusPlayerRepository.getOne(blueBid.getGameId());
+        PlayerVersusPlayerGame game = vsPlayerService.loadVersusPlayerGame(blueBid.getGameId());
         try {
             blueSession.getBasicRemote().sendObject(getOutGoingMessageForBids(game, Side.BLUE));
         } catch (IOException | EncodeException e) {
@@ -137,9 +138,11 @@ public class GameEndpoint {
     @OnClose
     public void onClose(Session session) {
         GameSession closingSession = getBySession(session);
-        versusPlayerRepository.getOne(closingSession.getGameId()).setStatus(Status.ENDED_PREMATURELY);
-        gameSessions.remove(closingSession);
-        broadcastStatusChange(new OutgoingMessage(closingSession.getGameId(), MessageType.PLAYER_LEFT));
+        if (closingSession != null) {
+            vsPlayerService.loadVersusPlayerGame(closingSession.getGameId()).setStatus(Status.ENDED_PREMATURELY);
+            gameSessions.remove(closingSession);
+            broadcastStatusChange(new OutgoingMessage(closingSession.getGameId(), MessageType.PLAYER_LEFT));
+        }
 
     }
 
