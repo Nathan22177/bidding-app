@@ -18,16 +18,12 @@ public class BiddingRound {
     Long id;
 
     /**
-     * Bids of the blue player in the context of a whole game
-     * but when passed to client trough {@link com.nathan22177.game.dto.StateDTO}
-     * it is the client's bid.
+     * Client's bid.
      * */
     private int ownBid;
 
     /**
-     * Bids of the red player in the context of a whole game
-     * but when passed to client trough {@link com.nathan22177.game.dto.StateDTO}
-     * it is the client's opponent's bid.
+     * Client's opponent's bid.
      * */
     private int opponentBid;
 

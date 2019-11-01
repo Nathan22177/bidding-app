@@ -19,7 +19,7 @@ public class StrategyUtil {
 
     /***
      * Retrieves the median all the bids.
-     * @param bidder instance of bidder
+     * @param bidder instance of a bidder.
      * @return median
      * */
     public static int allBidsMedian(BidderBot bidder) {
@@ -31,7 +31,7 @@ public class StrategyUtil {
 
     /***
      * Retrieves the median all the bids.
-     * @param history of all bids
+     * @param history of all the bids.
      * @return median
      * */
     public static int allBidsMedian(List<BiddingRound> history) {
@@ -68,7 +68,7 @@ public class StrategyUtil {
 
     /***
      * Retrieves mean price of one QU.
-     * @param bidder instance of bidder
+     * @param bidder instance of a bidder.
      * @return price
      * */
     public static int getMeanPriceForOneUnit(BidderBot bidder) {
@@ -125,7 +125,7 @@ public class StrategyUtil {
 
     /***
      * Retrieves bid that won last round.
-     * @param bidder - the instance of a bidder
+     * @param bidder instance of a bidder.
      * @return bid
      * */
     public static int getPreviousWinnerBid(BidderBot bidder) {

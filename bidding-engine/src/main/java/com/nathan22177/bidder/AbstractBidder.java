@@ -23,6 +23,12 @@ import com.nathan22177.game.Conditions;
 import lombok.Getter;
 import lombok.Setter;
 
+
+/**
+ * Used as a guideline to define participant of an auction.
+ * @author Valery Kokorev
+ * @author https://github.com/Nathan22177
+ */
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Entity
 @Getter
@@ -43,28 +49,41 @@ public abstract class AbstractBidder {
     private int acquiredAmount;
 
     /***
-     * Initial cash and QU
+     * Initial amount cash and QU.
      * */
     @Embedded
     private Conditions conditions;
 
 
     /***
-     * History of bidding rounds.
+     * Track of {@link BiddingRound}s.
      * */
     @OneToMany(cascade = CascadeType.ALL)
     @OrderColumn
     private List<BiddingRound> biddingHistory;
 
-
+    /**
+     * Used to withdraw cash from {@link AbstractBidder#balance}.
+     * @param
+     * */
     private void withdraw(int cash) {
         this.balance -= cash;
     }
 
+    /**
+     * Used to add quantity units to {@link AbstractBidder#acquiredAmount}.
+     * */
     private void acquire(int quantity) {
         this.acquiredAmount += quantity;
     }
 
+    /**
+     * Initiates cash withdrawal from {@link AbstractBidder#balance}
+     * and logging into {@link AbstractBidder#biddingHistory}.
+     * @param own amount of cash bid by the player.
+     * @param other amount of cash bid by the player.
+     * @return Nothing.
+     * */
     public void resolveBidsAndAppendHistory(int own, int other) {
         appendBiddingHistory(own, other);
         resolveBids(own, other);
@@ -88,7 +107,7 @@ public abstract class AbstractBidder {
 
     public void placeBidAndWithdraw(int bid) {
         Assert.isTrue(bid >= 0, "Bid should be positive number");
-        Assert.isTrue(bid <= getBalance(), "Bid should not be larger than amount of MU on the balance");
+        Assert.isTrue(bid <= getBalance(), "Bid should not be larger than amount of cash on the balance");
         withdraw(bid);
     }
 }
