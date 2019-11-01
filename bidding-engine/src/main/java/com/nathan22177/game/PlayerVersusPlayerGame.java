@@ -18,7 +18,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "player_versus_player_game")
-public class PlayerVersusPlayerGame extends AbstractGame implements Game{
+public class PlayerVersusPlayerGame extends AbstractGame{
 
     @OneToOne(cascade = CascadeType.ALL)
     BidderPlayer redPlayer;

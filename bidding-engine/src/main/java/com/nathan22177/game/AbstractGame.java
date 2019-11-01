@@ -24,7 +24,7 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-public abstract class AbstractGame implements Game{
+public abstract class AbstractGame{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
@@ -40,6 +40,5 @@ public abstract class AbstractGame implements Game{
     @Embedded
     Conditions conditions;
 
-    @Override
     public AbstractBidder getRedPlayer() {return null;}
 }

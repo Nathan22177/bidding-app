@@ -1,4 +1,4 @@
-package com.nathan22177.websocket;
+package com.nathan22177.websocket.decoder;
 
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;

@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -26,8 +25,9 @@ import com.nathan22177.enums.Side;
 import com.nathan22177.enums.Status;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.game.dto.StateDTO;
-import com.nathan22177.repositories.VersusPlayerRepository;
 import com.nathan22177.services.VersusPlayerService;
+import com.nathan22177.websocket.decoder.IncomingMessageDecoder;
+import com.nathan22177.websocket.encoder.OutgoingMessageEncoder;
 import com.nathan22177.websocket.messages.incoming.IncomingMessage;
 import com.nathan22177.websocket.messages.outgoing.OutgoingMessage;
 

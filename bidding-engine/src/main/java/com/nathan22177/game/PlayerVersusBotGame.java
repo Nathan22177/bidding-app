@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "player_versus_bot_game")
-public class PlayerVersusBotGame extends AbstractGame implements Game{
+public class PlayerVersusBotGame extends AbstractGame {
 
     @OneToOne(cascade = CascadeType.ALL)
     private BidderBot redPlayer;
@@ -47,7 +47,6 @@ public class PlayerVersusBotGame extends AbstractGame implements Game{
         setStatus(Status.WAITING_FOR_BIDS);
     }
 
-    @Override
     public BidderBot getRedPlayer() {
         return this.redPlayer;
     }
