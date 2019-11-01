@@ -35,7 +35,7 @@ public class BidderPlayer extends AbstractBidder {
     }
 
     /**
-     * Used by JPA.
+     * Used by persistence to create new instance via reflection upon fetching.
      */
     public BidderPlayer() {}
 }

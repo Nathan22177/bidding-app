@@ -30,7 +30,7 @@ public class Conditions {
     }
 
     /**
-     * Used by JPA.
+     * Used by persistence to create new instance via reflection upon fetching.
      */
     public Conditions() {}
 }

@@ -20,8 +20,9 @@ import lombok.Setter;
 @Setter
 public class BidderBot extends AbstractBidder {
 
-    /***
-     * Strategy that defines how to bid.
+    /**
+     * Contains information about the bot
+     * and strategy that dictates how to bid.
      * */
     @Enumerated(EnumType.STRING)
     private Bot bot;
@@ -47,7 +48,7 @@ public class BidderBot extends AbstractBidder {
     }
 
     /**
-     * Used by JPA.
+     * Used by persistence to create new instance via reflection upon fetching.
      */
     public BidderBot(){}
 }

@@ -45,13 +45,12 @@ public abstract class AbstractBidder {
     /***
      * Initial cash and QU
      * */
-
     @Embedded
     private Conditions conditions;
 
 
     /***
-     * LIFO bidding history.
+     * History of bidding rounds.
      * */
     @OneToMany(cascade = CascadeType.ALL)
     @OrderColumn

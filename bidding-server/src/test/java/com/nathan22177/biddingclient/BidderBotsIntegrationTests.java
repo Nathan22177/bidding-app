@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.nathan22177.BiddingServerApplication;
 import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.enums.Bot;
 import com.nathan22177.game.Conditions;
@@ -16,8 +17,8 @@ import com.nathan22177.game.Conditions;
 import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@Slf4j
+@SpringBootTest(classes = BiddingServerApplication.class,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BidderBotsIntegrationTests {
     private List<Integer> cashPoll = Arrays.asList(1000, 5000, 10_000, 50_000, 100_000, 500_000, 1000_000, 10_000_000);
     private List<Integer> quantityPoll = Arrays.asList(2, 4, 8, 16, 20, 30, 40, 50, 80, 100, 200, 400, 800, 1000);

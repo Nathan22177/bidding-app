@@ -63,7 +63,7 @@ public class PlayerVersusPlayerGame extends AbstractGame{
     }
 
     /**
-     * Used by JPA.
+     * Used by persistence to create new instance via reflection upon fetching.
      */
     public PlayerVersusPlayerGame(){}
 }

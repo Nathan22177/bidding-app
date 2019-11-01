@@ -10,7 +10,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.nathan22177.BiddingServerApplication;
 import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.collection.BiddingRound;
 import com.nathan22177.enums.Bot;
@@ -20,19 +22,17 @@ import com.nathan22177.util.StrategyUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@Slf4j
+@SpringBootTest(classes = BiddingServerApplication.class,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StrategyUtilUnitTests {
 
     private BidderBot bidder;
     private BidderBot opponent;
-    private int startQuantity;
-    private int startBalance;
 
     @Before
     public void init() {
-        startBalance = 10_000;
-        startQuantity = 100;
+        int startBalance = 10_000;
+        int startQuantity = 100;
         bidder = new BidderBot(new Conditions(startQuantity, startBalance), Bot.RISING_BOT);
         opponent = new BidderBot(new Conditions(startQuantity, startBalance), Bot.FAIR_BOT);
         for (int i = 0; i < startQuantity / 2; i++) {
