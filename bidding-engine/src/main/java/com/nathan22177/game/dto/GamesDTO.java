@@ -44,7 +44,7 @@ public class GamesDTO {
     /**
      * Constructor that we use to make a list of available games.
      *
-     * @param game
+     * @param game current game.
      */
     public GamesDTO(AbstractGame game) {
         this.gameId = game.getId();
