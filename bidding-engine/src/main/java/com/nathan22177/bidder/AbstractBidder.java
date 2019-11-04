@@ -26,6 +26,7 @@ import lombok.Setter;
 
 /**
  * Used as a guideline to define participant of an auction.
+ *
  * @author Valery Kokorev
  * @author https://github.com/Nathan22177
  */
@@ -64,16 +65,18 @@ public abstract class AbstractBidder {
 
     /**
      * Used to withdraw cash from {@link AbstractBidder#balance}.
+     *
      * @param cash amount of cash to be withdrawn.
-     * */
+     */
     private void withdraw(int cash) {
         this.balance -= cash;
     }
 
     /**
      * Used to add quantity units to {@link AbstractBidder#acquiredAmount}.
+     *
      * @param quantity amount of quantity won
-     * */
+     */
     private void acquire(int quantity) {
         Assert.isTrue(quantity <= 2, "Shouldn't be able to won more than 2 QU per round.");
         Assert.isTrue(quantity >= 0, "Shouldn't be able to subtract QUs.");
@@ -83,9 +86,10 @@ public abstract class AbstractBidder {
     /**
      * Initiates cash withdrawal from {@link AbstractBidder#balance}
      * and logging into {@link AbstractBidder#biddingHistory}.
-     * @param own amount of cash bid by the player.
+     *
+     * @param own   amount of cash bid by the player.
      * @param other amount of cash bid by the player's opponent.
-     * */
+     */
     public void resolveBidsAndAppendHistory(int own, int other) {
         appendBiddingHistory(own, other);
         resolveBids(own, other);
@@ -93,9 +97,10 @@ public abstract class AbstractBidder {
 
     /**
      * Adds entry into the {@link AbstractBidder#biddingHistory}.
-     * @param own amount of cash bid by the player.
+     *
+     * @param own   amount of cash bid by the player.
      * @param other amount of cash bid by the player's opponent.
-     * */
+     */
     private void appendBiddingHistory(int own, int other) {
         if (getBiddingHistory() == null) {
             setBiddingHistory(new LinkedList<>(Collections.singletonList(new BiddingRound(own, other))));
@@ -107,9 +112,10 @@ public abstract class AbstractBidder {
     /**
      * Resolves amount of QU won by the player
      * and adds it to the {@link AbstractBidder#acquiredAmount}.
-     * @param own amount of cash bid by the player.
+     *
+     * @param own   amount of cash bid by the player.
      * @param other amount of cash bid by the player's opponent.
-     * */
+     */
     private void resolveBids(int own, int other) {
         if (other < own) {
             acquire(2);
@@ -122,8 +128,9 @@ public abstract class AbstractBidder {
 
     /**
      * Public method that allows withdrawal of the cash upon bidding
+     *
      * @param bid amount of cash bid by the player.
-     * */
+     */
     public void withdrawBiddingAmount(int bid) {
         Assert.isTrue(bid >= 0, "Bid should be positive number");
         Assert.isTrue(bid <= getBalance(), "Bid should not be larger than amount of cash on the balance");

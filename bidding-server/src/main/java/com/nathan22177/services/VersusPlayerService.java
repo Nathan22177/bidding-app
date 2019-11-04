@@ -33,7 +33,6 @@ public class VersusPlayerService {
         if (pendingGame.isPresent()) {
             game = pendingGame.get();
             pendingGame.get().setRedPlayer(new BidderPlayer(game.getConditions(), username, Side.RED));
-            pendingGame.get().getRedPlayer().setSide(Side.RED);
         } else {
             game = NewGameUtil.createNewGameAgainstThePlayer(username);
             versusPlayerRepository.saveAndFlush(game);
