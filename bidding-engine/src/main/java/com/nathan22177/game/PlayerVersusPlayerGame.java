@@ -55,8 +55,8 @@ public class PlayerVersusPlayerGame extends AbstractGame{
     private void resolveBids(int bluesBid, int redsBid) {
         BidderPlayer bluePlayer = getBluePlayer();
         BidderPlayer redPlayer = getRedPlayer();
-        bluePlayer.placeBidAndWithdraw(bluesBid);
-        redPlayer.placeBidAndWithdraw(redsBid);
+        bluePlayer.withdrawBiddingAmount(bluesBid);
+        redPlayer.withdrawBiddingAmount(redsBid);
         bluePlayer.resolveBidsAndAppendHistory(bluesBid, redsBid);
         redPlayer.resolveBidsAndAppendHistory(redsBid, bluesBid);
         setStatus(Status.WAITING_FOR_BIDS);

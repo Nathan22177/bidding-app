@@ -14,8 +14,6 @@ import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.enums.Bot;
 import com.nathan22177.game.Conditions;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BiddingServerApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -83,8 +81,8 @@ public class BidderBotsIntegrationTests {
                 for (int i = 0; i < quantity / 2; i++) {
                     int bidderBid = bidderBot.getNextBid();
                     int opponentBid = opponentBot.getNextBid();
-                    bidderBot.placeBidAndWithdraw(bidderBid);
-                    opponentBot.placeBidAndWithdraw(opponentBid);
+                    bidderBot.withdrawBiddingAmount(bidderBid);
+                    opponentBot.withdrawBiddingAmount(opponentBid);
                     bidderBot.resolveBidsAndAppendHistory(bidderBid, opponentBid);
                     opponentBot.resolveBidsAndAppendHistory(opponentBid, bidderBid);
                 }

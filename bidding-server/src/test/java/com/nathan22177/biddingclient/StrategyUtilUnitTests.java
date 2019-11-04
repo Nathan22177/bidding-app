@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.nathan22177.BiddingServerApplication;
 import com.nathan22177.bidder.BidderBot;
@@ -18,8 +17,6 @@ import com.nathan22177.collection.BiddingRound;
 import com.nathan22177.enums.Bot;
 import com.nathan22177.game.Conditions;
 import com.nathan22177.util.StrategyUtil;
-
-import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BiddingServerApplication.class,
@@ -38,8 +35,8 @@ public class StrategyUtilUnitTests {
         for (int i = 0; i < startQuantity / 2; i++) {
             int bidderBid = bidder.getNextBid();
             int opponentBid = opponent.getNextBid();
-            bidder.placeBidAndWithdraw(bidderBid);
-            opponent.placeBidAndWithdraw(opponentBid);
+            bidder.withdrawBiddingAmount(bidderBid);
+            opponent.withdrawBiddingAmount(opponentBid);
             bidder.resolveBidsAndAppendHistory(bidderBid, opponentBid);
             opponent.resolveBidsAndAppendHistory(opponentBid, bidderBid);
         }
