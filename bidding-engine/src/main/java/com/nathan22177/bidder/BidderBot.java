@@ -9,7 +9,7 @@ import javax.persistence.Enumerated;
 import org.springframework.util.Assert;
 
 import com.nathan22177.enums.Bot;
-import com.nathan22177.game.Conditions;
+import com.nathan22177.collections.Conditions;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -47,10 +47,10 @@ public class BidderBot extends AbstractBidder {
      * @return new instance of {@link BidderBot}.
      */
     public BidderBot(Conditions conditions, Bot bot) {
-        Assert.isTrue(conditions.getQuantity() % 2 == 0 && conditions.getQuantity() > 0, "Quantity must be a positive and even number.");
-        Assert.isTrue(conditions.getMoney() > 0, "Money must be positive number.");
+        Assert.isTrue(conditions.getWinnableQuantity() % 2 == 0 && conditions.getWinnableQuantity() > 0, "Quantity must be a positive and even number.");
+        Assert.isTrue(conditions.getInitialBalance() > 0, "Money must be positive number.");
         setConditions(conditions);
-        setBalance(conditions.getMoney());
+        setBalance(conditions.getInitialBalance());
         setAcquiredAmount(0);
         this.bot = bot;
         setName(bot.getName());

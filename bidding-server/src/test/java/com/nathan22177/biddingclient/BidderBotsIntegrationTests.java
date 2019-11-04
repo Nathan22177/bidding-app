@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.nathan22177.BiddingServerApplication;
 import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.enums.Bot;
-import com.nathan22177.game.Conditions;
+import com.nathan22177.collections.Conditions;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BiddingServerApplication.class,

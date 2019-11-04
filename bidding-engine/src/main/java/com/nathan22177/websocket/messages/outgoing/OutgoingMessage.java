@@ -1,6 +1,5 @@
 package com.nathan22177.websocket.messages.outgoing;
 
-import com.nathan22177.collection.BiddingRound;
 import com.nathan22177.enums.MessageType;
 import com.nathan22177.game.dto.StateDTO;
 

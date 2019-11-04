@@ -7,6 +7,7 @@ import javax.persistence.Table;
 
 import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.bidder.BidderPlayer;
+import com.nathan22177.collections.Conditions;
 import com.nathan22177.enums.Bot;
 import com.nathan22177.enums.Side;
 import com.nathan22177.enums.Status;
@@ -14,13 +15,24 @@ import com.nathan22177.util.EndGameUtil;
 
 import lombok.Setter;
 
+/**
+ * Represents a game between player-controlled
+ * bidder and bot-controlled bidder.
+ *
+ * @author Valery Kokorev
+ * @author https://github.com/Nathan22177
+ */
 @Setter
 @Entity
 @Table(name = "player_versus_bot_game")
 public class PlayerVersusBotGame extends AbstractGame {
 
+    /**
+     * Bot-controlled participant.
+     */
     @OneToOne(cascade = CascadeType.ALL)
     private BidderBot redPlayer;
+
 
     public PlayerVersusBotGame(Conditions conditions, Bot bot) {
         this.conditions = conditions;

@@ -1,9 +1,10 @@
-package com.nathan22177.strategies;
+package com.nathan22177.strategies.impl;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import com.nathan22177.bidder.BidderBot;
+import com.nathan22177.strategies.BiddingStrategy;
 
 /**
  * For manual testing trough terminal.

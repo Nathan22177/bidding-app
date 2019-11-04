@@ -1,20 +1,22 @@
-package com.nathan22177.strategies;
+package com.nathan22177.strategies.impl;
 
 import com.nathan22177.bidder.BidderBot;
+import com.nathan22177.strategies.BiddingStrategy;
 import com.nathan22177.util.StrategyUtil;
 
 /**
- * Waits for an advantage then bids last winning bid plus one;
+ * Waits for an advantage then bids median plus 2.
  * */
-public class WinnerIncrementStrategy implements BiddingStrategy {
+public class SafeStrategy implements BiddingStrategy {
 
     private int calculateBiddingAmount(BidderBot bidder) {
         if (StrategyUtil.bidderHasAdvantageOverItsOpponent(bidder)) {
-            return StrategyUtil.getPreviousWinnerBid(bidder) + 1;
-        } else {
-            return 0;
+            return StrategyUtil.allBidsMedian(bidder) + 1;
         }
+
+        return 0;
     }
+
 
     @Override
     public int getBiddingAmount(BidderBot bidder) {

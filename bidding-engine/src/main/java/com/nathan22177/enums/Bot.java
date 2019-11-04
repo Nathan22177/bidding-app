@@ -1,14 +1,14 @@
 package com.nathan22177.enums;
 
 import com.nathan22177.strategies.BiddingStrategy;
-import com.nathan22177.strategies.CopycatStrategy;
-import com.nathan22177.strategies.FairStrategy;
-import com.nathan22177.strategies.LehaSVV2009Strategy;
-import com.nathan22177.strategies.NathanStrategy;
-import com.nathan22177.strategies.PyramidPlayerStrategy;
-import com.nathan22177.strategies.RisingStrategy;
-import com.nathan22177.strategies.SafeStrategy;
-import com.nathan22177.strategies.WinnerIncrementStrategy;
+import com.nathan22177.strategies.impl.CopycatStrategy;
+import com.nathan22177.strategies.impl.FairStrategy;
+import com.nathan22177.strategies.impl.LehaSVV2009Strategy;
+import com.nathan22177.strategies.impl.NathanStrategy;
+import com.nathan22177.strategies.impl.PyramidPlayerStrategy;
+import com.nathan22177.strategies.impl.RisingStrategy;
+import com.nathan22177.strategies.impl.SafeStrategy;
+import com.nathan22177.strategies.impl.WinnerIncrementStrategy;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

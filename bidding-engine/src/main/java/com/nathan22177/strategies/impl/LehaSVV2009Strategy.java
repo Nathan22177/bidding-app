@@ -1,6 +1,7 @@
-package com.nathan22177.strategies;
+package com.nathan22177.strategies.impl;
 
 import com.nathan22177.bidder.BidderBot;
+import com.nathan22177.strategies.BiddingStrategy;
 import com.nathan22177.util.StrategyUtil;
 
 
@@ -30,12 +31,12 @@ public class LehaSVV2009Strategy implements BiddingStrategy {
         }
 
         // Place maximum bid if there is only one round
-        if (bidder.getConditions().getQuantity() == 2) {
+        if (bidder.getConditions().getWinnableQuantity() == 2) {
             return bidder.getBalance();
         }
 
         // Check if it is possible to win by placing opponent's money + 1 (when opponent's money is too small)
-        long minimumTurnsToWin = (bidder.getConditions().getQuantity() / 2) - (bidder.getAcquiredAmount() / 2);
+        long minimumTurnsToWin = (bidder.getConditions().getWinnableQuantity() / 2) - (bidder.getAcquiredAmount() / 2);
         if (minimumTurnsToWin > 0 && bidder.getBalance() >= (StrategyUtil.getOpponentBalance(bidder) + 1) * minimumTurnsToWin) {
             return StrategyUtil.getOpponentBalance(bidder) + 1;
         }
@@ -50,7 +51,7 @@ public class LehaSVV2009Strategy implements BiddingStrategy {
         }
 
         // According to statistics median plus two bidder wins even random algorithm on small quantity
-        if (bidder.getConditions().getQuantity() <= 10) {
+        if (bidder.getConditions().getWinnableQuantity() <= 10) {
             int median = StrategyUtil.allBidsMedian(bidder);
             return median + 2 > bidder.getBalance()
                     ? bidder.getRandom().nextInt(bidder.getBalance())

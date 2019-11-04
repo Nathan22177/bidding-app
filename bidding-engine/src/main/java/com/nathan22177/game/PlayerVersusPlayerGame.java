@@ -7,6 +7,7 @@ import javax.persistence.Table;
 import javax.transaction.Transactional;
 
 import com.nathan22177.bidder.BidderPlayer;
+import com.nathan22177.collections.Conditions;
 import com.nathan22177.enums.Side;
 import com.nathan22177.enums.Status;
 import com.nathan22177.util.EndGameUtil;

@@ -1,6 +1,7 @@
-package com.nathan22177.strategies;
+package com.nathan22177.strategies.impl;
 
 import com.nathan22177.bidder.BidderBot;
+import com.nathan22177.strategies.BiddingStrategy;
 import com.nathan22177.util.StrategyUtil;
 
 /**
@@ -11,8 +12,8 @@ public class PyramidPlayerStrategy implements BiddingStrategy {
 
     @Override
     public int getBiddingAmount(BidderBot bidder) {
-        int spread = bidder.getConditions().getMoney() / bidder.getConditions().getQuantity() * 2;
-        int restWinRounds = bidder.getConditions().getQuantity() / 2 + 1 - bidder.getAcquiredAmount();
+        int spread = bidder.getConditions().getInitialBalance() / bidder.getConditions().getWinnableQuantity() * 2;
+        int restWinRounds = bidder.getConditions().getWinnableQuantity() / 2 + 1 - bidder.getAcquiredAmount();
         if (restWinRounds == 0) {
             return 0;
         }

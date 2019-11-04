@@ -1,4 +1,4 @@
-package com.nathan22177.collection;
+package com.nathan22177.collections;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

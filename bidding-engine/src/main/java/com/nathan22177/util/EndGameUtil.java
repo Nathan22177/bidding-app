@@ -7,7 +7,7 @@ public class EndGameUtil {
 
     public static boolean theGameHasEnded(AbstractGame game) {
         return game.getRedPlayer().getAcquiredAmount() + game.getBluePlayer().getAcquiredAmount()
-                == game.getConditions().getQuantity();
+                == game.getConditions().getWinnableQuantity();
     }
 
     public static void resolveGamesEnd(AbstractGame game) {

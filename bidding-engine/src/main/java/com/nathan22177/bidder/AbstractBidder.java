@@ -17,15 +17,15 @@ import javax.persistence.OrderColumn;
 
 import org.springframework.util.Assert;
 
-import com.nathan22177.collection.BiddingRound;
-import com.nathan22177.game.Conditions;
+import com.nathan22177.collections.BiddingRound;
+import com.nathan22177.collections.Conditions;
 
 import lombok.Getter;
 import lombok.Setter;
 
 
 /**
- * Used as a guideline to define participant of an auction.
+ * Inherited to define participant of an auction.
  *
  * @author Valery Kokorev
  * @author https://github.com/Nathan22177
@@ -50,7 +50,7 @@ public abstract class AbstractBidder {
     private int acquiredAmount;
 
     /**
-     * Initial amount money and QU.
+     * Initial amount of money and QU.
      * */
     @Embedded
     private Conditions conditions;

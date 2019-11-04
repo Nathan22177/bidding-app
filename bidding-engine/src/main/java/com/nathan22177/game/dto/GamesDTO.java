@@ -20,7 +20,7 @@ public class GamesDTO {
     private String opponent;
 
     /**
-     * How many times player cam place a bid before game runs out of QU.
+     * How many times player can place a bid before game runs out of QU.
      */
     private int roundsLeft;
 
@@ -47,7 +47,7 @@ public class GamesDTO {
     public GamesDTO(AbstractGame game) {
         this.gameId = game.getId();
         this.opponent = game.getRedPlayer().getName();
-        this.roundsLeft = (game.getConditions().getQuantity() / 2) - game.getBluePlayer().getBiddingHistory().size();
+        this.roundsLeft = (game.getConditions().getWinnableQuantity() / 2) - game.getBluePlayer().getBiddingHistory().size();
         this.acquired = game.getBluePlayer().getAcquiredAmount();
         this.balance = game.getBluePlayer().getBalance();
         this.status = game.getStatus().toString();

@@ -13,9 +13,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.nathan22177.BiddingServerApplication;
 import com.nathan22177.bidder.BidderBot;
-import com.nathan22177.collection.BiddingRound;
+import com.nathan22177.collections.BiddingRound;
 import com.nathan22177.enums.Bot;
-import com.nathan22177.game.Conditions;
+import com.nathan22177.collections.Conditions;
 import com.nathan22177.util.StrategyUtil;
 
 @RunWith(SpringRunner.class)

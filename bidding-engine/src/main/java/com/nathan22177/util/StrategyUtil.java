@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
 
 
 import com.nathan22177.bidder.BidderBot;
-import com.nathan22177.collection.BiddingRound;
+import com.nathan22177.collections.BiddingRound;
 
 /**
  * Class with methods to use while implementing the strategy.
@@ -62,8 +62,8 @@ public class StrategyUtil {
      * */
     public static int getOpponentBalance(BidderBot bidder) {
         return bidder.getBiddingHistory() != null && bidder.getBiddingHistory().size() > 0
-                ? bidder.getConditions().getMoney() - bidder.getBiddingHistory().stream().mapToInt(BiddingRound::getOpponentBid).sum()
-                : bidder.getConditions().getMoney();
+                ? bidder.getConditions().getInitialBalance() - bidder.getBiddingHistory().stream().mapToInt(BiddingRound::getOpponentBid).sum()
+                : bidder.getConditions().getInitialBalance();
     }
 
     /**
@@ -72,7 +72,7 @@ public class StrategyUtil {
      * @return price
      * */
     public static int getMeanPriceForOneUnit(BidderBot bidder) {
-        return bidder.getConditions().getMoney() / bidder.getConditions().getQuantity();
+        return bidder.getConditions().getInitialBalance() / bidder.getConditions().getWinnableQuantity();
     }
 
     /**
@@ -142,17 +142,17 @@ public class StrategyUtil {
      * to win.
      * */
     public static boolean bidderHasReachedTargetAmount(BidderBot bidder) {
-        return bidder.getAcquiredAmount() >= (bidder.getConditions().getQuantity() / 2) + 1;
+        return bidder.getAcquiredAmount() >= (bidder.getConditions().getWinnableQuantity() / 2) + 1;
     }
 
     public static int getRoundsLeft(BidderBot bidder) {
         return bidder.getBiddingHistory() == null  || bidder.getBiddingHistory().size() == 0
-                ? bidder.getConditions().getQuantity() / 2
-                : (bidder.getConditions().getQuantity() / 2) - bidder.getBiddingHistory().size();
+                ? bidder.getConditions().getWinnableQuantity() / 2
+                : (bidder.getConditions().getWinnableQuantity() / 2) - bidder.getBiddingHistory().size();
     }
 
     public static int getRoundsToWin(BidderBot bidder) {
-        return (bidder.getConditions().getQuantity() / 4) + 1;
+        return (bidder.getConditions().getWinnableQuantity() / 4) + 1;
     }
 
     /**
