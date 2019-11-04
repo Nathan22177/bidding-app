@@ -3,7 +3,7 @@ package com.nathan22177.strategies;
 import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.util.StrategyUtil;
 
-/***
+/**
  * Waits for an advantage then bids last winning bid plus one;
  * */
 public class WinnerIncrementStrategy implements BiddingStrategy {

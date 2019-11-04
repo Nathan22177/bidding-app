@@ -39,17 +39,17 @@ public abstract class AbstractBidder {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    /***
+    /**
      * Amount of money left.
      * */
     private int balance;
 
-    /***
+    /**
      * Amount of won QUs.
      * */
     private int acquiredAmount;
 
-    /***
+    /**
      * Initial amount money and QU.
      * */
     @Embedded
@@ -64,7 +64,7 @@ public abstract class AbstractBidder {
     private String name;
 
 
-    /***
+    /**
      * Track of {@link BiddingRound}s.
      * */
     @OneToMany(cascade = CascadeType.ALL)

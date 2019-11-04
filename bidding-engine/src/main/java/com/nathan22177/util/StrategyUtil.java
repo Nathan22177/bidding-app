@@ -17,7 +17,7 @@ import com.nathan22177.collection.BiddingRound;
  */
 public class StrategyUtil {
 
-    /***
+    /**
      * Retrieves the median all the bids.
      * @param bidder instance of a bidder.
      * @return median
@@ -29,7 +29,7 @@ public class StrategyUtil {
         return allBidsMedian(bidder.getBiddingHistory());
     }
 
-    /***
+    /**
      * Retrieves the median all the bids.
      * @param history of all the bids.
      * @return median
@@ -55,7 +55,7 @@ public class StrategyUtil {
 
     }
 
-    /***
+    /**
      * Retrieves {@param bidder's} opponent's balance
      * after all the bids they have made.
      * @return current balance
@@ -66,7 +66,7 @@ public class StrategyUtil {
                 : bidder.getConditions().getMoney();
     }
 
-    /***
+    /**
      * Retrieves mean price of one QU.
      * @param bidder instance of a bidder.
      * @return price
@@ -75,7 +75,7 @@ public class StrategyUtil {
         return bidder.getConditions().getMoney() / bidder.getConditions().getQuantity();
     }
 
-    /***
+    /**
      * Retrieves last {@param n} bids of a {@param bidder}.
      * @return FIFO list of bids
      * */
@@ -87,7 +87,7 @@ public class StrategyUtil {
                 .collect(Collectors.toList());
     }
 
-    /***
+    /**
      * Retrieves last {@param n} bids of a {@param bidder's} opponent.
      * @return FIFO list of bids
      * */
@@ -99,7 +99,7 @@ public class StrategyUtil {
                 .collect(Collectors.toList());
     }
 
-    /***
+    /**
      * Determines if {@param bidder} bidded over
      * mean price of two QUs for last {@param n} bids.
      * */
@@ -112,7 +112,7 @@ public class StrategyUtil {
         return getMeanPriceForOneUnit(bidder) * 2 < Collections.min(getLastNBids(n, bidder));
     }
 
-    /***
+    /**
      * Determines if {@param bidder} has more money
      * than their opponent.
      * */
@@ -123,7 +123,7 @@ public class StrategyUtil {
         return bidder.getBalance() > getOpponentBalance(bidder);
     }
 
-    /***
+    /**
      * Retrieves bid that won last round.
      * @param bidder instance of a bidder.
      * @return bid
@@ -137,7 +137,7 @@ public class StrategyUtil {
                 : 0;
     }
 
-    /***
+    /**
      * Determines if {@param bidder} has enough QU
      * to win.
      * */
@@ -155,7 +155,7 @@ public class StrategyUtil {
         return (bidder.getConditions().getQuantity() / 4) + 1;
     }
 
-    /***
+    /**
      * Determines if {@param bidder's} opponent always
      * raises it's bid.
      * */
@@ -173,7 +173,7 @@ public class StrategyUtil {
                 .allMatch(i -> bids.get(i) < bids.get(i - 1));
     }
 
-    /***
+    /**
      * Retrieves last bid of {@param bidder's} opponent.
      * @return bid
      * */
@@ -181,7 +181,7 @@ public class StrategyUtil {
         return bidder.getBiddingHistory().get(bidder.getBiddingHistory().size()-1).getOpponentBid();
     }
 
-    /***
+    /**
      * Determines if {@param bidder's} opponent bids
      * the same amount for the last {@param n} rounds.
      * */

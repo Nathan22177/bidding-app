@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 
 import com.nathan22177.bidder.BidderBot;
 
-/***
+/**
  * For manual testing trough terminal.
  * */
 public class ConsolePlayerStrategy implements BiddingStrategy {

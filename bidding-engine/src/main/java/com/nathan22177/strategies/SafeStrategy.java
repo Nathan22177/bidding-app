@@ -3,7 +3,7 @@ package com.nathan22177.strategies;
 import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.util.StrategyUtil;
 
-/***
+/**
  * Waits for an advantage then bids median plus 2.
  * */
 public class SafeStrategy implements BiddingStrategy {

@@ -4,7 +4,7 @@ import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.util.StrategyUtil;
 
 
-/***
+/**
  * lehaSVV2009s AwesomeBidder strategy refactored and appropriated.
  * Comments remain true to the source.
  * */

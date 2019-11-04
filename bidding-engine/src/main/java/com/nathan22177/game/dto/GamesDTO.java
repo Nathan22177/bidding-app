@@ -1,8 +1,6 @@
 package com.nathan22177.game.dto;
 
-import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.game.AbstractGame;
-import com.nathan22177.game.PlayerVersusBotGame;
 
 import lombok.Getter;
 

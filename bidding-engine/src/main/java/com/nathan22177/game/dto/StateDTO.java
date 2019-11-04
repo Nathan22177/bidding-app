@@ -11,20 +11,45 @@ import com.nathan22177.game.PlayerVersusPlayerGame;
 
 import lombok.Getter;
 
+/**
+ * Used when passing info about the game to the client.
+ *
+ * @author Valery Kokorev
+ * @author https://github.com/Nathan22177
+ */
 @Getter
 public class StateDTO {
     private Long gameId;
+
+    /**
+     * Amount of money left on the balance.
+     */
     private int balance;
+
+    /**
+     * Amount of currently won QU.
+     */
     private int acquiredAmount;
+
+    /**
+     * Initial amount money and QU.
+     */
     private Conditions conditions;
+
+    /**
+     * Bids from both players.
+     */
     private BiddingRound biddingRound;
+
+    /**
+     * Amount of money left on the opponent's balance.
+     */
     private int opponentBalance;
     private int opponentAcquiredAmount;
     private int roundsLeft;
     private Status status;
     private String ownName;
     private String opponentsName;
-
 
 
     public StateDTO(PlayerVersusBotGame game) {

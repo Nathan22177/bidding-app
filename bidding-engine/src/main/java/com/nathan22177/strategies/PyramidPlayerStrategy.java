@@ -3,7 +3,7 @@ package com.nathan22177.strategies;
 import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.util.StrategyUtil;
 
-/***
+/**
  * PyramidPlayers AdvancedBidder strategy refactored and appropriated.
  * Comments remain true to the source.
  * */
