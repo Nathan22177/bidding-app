@@ -29,6 +29,6 @@ public class NewGameUtil {
     }
 
     public static Map<String, Bot> getAvailableBots() {
-        return Arrays.stream(Bot.values()).collect(Collectors.toMap(Bot::getName, Function.identity()));
+        return Arrays.stream(Bot.values()).collect(Collectors.toMap(Bot::getTitle, Function.identity()));
     }
 }

@@ -132,7 +132,7 @@ public class GameEndpoint {
     }
 
     private static OutgoingMessage getOutGoingMessageForBids(PlayerVersusPlayerGame game, Side side) {
-        return new OutgoingMessage(game.getId(), MessageType.BID, new StateDTO(game, side));
+        return new OutgoingMessage(game.getId(), MessageType.BIDS, new StateDTO(game, side));
     }
 
     @OnClose

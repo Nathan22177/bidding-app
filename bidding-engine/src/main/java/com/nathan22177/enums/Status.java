@@ -3,6 +3,12 @@ package com.nathan22177.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * Describes condition of the game.
+ *
+ * @author Valery Kokorev
+ * @author https://github.com/Nathan22177
+ */
 @AllArgsConstructor
 @Getter
 public enum Status {
@@ -15,7 +21,11 @@ public enum Status {
     RED_WON(false),
     DRAW(false);
 
+    /**
+     * Describes if game is still going.
+     */
     public final boolean active;
+
     Status() {
         this(true);
     }

@@ -10,9 +10,18 @@ import com.nathan22177.strategies.RisingStrategy;
 import com.nathan22177.strategies.SafeStrategy;
 import com.nathan22177.strategies.WinnerIncrementStrategy;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * Used to quickly fetch a list of available
+ * bots and to instantiate one once chosen as an opponent.
+ *
+ * @author Valery Kokorev
+ * @author https://github.com/Nathan22177
+ */
 @Getter
+@AllArgsConstructor
 public enum Bot {
     /***
      * Random strategy
@@ -61,13 +70,14 @@ public enum Bot {
      * */
     WIN_INC_BOT("Chad", new WinnerIncrementStrategy());
 
+    /**
+     * Humanised name to show to the player
+     * in order to not telegraph their strategy.
+     */
     private final String title;
-    private final String name;
-    private final BiddingStrategy strategy;
 
-    Bot(String title, BiddingStrategy strategy) {
-        this.title = title;
-        this.strategy = strategy;
-        this.name = this.toString();
-    }
+    /**
+     * Defines how bot evaluates how much to bid.
+     */
+    private final BiddingStrategy strategy;
 }

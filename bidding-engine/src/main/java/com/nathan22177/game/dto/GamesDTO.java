@@ -4,6 +4,12 @@ import com.nathan22177.game.PlayerVersusBotGame;
 
 import lombok.Getter;
 
+/**
+ * Used when making a list of games available to the player.
+ *
+ * @author Valery Kokorev
+ * @author https://github.com/Nathan22177
+ */
 @Getter
 public class GamesDTO {
     private Long id;
