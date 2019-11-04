@@ -11,7 +11,7 @@ public class PyramidPlayerStrategy implements BiddingStrategy {
 
     @Override
     public int getBiddingAmount(BidderBot bidder) {
-        int spread = bidder.getConditions().getCash() / bidder.getConditions().getQuantity() * 2;
+        int spread = bidder.getConditions().getMoney() / bidder.getConditions().getQuantity() * 2;
         int restWinRounds = bidder.getConditions().getQuantity() / 2 + 1 - bidder.getAcquiredAmount();
         if (restWinRounds == 0) {
             return 0;

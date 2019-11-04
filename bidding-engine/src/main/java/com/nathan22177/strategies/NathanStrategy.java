@@ -12,7 +12,7 @@ public class NathanStrategy implements BiddingStrategy{
     public int getBiddingAmount(BidderBot bidder) {
 
         /*
-          We will always safely bet 2 until opponent runs out of cash.
+          We will always safely bet 2 until opponent runs out of money.
         */
         boolean thereAreMoreRoundsThanMonetaryUnits = bidder.getConditions().getQuantity() / 2 > bidder.getBalance();
 
@@ -23,7 +23,7 @@ public class NathanStrategy implements BiddingStrategy{
         int defaultBid = !thereAreMoreRoundsThanMonetaryUnits
                 ? (bidder.getBalance() / (roundsLeft * 2)) + (initialQuantity - roundsLeft) + 2
                 : 1;
-        int price = bidder.getConditions().getCash() / bidder.getConditions().getQuantity();
+        int price = bidder.getConditions().getMoney() / bidder.getConditions().getQuantity();
 
         /*
           If opponent consistently bids the same amount we can easily outbid them.

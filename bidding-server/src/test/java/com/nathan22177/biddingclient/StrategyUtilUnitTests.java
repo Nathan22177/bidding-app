@@ -147,7 +147,7 @@ public class StrategyUtilUnitTests {
     public void getMeanPriceForOneUnit() {
         /*
          * Checking that mean price is in fact 100 for
-         * when initial QU is 1000 and initial cash is 10.000,
+         * when initial QU is 1000 and initial money is 10.000,
          * additionally checking that both bidders got the same result.
          * */
         Assert.assertEquals(100, StrategyUtil.getMeanPriceForOneUnit(bidder));

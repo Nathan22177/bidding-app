@@ -38,9 +38,9 @@
                             window.alert('VICTORY! \n' +
                                 '\nAcquired ' + data.acquiredAmount +
                                 'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
-                                'Cash left: ' + data.balance + '\n' +
+                                'Money left: ' + data.balance + '\n' +
                                 '\nOpponent lost with ' + data.opponentAcquiredAmount + ' QUs and ' +
-                                data.opponentBalance + ' cash.' +
+                                data.opponentBalance + ' money.' +
                                 '\n\nYou will now be redirected to the menu.');
                             window.location.replace('/');
                             break;
@@ -48,9 +48,9 @@
                             window.alert('DEFEAT! \n' +
                                 '\nAcquired ' + data.acquiredAmount +
                                 'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
-                                'Cash left: ' + data.balance + '\n' +
+                                'Money left: ' + data.balance + '\n' +
                                 '\nOpponent won with ' + data.opponentAcquiredAmount + ' QUs and ' +
-                                data.opponentBalance + ' cash.' +
+                                data.opponentBalance + ' money.' +
                                 '\n\nYou will now be redirected to the menu.');
                             window.location.replace('/');
                             break;
@@ -58,7 +58,7 @@
                             window.alert('DRAW! \n' +
                                 '\nBoth acquired ' + data.acquiredAmount +
                                 'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
-                                'Both left with ' + data.balnce + ' of cash.' +
+                                'Both left with ' + data.balnce + ' of money.' +
                                 '\nYou will now be redirected to the menu.');
                             window.location.replace('/');
                             break;
@@ -170,7 +170,7 @@
                 <span>&nbsp;&nbsp;Acquired QU: &nbsp;<p class="inline" id="acquiredAmount"
                                                               th:text="${blue.acquiredAmount}"></p></span>
                 <h2 class="display-4">Conditions</h2>
-                <span>Start balance: &nbsp;<p class="inline" th:text="${blue.conditions.cash}"></p></span>
+                <span>Start balance: &nbsp;<p class="inline" th:text="${blue.conditions.money}"></p></span>
 
                 <span>&nbsp;&nbsp;Overall quantity: <p class="inline"
                                                              th:text="${blue.conditions.quantity}"></p></span>

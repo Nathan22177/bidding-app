@@ -56,9 +56,9 @@ public class BidderBot extends AbstractBidder {
      */
     public BidderBot(Conditions conditions, Bot bot) {
         Assert.isTrue(conditions.getQuantity() % 2 == 0 && conditions.getQuantity() > 0, "Quantity must be a positive and even number.");
-        Assert.isTrue(conditions.getCash() > 0, "Cash must be positive number.");
+        Assert.isTrue(conditions.getMoney() > 0, "Money must be positive number.");
         setConditions(conditions);
-        setBalance(conditions.getCash());
+        setBalance(conditions.getMoney());
         setAcquiredAmount(0);
         this.bot = bot;
         this.title = bot.getTitle();

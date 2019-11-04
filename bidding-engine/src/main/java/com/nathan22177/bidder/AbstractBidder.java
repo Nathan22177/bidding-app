@@ -40,7 +40,7 @@ public abstract class AbstractBidder {
     Long id;
 
     /***
-     * Amount of cash left.
+     * Amount of money left.
      * */
     private int balance;
 
@@ -50,7 +50,7 @@ public abstract class AbstractBidder {
     private int acquiredAmount;
 
     /***
-     * Initial amount cash and QU.
+     * Initial amount money and QU.
      * */
     @Embedded
     private Conditions conditions;
@@ -64,12 +64,12 @@ public abstract class AbstractBidder {
     private List<BiddingRound> biddingHistory;
 
     /**
-     * Used to withdraw cash from {@link AbstractBidder#balance}.
+     * Used to withdraw money from {@link AbstractBidder#balance}.
      *
-     * @param cash amount of cash to be withdrawn.
+     * @param money amount of money to be withdrawn.
      */
-    private void withdraw(int cash) {
-        this.balance -= cash;
+    private void withdraw(int money) {
+        this.balance -= money;
     }
 
     /**
@@ -84,11 +84,11 @@ public abstract class AbstractBidder {
     }
 
     /**
-     * Initiates cash withdrawal from {@link AbstractBidder#balance}
+     * Initiates money withdrawal from {@link AbstractBidder#balance}
      * and logging into {@link AbstractBidder#biddingHistory}.
      *
-     * @param own   amount of cash bid by the player.
-     * @param other amount of cash bid by the player's opponent.
+     * @param own   amount of money bid by the player.
+     * @param other amount of money bid by the player's opponent.
      */
     public void resolveBidsAndAppendHistory(int own, int other) {
         appendBiddingHistory(own, other);
@@ -98,8 +98,8 @@ public abstract class AbstractBidder {
     /**
      * Adds entry into the {@link AbstractBidder#biddingHistory}.
      *
-     * @param own   amount of cash bid by the player.
-     * @param other amount of cash bid by the player's opponent.
+     * @param own   amount of money bid by the player.
+     * @param other amount of money bid by the player's opponent.
      */
     private void appendBiddingHistory(int own, int other) {
         if (getBiddingHistory() == null) {
@@ -113,8 +113,8 @@ public abstract class AbstractBidder {
      * Resolves amount of QU won by the player
      * and adds it to the {@link AbstractBidder#acquiredAmount}.
      *
-     * @param own   amount of cash bid by the player.
-     * @param other amount of cash bid by the player's opponent.
+     * @param own   amount of money bid by the player.
+     * @param other amount of money bid by the player's opponent.
      */
     private void resolveBids(int own, int other) {
         if (other < own) {
@@ -127,13 +127,13 @@ public abstract class AbstractBidder {
     }
 
     /**
-     * Public method that allows withdrawal of the cash upon bidding
+     * Public method that allows withdrawal of the money upon bidding
      *
-     * @param bid amount of cash bid by the player.
+     * @param bid amount of money bid by the player.
      */
     public void withdrawBiddingAmount(int bid) {
         Assert.isTrue(bid >= 0, "Bid should be positive number");
-        Assert.isTrue(bid <= getBalance(), "Bid should not be larger than amount of cash on the balance");
+        Assert.isTrue(bid <= getBalance(), "Bid should not be larger than amount of money on the balance");
         withdraw(bid);
     }
 }

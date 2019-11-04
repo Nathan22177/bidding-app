@@ -14,15 +14,15 @@ import lombok.Getter;
 @Embeddable
 public class Conditions {
     private final static List<Integer> quantityPoll = Arrays.asList(8, 16, 20);
-    private final static List<Integer> cashPoll = Arrays.asList(1000, 5000, 20_000, 80_000);
+    private final static List<Integer> moneyPoll = Arrays.asList(1000, 5000, 20_000, 80_000);
     private final static Random rand = new Random();
 
     private int quantity;
-    private int cash;
+    private int money;
 
 
     public static Conditions getRandomConditions() {
-        return new Conditions(getRandomCondition(quantityPoll), getRandomCondition(cashPoll));
+        return new Conditions(getRandomCondition(quantityPoll), getRandomCondition(moneyPoll));
     }
 
     private static Integer getRandomCondition(List<Integer> poll) {

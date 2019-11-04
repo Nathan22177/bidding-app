@@ -62,8 +62,8 @@ public class StrategyUtil {
      * */
     public static int getOpponentBalance(BidderBot bidder) {
         return bidder.getBiddingHistory() != null && bidder.getBiddingHistory().size() > 0
-                ? bidder.getConditions().getCash() - bidder.getBiddingHistory().stream().mapToInt(BiddingRound::getOpponentBid).sum()
-                : bidder.getConditions().getCash();
+                ? bidder.getConditions().getMoney() - bidder.getBiddingHistory().stream().mapToInt(BiddingRound::getOpponentBid).sum()
+                : bidder.getConditions().getMoney();
     }
 
     /***
@@ -72,7 +72,7 @@ public class StrategyUtil {
      * @return price
      * */
     public static int getMeanPriceForOneUnit(BidderBot bidder) {
-        return bidder.getConditions().getCash() / bidder.getConditions().getQuantity();
+        return bidder.getConditions().getMoney() / bidder.getConditions().getQuantity();
     }
 
     /***

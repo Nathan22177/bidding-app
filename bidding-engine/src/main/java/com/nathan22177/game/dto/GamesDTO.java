@@ -12,16 +12,32 @@ import lombok.Getter;
  */
 @Getter
 public class GamesDTO {
-    private Long id;
+    private Long gameId;
+
+    /**
+     * Name if opponent is a player and title if opponent is a bot.
+     */
     private String opponent;
+
+    /**
+     * How many times player cam place a bid before game runs out of QU.
+     */
     private int roundsLeft;
+
+    /**
+     *  Amount of already won QUs.
+     */
     private int acquired;
+
+    /**
+     * Amount of money left on the balance.
+     * */
     private int balance;
     private String status;
     private boolean active;
 
     public GamesDTO(PlayerVersusBotGame game) {
-        this.id = game.getId();
+        this.gameId = game.getId();
         this.opponent = game.getRedPlayer().getTitle();
         this.roundsLeft = (game.getConditions().getQuantity() / 2) - game.getBluePlayer().getBiddingHistory().size();
         this.acquired = game.getBluePlayer().getAcquiredAmount();

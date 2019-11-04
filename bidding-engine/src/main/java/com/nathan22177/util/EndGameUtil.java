@@ -21,9 +21,9 @@ public class EndGameUtil {
     }
 
     private static void resolveDraw(AbstractGame game) {
-        if (redHasMoreCash(game)) {
+        if (redHasMoreMoney(game)) {
             game.setStatus(Status.RED_WON);
-        } else if (blueHasMoreCash(game)) {
+        } else if (blueHasMoreMoney(game)) {
             game.setStatus(Status.BLUE_WON);
         } else {
             game.setStatus(Status.DRAW);
@@ -38,11 +38,11 @@ public class EndGameUtil {
         return game.getRedPlayer().getAcquiredAmount() < game.getBluePlayer().getAcquiredAmount();
     }
 
-    private static boolean redHasMoreCash(AbstractGame game) {
+    private static boolean redHasMoreMoney(AbstractGame game) {
         return game.getRedPlayer().getBalance() > game.getBluePlayer().getBalance();
     }
 
-    private static boolean blueHasMoreCash(AbstractGame game) {
+    private static boolean blueHasMoreMoney(AbstractGame game) {
         return game.getRedPlayer().getBalance() < game.getBluePlayer().getBalance();
     }
 

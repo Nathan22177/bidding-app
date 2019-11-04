@@ -19,12 +19,12 @@ public class LehaSVV2009Strategy implements BiddingStrategy {
     }
 
     private static int calculateBiddingAmount(BidderBot bidder) {
-        // Skip calculations if there is no cash or turns
+        // Skip calculations if there is no money or turns
         if (bidder.getBalance() == 0 || StrategyUtil.getRoundsLeft(bidder) == 0) {
             return 0;
         }
 
-        // Don't waste money if opponent's cash is 0
+        // Don't waste money if opponent's money is 0
         if (StrategyUtil.getOpponentBalance(bidder) == 0) {
             return 1;
         }
@@ -34,7 +34,7 @@ public class LehaSVV2009Strategy implements BiddingStrategy {
             return bidder.getBalance();
         }
 
-        // Check if it is possible to win by placing opponent's cash + 1 (when opponent's cash is too small)
+        // Check if it is possible to win by placing opponent's money + 1 (when opponent's money is too small)
         long minimumTurnsToWin = (bidder.getConditions().getQuantity() / 2) - (bidder.getAcquiredAmount() / 2);
         if (minimumTurnsToWin > 0 && bidder.getBalance() >= (StrategyUtil.getOpponentBalance(bidder) + 1) * minimumTurnsToWin) {
             return StrategyUtil.getOpponentBalance(bidder) + 1;

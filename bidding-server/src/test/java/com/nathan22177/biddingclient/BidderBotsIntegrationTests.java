@@ -18,7 +18,7 @@ import com.nathan22177.game.Conditions;
 @SpringBootTest(classes = BiddingServerApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BidderBotsIntegrationTests {
-    private List<Integer> cashPoll = Arrays.asList(1000, 5000, 10_000, 50_000, 100_000, 500_000, 1000_000, 10_000_000);
+    private List<Integer> moneyPoll = Arrays.asList(1000, 5000, 10_000, 50_000, 100_000, 500_000, 1000_000, 10_000_000);
     private List<Integer> quantityPoll = Arrays.asList(2, 4, 8, 16, 20, 30, 40, 50, 80, 100, 200, 400, 800, 1000);
 
     @Test
@@ -74,10 +74,10 @@ public class BidderBotsIntegrationTests {
 
     public void twoStrategiesCompetition(Bot bidder, Bot bot, int winningThreshold) {
         int winOrDrawCount = 0;
-        for (int cash : cashPoll) {
+        for (int money : moneyPoll) {
             for (int quantity : quantityPoll) {
-                BidderBot bidderBot = new BidderBot(new Conditions(quantity, cash), bidder);
-                BidderBot opponentBot = new BidderBot(new Conditions(quantity, cash), bot);
+                BidderBot bidderBot = new BidderBot(new Conditions(quantity, money), bidder);
+                BidderBot opponentBot = new BidderBot(new Conditions(quantity, money), bot);
                 for (int i = 0; i < quantity / 2; i++) {
                     int bidderBid = bidderBot.getNextBid();
                     int opponentBid = opponentBot.getNextBid();
