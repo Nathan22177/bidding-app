@@ -74,7 +74,7 @@ public enum Bot {
      * Humanised name to show to the player
      * in order to not telegraph their strategy.
      */
-    private final String title;
+    private final String name;
 
     /**
      * Defines how bot evaluates how much to bid.

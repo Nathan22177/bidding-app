@@ -16,12 +16,12 @@
     <script th:src="@{/webjars/requirejs/2.3.6/require.js}"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" th:inline="javascript">
-        let username;
+        let name;
         require(['jquery'], function ($) {
             function startPvpGame() {
-                username = window.prompt('Enter your pvp username.');
-                if (username) {
-                    window.location.replace('/start_new_game_vs_another_player/' + username);
+                name = window.prompt('Enter your pvp name.');
+                if (name) {
+                    window.location.replace('/start_new_game_vs_another_player/' + name);
                 }
             }
 

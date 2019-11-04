@@ -1,6 +1,5 @@
 package com.nathan22177.bidder;
 
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -24,12 +23,6 @@ import lombok.Setter;
 public class BidderPlayer extends AbstractBidder {
 
     /**
-     * Name chosen by user to show to other players.
-     */
-    @Embedded
-    String username;
-
-    /**
      * Represents side in pvp.
      */
     @Setter
@@ -41,17 +34,17 @@ public class BidderPlayer extends AbstractBidder {
      *
      * @param conditions initial {@link #balance} and amount
      *                   of winnable QUs.
-     * @param username   {@link BidderPlayer#username} got from user input.
-     * @param side if player is blue or red.
+     * @param name   {@link BidderPlayer#name} got from user input.
+     * @param side       if player is blue or red.
      * @return new instance of {@link BidderBot}.
      */
-    public BidderPlayer(Conditions conditions, String username, Side side) {
+    public BidderPlayer(Conditions conditions, String name, Side side) {
         Assert.isTrue(conditions.getQuantity() % 2 == 0 && conditions.getQuantity() > 0, "Quantity must be a positive and even number.");
         Assert.isTrue(conditions.getMoney() > 0, "Money must be positive number.");
         setConditions(conditions);
         setBalance(conditions.getMoney());
         setAcquiredAmount(0);
-        this.username = username;
+        setName(name);
         this.side = side;
     }
 

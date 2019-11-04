@@ -34,7 +34,7 @@ import com.nathan22177.websocket.messages.outgoing.OutgoingMessage;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@ServerEndpoint(value = "/pvp/{gameId}/{username}",
+@ServerEndpoint(value = "/pvp/{gameId}/{name}",
         encoders = OutgoingMessageEncoder.class,
         decoders = IncomingMessageDecoder.class,
         configurator = CustomSpringConfigurator.class)
@@ -48,10 +48,10 @@ public class GameEndpoint {
 
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("gameId") Long gameId, @PathParam("username") String username) {
+    public void onOpen(Session session, @PathParam("gameId") Long gameId, @PathParam("name") String name) {
         PlayerVersusPlayerGame game = vsPlayerService.loadVersusPlayerGame(gameId);
-        BidderPlayer player = game.getPlayerByUsername(username);
-        GameSession newGameSession = new GameSession(gameId, session, username, player.getSide());
+        BidderPlayer player = game.getPlayerByName(name);
+        GameSession newGameSession = new GameSession(gameId, session, name, player.getSide());
         if (player.getSide() == Side.BLUE) {
             broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.WAITING_FOR_OPPONENT));
         } else {

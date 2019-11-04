@@ -23,9 +23,9 @@ public class PlayerVersusPlayerGame extends AbstractGame{
     @OneToOne(cascade = CascadeType.ALL)
     BidderPlayer redPlayer;
 
-    public PlayerVersusPlayerGame(Conditions conditions, String username) {
+    public PlayerVersusPlayerGame(Conditions conditions, String name) {
         this.conditions = conditions;
-        this.bluePlayer = new BidderPlayer(conditions, username, Side.BLUE);
+        this.bluePlayer = new BidderPlayer(conditions, name, Side.BLUE);
         setStatus(Status.MATCHMAKING);
     }
 
@@ -35,14 +35,14 @@ public class PlayerVersusPlayerGame extends AbstractGame{
     }
 
     @Transactional
-    public BidderPlayer getPlayerByUsername(String username) {
-        if (getBluePlayer().getUsername().equals(username)) {
+    public BidderPlayer getPlayerByName(String name) {
+        if (getBluePlayer().getName().equals(name)) {
             return getBluePlayer();
         }
-        if (getRedPlayer().getUsername().equals(username)) {
+        if (getRedPlayer().getName().equals(name)) {
             return getRedPlayer();
         }
-        throw new IllegalArgumentException("No such player in this game. Username: " + username + "; gameId: " + getId());
+        throw new IllegalArgumentException("No such player in this game. Name: " + name + "; gameId: " + getId());
     }
 
     public void playersPlaceTheirBids(Integer bluesBid, Integer redsBid) {

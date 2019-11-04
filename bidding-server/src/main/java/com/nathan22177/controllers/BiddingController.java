@@ -53,17 +53,17 @@ public class BiddingController {
         return vsBotService.placeBidVersusBot(gameId, bid);
     }
 
-    @GetMapping("/start_new_game_vs_another_player/{username}")
-    public String startVersusPlayerGame(Model model, @PathVariable String username) {
-        Long gameId = vsPlayerService.getPendingGameOrCreateNewOne(username);
+    @GetMapping("/start_new_game_vs_another_player/{name}")
+    public String startVersusPlayerGame(Model model, @PathVariable String name) {
+        Long gameId = vsPlayerService.getPendingGameOrCreateNewOne(name);
         model.addAttribute("gameId", gameId);
-        return "redirect:/vs_player/" + gameId + "/" + username;
+        return "redirect:/vs_player/" + gameId + "/" + name;
     }
 
-    @GetMapping("/vs_player/{gameId}/{username}")
-    public String loadVersusPlayerGame(Model model, @PathVariable Long gameId, @PathVariable String username) {
+    @GetMapping("/vs_player/{gameId}/{name}")
+    public String loadVersusPlayerGame(Model model, @PathVariable Long gameId, @PathVariable String name) {
         PlayerVersusPlayerGame game = vsPlayerService.loadVersusPlayerGame(gameId);
-        Side side = game.getBluePlayer().getUsername().equals(username) ? Side.BLUE : Side.RED;
+        Side side = game.getBluePlayer().getName().equals(name) ? Side.BLUE : Side.RED;
         model.addAttribute("side", side);
         model.addAttribute("player", game.getBluePlayer());
         model.addAttribute("gameId", game.getId());

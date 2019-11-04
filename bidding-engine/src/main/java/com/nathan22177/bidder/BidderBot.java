@@ -2,7 +2,6 @@ package com.nathan22177.bidder;
 
 import java.util.Random;
 
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -34,13 +33,6 @@ public class BidderBot extends AbstractBidder {
     private Bot bot;
 
     /**
-     * Humanised name to show to the player
-     * in order to not telegraph their strategy.
-     */
-    @Embedded
-    private String title;
-
-    /**
      * Instance of {@link Random} used by most of the strategies.
      **/
     private final Random random = new Random();
@@ -51,7 +43,7 @@ public class BidderBot extends AbstractBidder {
      * @param conditions initial {@link #balance} and amount
      *                   of winnable QUs.
      * @param bot        defines {@link com.nathan22177.strategies.BiddingStrategy}
-     *                   and {@link BidderBot#title}.
+     *                   and {@link BidderBot#name}.
      * @return new instance of {@link BidderBot}.
      */
     public BidderBot(Conditions conditions, Bot bot) {
@@ -61,7 +53,7 @@ public class BidderBot extends AbstractBidder {
         setBalance(conditions.getMoney());
         setAcquiredAmount(0);
         this.bot = bot;
-        this.title = bot.getTitle();
+        setName(bot.getName());
     }
 
     /**

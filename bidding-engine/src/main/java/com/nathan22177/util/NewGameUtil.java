@@ -15,8 +15,8 @@ public class NewGameUtil {
         return new PlayerVersusBotGame(Conditions.getRandomConditions(), bot);
     }
 
-    public static PlayerVersusPlayerGame createNewGameAgainstThePlayer(String username) {
-        return new PlayerVersusPlayerGame(Conditions.getRandomConditions(), username);
+    public static PlayerVersusPlayerGame createNewGameAgainstThePlayer(String name) {
+        return new PlayerVersusPlayerGame(Conditions.getRandomConditions(), name);
     }
 
     public static String getRandomBot() {
@@ -29,6 +29,6 @@ public class NewGameUtil {
     }
 
     public static Map<String, Bot> getAvailableBots() {
-        return Arrays.stream(Bot.values()).collect(Collectors.toMap(Bot::getTitle, Function.identity()));
+        return Arrays.stream(Bot.values()).collect(Collectors.toMap(Bot::getName, Function.identity()));
     }
 }

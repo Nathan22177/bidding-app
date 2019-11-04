@@ -24,7 +24,7 @@ public class VersusPlayerService {
         this.versusPlayerRepository = versusPlayerRepository;
     }
 
-    public Long getPendingGameOrCreateNewOne(String username) {
+    public Long getPendingGameOrCreateNewOne(String name) {
         Optional<PlayerVersusPlayerGame> pendingGame = versusPlayerRepository
                 .findPendingGames()
                 .stream()
@@ -32,9 +32,9 @@ public class VersusPlayerService {
         PlayerVersusPlayerGame game;
         if (pendingGame.isPresent()) {
             game = pendingGame.get();
-            pendingGame.get().setRedPlayer(new BidderPlayer(game.getConditions(), username, Side.RED));
+            pendingGame.get().setRedPlayer(new BidderPlayer(game.getConditions(), name, Side.RED));
         } else {
-            game = NewGameUtil.createNewGameAgainstThePlayer(username);
+            game = NewGameUtil.createNewGameAgainstThePlayer(name);
             versusPlayerRepository.saveAndFlush(game);
         }
         return game.getId();

@@ -55,6 +55,14 @@ public abstract class AbstractBidder {
     @Embedded
     private Conditions conditions;
 
+    /**
+     * Name chosen by user to show to other players if it's a player,
+     * and a humanised name to show to the player in order
+     * to not telegraph their strategy if its a bot.
+     */
+    @Embedded
+    private String name;
+
 
     /***
      * Track of {@link BiddingRound}s.

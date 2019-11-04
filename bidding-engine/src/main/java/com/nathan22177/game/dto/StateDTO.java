@@ -22,8 +22,8 @@ public class StateDTO {
     private int opponentAcquiredAmount;
     private int roundsLeft;
     private Status status;
-    private String ownUsername;
-    private String opponentsUsername;
+    private String ownName;
+    private String opponentsName;
 
 
 
@@ -38,8 +38,8 @@ public class StateDTO {
         this.opponentBalance = game.getRedPlayer().getBalance();
         this.opponentAcquiredAmount = game.getRedPlayer().getAcquiredAmount();
         this.roundsLeft = (game.getConditions().getQuantity() / 2) - player.getBiddingHistory().size();
-        this.ownUsername = game.getBluePlayer().getUsername();
-        this.opponentsUsername = game.getRedPlayer().getTitle();
+        this.ownName = game.getBluePlayer().getName();
+        this.opponentsName = game.getRedPlayer().getName();
     }
 
     public StateDTO(PlayerVersusPlayerGame game, Side side) {
@@ -58,10 +58,10 @@ public class StateDTO {
         if (opponent != null) {
             this.opponentBalance = opponent.getBalance();
             this.opponentAcquiredAmount = opponent.getAcquiredAmount();
-            this.opponentsUsername = opponent.getUsername();
+            this.opponentsName = opponent.getName();
         }
         this.roundsLeft = (game.getConditions().getQuantity() / 2) - player.getBiddingHistory().size();
-        this.ownUsername = player.getUsername();
+        this.ownName = player.getName();
 
     }
 

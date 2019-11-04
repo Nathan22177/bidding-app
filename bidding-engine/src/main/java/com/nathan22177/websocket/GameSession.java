@@ -12,6 +12,6 @@ import lombok.Getter;
 public class GameSession {
     Long gameId;
     Session session;
-    String username;
+    String name;
     Side side;
 }
