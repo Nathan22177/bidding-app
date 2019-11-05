@@ -1,6 +1,7 @@
 package com.nathan22177.game.dto;
 
-import com.nathan22177.game.AbstractGame;
+import com.nathan22177.game.PlayerVersusBotGame;
+import com.nathan22177.game.PlayerVersusPlayerGame;
 
 import lombok.Getter;
 
@@ -44,12 +45,17 @@ public class GamesDTO {
      *
      * @param game current game.
      */
-    public GamesDTO(AbstractGame game) {
+    public GamesDTO(PlayerVersusBotGame game) {
         this.gameId = game.getId();
         this.opponent = game.getRedPlayer().getName();
         this.roundsLeft = (game.getConditions().getWinnableQuantity() / 2) - game.getBluePlayer().getBiddingHistory().size();
         this.acquired = game.getBluePlayer().getAcquiredAmount();
         this.balance = game.getBluePlayer().getBalance();
         this.status = game.getStatus().toString();
+    }
+
+    public GamesDTO(PlayerVersusPlayerGame game) {
+        this.gameId = game.getId();
+        this.opponent = game.getBluePlayer().getName();
     }
 }
