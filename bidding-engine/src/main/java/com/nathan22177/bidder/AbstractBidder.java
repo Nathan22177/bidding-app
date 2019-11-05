@@ -101,6 +101,7 @@ public abstract class AbstractBidder {
     public void resolveBidsAndAppendHistory(int own, int other) {
         appendBiddingHistory(own, other);
         resolveBids(own, other);
+        withdrawBiddingAmount(own);
     }
 
     /**

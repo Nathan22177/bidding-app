@@ -33,7 +33,15 @@ public class PlayerVersusBotGame extends AbstractGame {
     @OneToOne(cascade = CascadeType.ALL)
     private BidderBot redPlayer;
 
-
+    /**
+     * Constructor that we use in order to instantiate a game.
+     *
+     * @param conditions initial {@link com.nathan22177.bidder.AbstractBidder#balance} and amount
+     *                   of winnable QUs.
+     * @param bot        defines how bot evaluates how much to bid
+     *                   and bot's {@link BidderBot#name}.
+     * @return new instance of {@link PlayerVersusBotGame}.
+     */
     public PlayerVersusBotGame(Conditions conditions, Bot bot) {
         this.conditions = conditions;
         this.redPlayer = new BidderBot(conditions, bot);
@@ -41,19 +49,28 @@ public class PlayerVersusBotGame extends AbstractGame {
         this.status = Status.WAITING_FOR_BIDS;
     }
 
+    /**
+     * Accepts client's bid.
+     *
+     * @param bluesBid bid of a client.
+     */
     public void playerPlacesBidVersusBot(Integer bluesBid) {
         int redsBid = getRedPlayer().getNextBid();
-        resolveBidsVersusBot(bluesBid, redsBid);
+        resolveBiddingRound(bluesBid, redsBid);
         if (EndGameUtil.theGameHasEnded(this)) {
             EndGameUtil.resolveGamesEnd(this);
         }
     }
 
-    private void resolveBidsVersusBot(int bluesBid, int redsBid) {
+    /**
+     * Accepts both client's and their opponent's bids.
+     *
+     * @param bluesBid bid of a client.
+     * @param redsBid  bid of a bot.
+     */
+    private void resolveBiddingRound(int bluesBid, int redsBid) {
         BidderPlayer player = getBluePlayer();
         BidderBot bot = getRedPlayer();
-        player.withdrawBiddingAmount(bluesBid);
-        bot.withdrawBiddingAmount(redsBid);
         player.resolveBidsAndAppendHistory(bluesBid, redsBid);
         bot.resolveBidsAndAppendHistory(redsBid, bluesBid);
         setStatus(Status.WAITING_FOR_BIDS);
@@ -66,5 +83,6 @@ public class PlayerVersusBotGame extends AbstractGame {
     /**
      * Used by persistence to create new instance via reflection upon fetching.
      */
-    public PlayerVersusBotGame(){}
+    public PlayerVersusBotGame() {
+    }
 }
