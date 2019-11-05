@@ -55,7 +55,7 @@ public class GameEndpoint {
         if (player.getSide() == Side.BLUE) {
             broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.WAITING_FOR_OPPONENT));
         } else {
-            broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.PLAYER_JOINED));
+            broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.PLAYER_JOINED, new StateDTO(game, player.getSide())));
         }
         gameSessions.add(newGameSession);
     }

@@ -61,8 +61,8 @@
             }
 
             function updateGameInfo(state) {
-                if (state.status.isActive) {
-                    switch (state.status) {
+                if (state.active) {
+                    switch (state.status.toString()) {
                         case 'WAITING_FOR_BIDS' :
                             updateAndEnableInterface(state);
                             break;
@@ -75,7 +75,7 @@
                                 disableInterface();
                             break;
                         default:
-                            window.alert('Something went wrong. \n\nYou will now be redirected to the menu. Status:' + state.status);
+                            window.alert('Something went wrong.1231231212 \n\nYou will now be redirected to the menu. Status: ' + state.status);
                             window.location.replace('/');
                             break;
                     }
@@ -96,6 +96,9 @@
                     $("#bid").val(0);
                     resolveRoundsCountdown(state);
                     checkIfGameHasEnded(state);
+                    $('#waiting').hide();
+                    $('#opponentName').text(state.opponentsName);
+                    $('#interface').show();
                 }
             }
 
@@ -141,8 +144,8 @@
             }
 
             function checkIfGameHasEnded(data) {
-                if (!data.status.isActive) {
-                    switch (data.status) {
+                if (!data.active) {
+                    switch (data.status.toString()) {
                         case 'BLUE_WON':
                             if (side.toString() === 'BLUE')
                                 resolveWin(data);
@@ -164,7 +167,7 @@
                             break;
                         case 'ENDED_PREMATURELY':
                         default:
-                            window.alert('Something went wrong. \n\nYou will now be redirected to the menu. Status:' + data.status);
+                            window.alert('Something went wrong.asdasasd \n\nYou will now be redirected to the menu. Status:' + data.status);
                             window.location.replace('/');
                             break;
                     }

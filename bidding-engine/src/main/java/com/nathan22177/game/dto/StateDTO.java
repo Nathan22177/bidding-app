@@ -1,5 +1,7 @@
 package com.nathan22177.game.dto;
 
+import javax.transaction.Transactional;
+
 import com.nathan22177.bidder.AbstractBidder;
 import com.nathan22177.bidder.BidderPlayer;
 import com.nathan22177.collections.BiddingRound;
@@ -74,6 +76,11 @@ public class StateDTO {
     private String opponentsName;
 
     /**
+     * Players can place bets.
+     */
+    private boolean active;
+
+    /**
      * Constructor that we use to pass a state to the client.
      *
      * @param game current game.
@@ -91,6 +98,7 @@ public class StateDTO {
         this.roundsLeft = (game.getConditions().getWinnableQuantity() / 2) - player.getBiddingHistory().size();
         this.ownName = game.getBluePlayer().getName();
         this.opponentsName = game.getRedPlayer().getName();
+        this.active = game.getStatus().isActive();
     }
 
     /**
@@ -118,7 +126,7 @@ public class StateDTO {
         }
         this.roundsLeft = (game.getConditions().getWinnableQuantity() / 2) - player.getBiddingHistory().size();
         this.ownName = player.getName();
-
+        this.active = game.getStatus().isActive();
     }
 
     /**
@@ -127,7 +135,8 @@ public class StateDTO {
      * @param player addressee of the message with a state.
      * @return last bidding round.
      */
-    private BiddingRound getBiddingRound(AbstractBidder player) {
+    @Transactional
+    BiddingRound getBiddingRound(AbstractBidder player) {
         if (player.getBiddingHistory().size() == 0) {
             return null;
         }
