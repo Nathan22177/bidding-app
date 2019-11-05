@@ -25,26 +25,28 @@
 
         require(['jquery'], function ($) {
             socket.onmessage = function (message) {
-                switch (message.data.type) {
+                let data = JSON.parse(message.data)
+                switch (data.type) {
                     case 'PLAYER_JOINED' :
-                        startGame();
+                        startGame(data.state);
                         break;
                     case 'BID' :
-                        updateGameInfo(message.data);
+                        updateGameInfo(data.state);
                         break;
                     case 'PLAYER_LEFT':
-                        resolveSuddenEnd(message.data);
+                        resolveSuddenEnd();
                         break;
                     case 'WAITING_FOR_OPPONENT' :
                         waitingForOpponent();
                         break;
                     default :
-                        window.alert('Unknown type found: ' + message.data.type);
+                        window.alert('Unknown type found: ' + data.type);
                 }
             };
 
-            function startGame() {
+            function startGame(state) {
                 $('#waiting').hide();
+                $('#opponentName').text(state.opponentsName);
                 $('#interface').show();
             }
 
@@ -55,25 +57,46 @@
 
             function waitingForOpponent() {
                 $('#interface').hide();
+                $('#waiting').show();
             }
 
-            function updateGameInfo(message) {
-                let data = JSON.parse(message);
+            function updateGameInfo(state) {
+                if (state.status.isActive) {
+                    switch (state.status) {
+                        case 'WAITING_FOR_BIDS' :
+                            updateAndEnableInterface(data.state);
+                            break;
+                        case 'WAITING_FOR_BLUE' :
+                            if (side.toString() === 'RED')
+                                disableInterface();
+                            break;
+                        case 'WAITING_FOR_RED' :
+                            if (side.toString() === 'BLUE')
+                                disableInterface();
+                            break;
+                        default:
+                            window.alert('Something went wrong. \n\nYou will now be redirected to the menu. Status:' + data.status);
+                            window.location.replace('/');
+                            break;
+                    }
+                }
+            }
 
-                // if (data) {
-                //     $("#balance").text(data.balance);
-                //     $("#acquiredAmount").text(data.acquiredAmount);
-                //     $("#bid").val('');
-                //     if (data.biddingRound) {
-                //         var lastOwn = data.biddingRound.ownBid;
-                //         var lastOpponents = data.biddingRound.opponentBid;
-                //         var entry = "<p>Your bid: " + lastOwn + "&nbsp; Opponents bid: " + lastOpponents + "</p>";
-                //         $("#history").append(entry);
-                //     }
-                //     $("#bid").val(0);
-                //     resolveRoundsCountdown(data);
-                //     checkIfGameHasEnded(data);
-                // }
+            function updateAndEnableInterface(state) {
+                if (state) {
+                    $("#balance").text(state.balance);
+                    $("#acquiredAmount").text(state.acquiredAmount);
+                    $("#bid").val('');
+                    if (state.biddingRound) {
+                        let lastOwn = state.biddingRound.ownBid;
+                        let lastOpponents = state.biddingRound.opponentBid;
+                        let entry = "<p>Your bid: " + lastOwn + "&nbsp; Opponents bid: " + lastOpponents + "</p>";
+                        $("#history").append(entry);
+                    }
+                    $("#bid").val(0);
+                    resolveRoundsCountdown(state);
+                    checkIfGameHasEnded(state);
+                }
             }
 
             function resolveRoundsCountdown(data) {
@@ -135,9 +158,13 @@
                         case 'DRAW':
                             resolveDraw(data);
                             break;
+                        case 'MATCHMAKING' :
+                            $('#interface').hide();
+                            $('#waiting').show();
+                            break;
                         case 'ENDED_PREMATURELY':
                         default:
-                            window.alert('Something went wrong. \n\nYou will now be redirected to the menu.');
+                            window.alert('Something went wrong. \n\nYou will now be redirected to the menu. Status:' + data.status);
                             window.location.replace('/');
                             break;
                     }
@@ -308,7 +335,8 @@
                     <span>&nbsp;&nbsp;Acquired QU: &nbsp;<p class="inline" id="acquiredAmount"
                                                             th:text="${player.acquiredAmount}"></p></span>
                     <h2 class="display-4">Conditions</h2>
-                    <span>Start balance: &nbsp;<p class="inline" th:text="${player.conditions.initialBalance}"></p></span>
+                    <span>Start balance: &nbsp;<p class="inline"
+                                                  th:text="${player.conditions.initialBalance}"></p></span>
 
                     <span>&nbsp;&nbsp;Overall quantity: <p class="inline"
                                                            th:text="${player.conditions.winnableQuantity}"></p></span>
