@@ -53,7 +53,7 @@ public class BidderBot extends AbstractBidder {
         setBalance(conditions.getInitialBalance());
         setAcquiredAmount(0);
         this.bot = bot;
-        setName(bot.getName());
+        setName(bot.getNickname());
     }
 
     /**

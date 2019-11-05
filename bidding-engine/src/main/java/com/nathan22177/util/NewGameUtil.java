@@ -21,7 +21,7 @@ public class NewGameUtil {
     /**
      * Produces random starting conditions.
      * */
-    public static Conditions getRandomConditions() {
+    private static Conditions getRandomConditions() {
         return new Conditions(getRandomCondition(quantityPoll), getRandomCondition(moneyPoll));
     }
 
@@ -58,6 +58,6 @@ public class NewGameUtil {
     }
 
     public static Map<String, Bot> getAvailableBots() {
-        return Arrays.stream(Bot.values()).collect(Collectors.toMap(Bot::getName, Function.identity()));
+        return Arrays.stream(Bot.values()).collect(Collectors.toMap(Bot::name, Function.identity()));
     }
 }

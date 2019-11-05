@@ -37,7 +37,7 @@
                         case 'BLUE_WON':
                             window.alert('VICTORY! \n' +
                                 '\nAcquired ' + data.acquiredAmount +
-                                'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
+                                'QUs out of ' + [[${blue.conditions.winnableQuantity}]] + '\n' +
                                 'Money left: ' + data.balance + '\n' +
                                 '\nOpponent lost with ' + data.opponentAcquiredAmount + ' QUs and ' +
                                 data.opponentBalance + ' money.' +
@@ -47,7 +47,7 @@
                         case 'RED_WON':
                             window.alert('DEFEAT! \n' +
                                 '\nAcquired ' + data.acquiredAmount +
-                                'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
+                                'QUs out of ' + [[${blue.conditions.winnableQuantity}]] + '\n' +
                                 'Money left: ' + data.balance + '\n' +
                                 '\nOpponent won with ' + data.opponentAcquiredAmount + ' QUs and ' +
                                 data.opponentBalance + ' money.' +
@@ -57,7 +57,7 @@
                         case 'DRAW':
                             window.alert('DRAW! \n' +
                                 '\nBoth acquired ' + data.acquiredAmount +
-                                'QUs out of ' + [[${blue.conditions.quantity}]] + '\n' +
+                                'QUs out of ' + [[${blue.conditions.winnableQuantity}]] + '\n' +
                                 'Both left with ' + data.balnce + ' of money.' +
                                 '\nYou will now be redirected to the menu.');
                             window.location.replace('/');
@@ -160,7 +160,7 @@
 <body>
 <div class="jumbotron">
     <div class="container">
-        <h1 class="display-3"><p th:text="${'Playing against ' + red.title}"></p></h1>
+        <h1 class="display-3"><p th:text="${'Playing against ' + red.name}"></p></h1>
         <p class="lead">Try to win as much QU as possible. But be careful! If you overspend the bot might gain an
             upper hand on what's left. So don't run out of money!</p>
         <div class="row">
@@ -170,10 +170,10 @@
                 <span>&nbsp;&nbsp;Acquired QU: &nbsp;<p class="inline" id="acquiredAmount"
                                                               th:text="${blue.acquiredAmount}"></p></span>
                 <h2 class="display-4">Conditions</h2>
-                <span>Start balance: &nbsp;<p class="inline" th:text="${blue.conditions.money}"></p></span>
+                <span>Start balance: &nbsp;<p class="inline" th:text="${blue.conditions.initialBalance}"></p></span>
 
                 <span>&nbsp;&nbsp;Overall quantity: <p class="inline"
-                                                             th:text="${blue.conditions.quantity}"></p></span>
+                                                             th:text="${blue.conditions.winnableQuantity}"></p></span>
             </div>
             <div class="col-sm-4">
                 <h4 class="display-4">History</h4>

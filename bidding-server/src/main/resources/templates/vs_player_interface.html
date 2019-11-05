@@ -89,7 +89,7 @@
             function resolveWin(data) {
                 window.alert('VICTORY! \n' +
                     '\nAcquired ' + data.acquiredAmount +
-                    'QUs out of ' + [[${player.conditions.quantity}]] + '\n' +
+                    'QUs out of ' + [[${player.conditions.winnableQuantity}]] + '\n' +
                     'Money left: ' + data.balance + '\n' +
                     '\nOpponent lost with ' + data.opponentAcquiredAmount + ' QUs and ' +
                     data.opponentBalance + ' money.' +
@@ -100,7 +100,7 @@
             function resolveDefeat(data) {
                 window.alert('DEFEAT! \n' +
                     '\nAcquired ' + data.acquiredAmount +
-                    'QUs out of ' + [[${player.conditions.quantity}]] + '\n' +
+                    'QUs out of ' + [[${player.conditions.winnableQuantity}]] + '\n' +
                     'Money left: ' + data.balance + '\n' +
                     '\nOpponent won with ' + data.opponentAcquiredAmount + ' QUs and ' +
                     data.opponentBalance + ' money.' +
@@ -111,7 +111,7 @@
             function resolveDraw() {
                 window.alert('DRAW! \n' +
                     '\nBoth acquired ' + data.acquiredAmount +
-                    'QUs out of ' + [[${player.conditions.quantity}]] + '\n' +
+                    'QUs out of ' + [[${player.conditions.winnableQuantity}]] + '\n' +
                     'Both left with ' + data.balnce + ' of money.' +
                     '\nYou will now be redirected to the menu.');
                 window.location.replace('/');
@@ -308,10 +308,10 @@
                     <span>&nbsp;&nbsp;Acquired QU: &nbsp;<p class="inline" id="acquiredAmount"
                                                             th:text="${player.acquiredAmount}"></p></span>
                     <h2 class="display-4">Conditions</h2>
-                    <span>Start balance: &nbsp;<p class="inline" th:text="${player.conditions.money}"></p></span>
+                    <span>Start balance: &nbsp;<p class="inline" th:text="${player.conditions.initialBalance}"></p></span>
 
                     <span>&nbsp;&nbsp;Overall quantity: <p class="inline"
-                                                           th:text="${player.conditions.quantity}"></p></span>
+                                                           th:text="${player.conditions.winnableQuantity}"></p></span>
                 </div>
                 <div class="col-sm-4">
                     <h4 class="display-4">History</h4>
