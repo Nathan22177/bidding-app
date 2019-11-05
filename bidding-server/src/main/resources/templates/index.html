@@ -19,16 +19,11 @@
         let name;
         require(['jquery'], function ($) {
             function startPvpGame() {
-                name = window.prompt('Enter your pvp name.');
                 if (name) {
                     window.location.replace('/start_new_game_vs_another_player/' + name);
-                }
-            }
-
-            function joinPvpGame(gameId) {
-                name = window.prompt('Enter your pvp name.');
-                if (name) {
-                    window.location.replace('/'+  +'/' + name);
+                } else {
+                    name = window.prompt('Enter your pvp name.');
+                    window.location.replace('/start_new_game_vs_another_player/' + name);
                 }
             }
 
@@ -38,6 +33,7 @@
 
 
             $(document).ready(function () {
+                name = window.prompt('Enter your name.');
             });
         });
     </script>
@@ -156,18 +152,17 @@
                         <button class="btn join-pvp btn-secondary dropdown-toggle btn-secondary dropdown-toggle"
                                 type="button" style="width: 200px"
                                 id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">join existing game online &nbsp;<i class="fas fa-user"></i>
+                                aria-expanded="false">join pvp game &nbsp;<i class="fas fa-user"></i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <a class="dropdown-item" th:each="game : ${listOfGamesVersusPlayers}"
-                               th:onclick="|joinPvpGame${game.gameId})|"
-                               th:value="${game.gameId}"
-                               th:text="${'(room id: ' + game.gameId + ')' + ' vs. ' + game.opponent}"></a>
+                               th:href="${'join_pvp_game/' + game.gameId + '/' + name}"
+                               th:text="${'(game id: ' + game.gameId + ')' + ' vs. ' + game.opponent}"></a>
                         </div>
                     </div>
                     <p></p>
                     <div>
-                        <button id="newGamePvp" class="btn new-pvp"> new game online
+                        <button id="newGamePvp" class="btn new-pvp"> new pvp game
                             &nbsp;<i class="fa fa-user"></i></button>
                     </div>
                     <p></p>
@@ -189,7 +184,7 @@
                         <button class="btn load-pve btn-secondary dropdown-toggle btn-secondary dropdown-toggle"
                                 type="button" style="width: 200px"
                                 id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">load game &nbsp;<i class="fas fa-robot"></i>
+                                aria-expanded="false">load game vs. bot&nbsp;<i class="fas fa-robot"></i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
                             <a class="dropdown-item" th:each="game : ${listOfGamesVersusBots}"

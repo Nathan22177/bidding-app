@@ -64,7 +64,7 @@
                 if (state.status.isActive) {
                     switch (state.status) {
                         case 'WAITING_FOR_BIDS' :
-                            updateAndEnableInterface(data.state);
+                            updateAndEnableInterface(state);
                             break;
                         case 'WAITING_FOR_BLUE' :
                             if (side.toString() === 'RED')
@@ -75,7 +75,7 @@
                                 disableInterface();
                             break;
                         default:
-                            window.alert('Something went wrong. \n\nYou will now be redirected to the menu. Status:' + data.status);
+                            window.alert('Something went wrong. \n\nYou will now be redirected to the menu. Status:' + state.status);
                             window.location.replace('/');
                             break;
                     }

@@ -60,6 +60,12 @@ public class BiddingController {
         return "redirect:/vs_player/" + gameId + "/" + name;
     }
 
+    @GetMapping("/join_pvp_game/{gameId}/{name}")
+    public String startVersusPlayerGame(Model model,@PathVariable Long gameId, @PathVariable String name) {
+        vsPlayerService.redPlayerJoined(gameId, name);
+        return "redirect:/vs_player/" + gameId + "/" + name;
+    }
+
     @GetMapping("/vs_player/{gameId}/{name}")
     public String loadVersusPlayerGame(Model model, @PathVariable Long gameId, @PathVariable String name) {
         PlayerVersusPlayerGame game = vsPlayerService.loadVersusPlayerGame(gameId);

@@ -48,11 +48,22 @@ public class PlayerVersusPlayerGame extends AbstractGame {
         setStatus(Status.MATCHMAKING);
     }
 
+    /**
+     * Called when second player joins the game.
+     *
+     * @param name name of the {@link #redPlayer} that
+     *             joined the game.
+     */
+    @Transactional
+    public void redPlayerJoined(String name) {
+        this.redPlayer = new BidderPlayer(getConditions(), name, Side.RED);
+        setStatus(Status.WAITING_FOR_BIDS);
+    }
 
     /**
-     * @return  player-controlled participant of the game.
      * @param name name of the player.
-     * */
+     * @return player-controlled participant of the game.
+     */
     @Transactional
     public BidderPlayer getPlayerByName(String name) {
         if (getBluePlayer().getName().equals(name)) {
@@ -68,7 +79,7 @@ public class PlayerVersusPlayerGame extends AbstractGame {
      * Accepts bids from both players.
      *
      * @param bluesBid bid of the {@link #bluePlayer}.
-     * @param redsBid bid of the {@link #redPlayer}.
+     * @param redsBid  bid of the {@link #redPlayer}.
      */
     public void playersPlaceTheirBids(Integer bluesBid, Integer redsBid) {
         resolveBiddingRound(bluesBid, redsBid);

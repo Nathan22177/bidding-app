@@ -37,4 +37,10 @@ public class VersusPlayerService {
     public List<GamesDTO> getPendingGamesVersusPlayers() {
         return versusPlayerRepository.findPendingGames().stream().map(GamesDTO::new).collect(Collectors.toList());
     }
+
+    public void redPlayerJoined(Long gameId, String name) {
+        PlayerVersusPlayerGame game = loadVersusPlayerGame(gameId);
+        game.redPlayerJoined(name);
+        versusPlayerRepository.saveAndFlush(game);
+    }
 }
