@@ -76,6 +76,7 @@ public class PlayerVersusBotGame extends AbstractGame {
         setStatus(Status.WAITING_FOR_BIDS);
     }
 
+    @Override
     public BidderBot getRedPlayer() {
         return this.redPlayer;
     }
