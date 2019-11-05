@@ -25,9 +25,17 @@
                 }
             }
 
-            $("#pvpBtn").click(function () {
+            function joinPvpGame(gameId) {
+                name = window.prompt('Enter your pvp name.');
+                if (name) {
+                    window.location.replace('/'+  +'/' + name);
+                }
+            }
+
+            $("#newGamePvp").click(function () {
                 startPvpGame();
             });
+
 
             $(document).ready(function () {
             });
@@ -62,21 +70,27 @@
             margin-bottom: -500px;
         }
 
-        .pve {
+        .new-pve {
             width: 200px;
             background: #000428;
             background: -webkit-linear-gradient(to right, #000428, #004e92);
             background: linear-gradient(to right, #000428, #004e92);
         }
 
-        .pvp {
+        .join-pvp {
+            background: #009fff;
+            background: -webkit-linear-gradient(to right, #009fff, #ec2f4b);
+            background: linear-gradient(to right, #009fff, #ec2f4b);
+        }
+
+        .new-pvp {
             width: 200px;
             background: #b92b27;
             background: -webkit-linear-gradient(to right, #b92b27, #1565c0);
             background: linear-gradient(to right, #b92b27, #1565c0);
         }
 
-        .load {
+        .load-pve {
             width: 200px;
             background: #2c3e50;
             background: -webkit-linear-gradient(to right, #2c3e50, #4ca1af);
@@ -138,22 +152,32 @@
                 <h2 class="display-4">Play</h2>
                 <div>
                     <p></p>
-                    <div>
-                        <button id="pvpBtn" class="btn pvp"> vs. another player
-                            &nbsp;<i class="fa fa-user"></i></button>
+                    <div th:unless="${listOfGamesVersusPlayers.size() == 0}">
+                        <button class="btn join-pvp btn-secondary dropdown-toggle btn-secondary dropdown-toggle"
+                                type="button" style="width: 200px"
+                                id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">join existing game online &nbsp;<i class="fas fa-user"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <a class="dropdown-item" th:each="game : ${listOfGamesVersusPlayers}"
+                               th:onclick="|joinPvpGame${game.gameId})|"
+                               th:value="${game.gameId}"
+                               th:text="${'(room id: ' + game.gameId + ')' + ' vs. ' + game.opponent}"></a>
+                        </div>
                     </div>
                     <p></p>
                     <div>
-                        <button class="btn pve btn-secondary dropdown-toggle btn-secondary dropdown-toggle"
+                        <button id="newGamePvp" class="btn new-pvp"> new game online
+                            &nbsp;<i class="fa fa-user"></i></button>
+                    </div>
+                    <div>
+                        <button class="btn new-pve btn-secondary dropdown-toggle btn-secondary dropdown-toggle"
                                 type="button" style="width: 200px"
-                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
-                            vs.
-                            one of
-                            the
-                            bots &nbsp;<i class="fas fa-robot"></i>
+                            new game vs. bot &nbsp;<i class="fas fa-robot"></i>
                         </button>
-                        <div class="dropdown-menu" style="width: 200px" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-menu" style="width: 200px" aria-labelledby="dropdownMenuButton2">
                             <a class="dropdown-item" th:each="bot : ${bots}"
                                th:href="${'start_new_game_vs_bot/' + bot.key}"
                                th:text="${bot.value.nickname}"></a>
@@ -161,15 +185,15 @@
                     </div>
                     <p></p>
                     <div th:unless="${listOfGamesVersusBots.size() == 0}">
-                        <button class="btn load btn-secondary dropdown-toggle btn-secondary dropdown-toggle"
+                        <button class="btn load-pve btn-secondary dropdown-toggle btn-secondary dropdown-toggle"
                                 type="button" style="width: 200px"
-                                id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
+                                id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">load game &nbsp;<i class="fas fa-robot"></i>
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
                             <a class="dropdown-item" th:each="game : ${listOfGamesVersusBots}"
                                th:href="${'vs_bot/' + game.gameId}"
-                               th:text="${'(' + game.gameId + ')' + ' vs. ' + game.opponent + ';  rounds left: ' + game.roundsLeft + ';  balance: ' + game.balance + ';  acquired: ' + game.acquired + '.'}"></a>
+                               th:text="${'(game id: ' + game.gameId + ')' + ' vs. ' + game.opponent + ';  rounds left: ' + game.roundsLeft + ';  balance: ' + game.balance + ';  acquired: ' + game.acquired + '.'}"></a>
                         </div>
                     </div>
                 </div>

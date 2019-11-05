@@ -55,7 +55,7 @@ public class BiddingController {
 
     @GetMapping("/start_new_game_vs_another_player/{name}")
     public String startVersusPlayerGame(Model model, @PathVariable String name) {
-        Long gameId = vsPlayerService.getPendingGameOrCreateNewOne(name);
+        Long gameId = vsPlayerService.getNewGameVsPlayer(name);
         model.addAttribute("gameId", gameId);
         return "redirect:/vs_player/" + gameId + "/" + name;
     }
@@ -78,6 +78,8 @@ public class BiddingController {
     public String menu(Model model) {
         model.addAttribute("bots", NewGameUtil.getAvailableBots());
         model.addAttribute("listOfGamesVersusBots", vsBotService.getStartedGamesVersusBots());
+        model.addAttribute("listOfGamesVersusPlayers", vsPlayerService.getPendingGamesVersusPlayers());
+
         return "index";
     }
 }
