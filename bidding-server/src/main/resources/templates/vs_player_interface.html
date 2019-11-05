@@ -26,6 +26,7 @@
         require(['jquery'], function ($) {
             socket.onmessage = function (message) {
                 let data = JSON.parse(message.data)
+                state = data.state;
                 switch (data.type) {
                     case 'PLAYER_JOINED' :
                         startGame(data.state);
@@ -60,9 +61,10 @@
                 $('#waiting').show();
             }
 
-            function updateGameInfo(state) {
-                if (state.active) {
-                    switch (state.status.toString()) {
+            function updateGameInfo(data) {
+                state = $.get('/updateGameState/' + state.gameId + '/' + state.side);
+                if (data.active) {
+                    switch (data.status) {
                         case 'WAITING_FOR_BIDS' :
                             updateAndEnableInterface(state);
                             break;
@@ -75,7 +77,7 @@
                                 disableInterface();
                             break;
                         default:
-                            window.alert('Something went wrong.1231231212 \n\nYou will now be redirected to the menu. Status: ' + state.status);
+                            window.alert('Something went wrong.1231231212 \n\nYou will now be redirected to the menu. Status: ' + data.status);
                             window.location.replace('/');
                             break;
                     }
@@ -144,8 +146,9 @@
             }
 
             function checkIfGameHasEnded(data) {
+                state = data;
                 if (!data.active) {
-                    switch (data.status.toString()) {
+                    switch (data.status) {
                         case 'BLUE_WON':
                             if (side.toString() === 'BLUE')
                                 resolveWin(data);
@@ -175,6 +178,7 @@
             }
 
             function placeBid() {
+
                 let bid = parseInt($("#bid").val(), 10);
                 $("#bid").val(0);
                 let balance = parseInt($("#balance").text(), 10);
@@ -186,16 +190,20 @@
                     window.alert("Bid must be positive number");
                     return;
                 }
-                socket.send(bid);
+                let message = {};
+                message.gameId = state.gameId;
+                message.bid = bid;
+                message.side = state.side;
+                socket.send(message);
             }
 
             $("#bidBtn").click(function () {
-                checkIfGameHasEnded(state);
+                checkIfGameHasEnded($.get('/updateGameState/' + state.gameId + '/' + state.side));
                 placeBid();
             });
 
             $(document).ready(function () {
-                checkIfGameHasEnded(state);
+                checkIfGameHasEnded($.get('/updateGameState/' + state.gameId + '/' + state.side));
                 $("#bid").val(0);
                 $(".mask").inputmask('numeric', {rightAlign: false, min: 0, max: upperLimit});
                 resolveRoundsCountdown(state);
@@ -328,7 +336,7 @@
             <h1 style="text-align: center;" class="display-3">Waiting for another player to join</h1>
         </div>
         <div id="interface" style="display: none">
-            <h1 class="display-3"><p th:id="opponentName"></p></h1>
+            <h1 class="display-3">Playing against: <p th:id="opponentName"></p></h1>
             <p class="lead">Try to win as much QU as possible. But be careful! If you overspend the bot might gain an
                 upper hand on what's left. So don't run out of money!</p>
             <div class="row">

@@ -53,6 +53,12 @@ public class BiddingController {
         return vsBotService.placeBidVersusBot(gameId, bid);
     }
 
+    @GetMapping("/updateGameState/{gameId}/{side}")
+    @ResponseBody
+    public StateDTO updateGameState(@PathVariable Long gameId, @PathVariable String side) {
+        return new StateDTO(vsPlayerService.loadVersusPlayerGame(gameId), Side.valueOf(side));
+    }
+
     @GetMapping("/start_new_game_vs_another_player/{name}")
     public String startVersusPlayerGame(Model model, @PathVariable String name) {
         Long gameId = vsPlayerService.getNewGameVsPlayer(name);
