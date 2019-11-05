@@ -2,7 +2,6 @@
 
 ## Classes to look at:
 * [BidderImpl](src/main/java/com/nathan22177/bidder/BidderImpl.java) - class to instantiate and use for competition.
-* [BiddingStrategy](src/main/java/com/nathan22177/strategies/BiddingStrategy.java) - enum-class that defines the strategy for BidderImpl.java, and a brief description of other strategies used for testing.
 * [NathanStrategy](src/main/java/com/nathan22177/strategies/NathanStrategy.java) - a strategy I came up with.
 
 ## Util classes:

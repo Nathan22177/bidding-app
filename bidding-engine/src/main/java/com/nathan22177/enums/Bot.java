@@ -1,14 +1,16 @@
 package com.nathan22177.enums;
 
-import com.nathan22177.strategies.BiddingStrategy;
-import com.nathan22177.strategies.impl.CopycatStrategy;
-import com.nathan22177.strategies.impl.FairStrategy;
-import com.nathan22177.strategies.impl.LehaSVV2009Strategy;
-import com.nathan22177.strategies.impl.NathanStrategy;
-import com.nathan22177.strategies.impl.PyramidPlayerStrategy;
-import com.nathan22177.strategies.impl.RisingStrategy;
-import com.nathan22177.strategies.impl.SafeStrategy;
-import com.nathan22177.strategies.impl.WinnerIncrementStrategy;
+import java.util.function.Function;
+
+import com.nathan22177.bidder.BidderBot;
+import com.nathan22177.bidder.strategies.CopycatStrategy;
+import com.nathan22177.bidder.strategies.FairStrategy;
+import com.nathan22177.bidder.strategies.LehaSVV2009Strategy;
+import com.nathan22177.bidder.strategies.NathanStrategy;
+import com.nathan22177.bidder.strategies.PyramidPlayerStrategy;
+import com.nathan22177.bidder.strategies.RisingStrategy;
+import com.nathan22177.bidder.strategies.SafeStrategy;
+import com.nathan22177.bidder.strategies.WinnerIncrementStrategy;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,44 +33,44 @@ public enum Bot {
     /**
      * Bids it's opponent's last bid plus one if has advantage, else skips round.
      * */
-    COPYCAT_BOT("Copycaster", new CopycatStrategy()),
+    COPYCAT_BOT("Copycaster", CopycatStrategy::getBiddingAmount),
 
     /**
      * Always bids mean price of 2 QU's.
      * */
-    FAIR_BOT("Lawful_Goodman", new FairStrategy()),
+    FAIR_BOT("Lawful_Goodman", FairStrategy::getBiddingAmount),
 
     /**
      * lehaSVV2009s AwesomeBidder strategy refactored and appropriated.
      * Comments remain true to the source.
      * */
-    LEHASVV2009_BOT("LehaSVV2009", new LehaSVV2009Strategy()),
+    LEHASVV2009_BOT("LehaSVV2009", LehaSVV2009Strategy::getBiddingAmount),
 
     /**
      * My own strategy.
      * */
-    NATHAN22177_BOT("Nathan22177", new NathanStrategy()),
+    NATHAN22177_BOT("Nathan22177", NathanStrategy::getBiddingAmount),
 
     /**
      * PyramidPlayers AdvancedBidder strategy refactored and appropriated.
      * Comments remain true to the source.
      * */
-    PYRAMID_PLAYER_BOT("Pyramid_Player", new PyramidPlayerStrategy()),
+    PYRAMID_PLAYER_BOT("Pyramid_Player", PyramidPlayerStrategy::getBiddingAmount),
 
     /**
      * Gradually raises bid so that would go with empty balance at the end.
      * */
-    RISING_BOT("Riser", new RisingStrategy()),
+    RISING_BOT("Riser", RisingStrategy::getBiddingAmount),
 
     /**
      * Waits for an advantage then bids median plus 2.
      * */
-    SAFE_BOT("The Calm One", new SafeStrategy()),
+    SAFE_BOT("The Calm One", SafeStrategy::getBiddingAmount),
 
     /**
      * Waits for an advantage then bids last winning bid plus one;
      * */
-    WIN_INC_BOT("Chad", new WinnerIncrementStrategy());
+    WIN_INC_BOT("Chad", WinnerIncrementStrategy::getBiddingAmount);
 
     /**
      * Humanised name to show to the player
@@ -79,5 +81,5 @@ public enum Bot {
     /**
      * Defines how bot evaluates how much to bid.
      */
-    private final BiddingStrategy strategy;
+    private final Function<BidderBot, Integer> strategy;
 }

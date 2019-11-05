@@ -1,16 +1,14 @@
-package com.nathan22177.strategies.impl;
+package com.nathan22177.bidder.strategies;
 
 import com.nathan22177.bidder.BidderBot;
-import com.nathan22177.strategies.BiddingStrategy;
 import com.nathan22177.util.StrategyUtil;
 
 /**
  * My own strategy.
  * */
-public class NathanStrategy implements BiddingStrategy {
+public class NathanStrategy {
 
-    @Override
-    public int getBiddingAmount(BidderBot bidder) {
+    public static int getBiddingAmount(BidderBot bidder) {
 
         /*
           We will always safely bet 2 until opponent runs out of money.
@@ -101,4 +99,5 @@ public class NathanStrategy implements BiddingStrategy {
 
         return defaultBid;
     }
+
 }

@@ -1,7 +1,6 @@
-package com.nathan22177.strategies.impl;
+package com.nathan22177.bidder.strategies;
 
 import com.nathan22177.bidder.BidderBot;
-import com.nathan22177.strategies.BiddingStrategy;
 import com.nathan22177.util.StrategyUtil;
 
 
@@ -9,10 +8,9 @@ import com.nathan22177.util.StrategyUtil;
  * lehaSVV2009s AwesomeBidder strategy refactored and appropriated.
  * Comments remain true to the source.
  * */
-public class LehaSVV2009Strategy implements BiddingStrategy {
+public class LehaSVV2009Strategy {
 
-    @Override
-    public int getBiddingAmount(BidderBot bidder) {
+    public static int getBiddingAmount(BidderBot bidder) {
         int bid = calculateBiddingAmount(bidder);
         return bid >= 0 && bid <= bidder.getBalance()
                 ? bid

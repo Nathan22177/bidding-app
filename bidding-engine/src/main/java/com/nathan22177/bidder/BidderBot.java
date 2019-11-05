@@ -42,7 +42,7 @@ public class BidderBot extends AbstractBidder {
      *
      * @param conditions initial {@link #balance} and amount
      *                   of winnable QUs.
-     * @param bot        defines {@link com.nathan22177.strategies.BiddingStrategy}
+     * @param bot        defines how bot evaluates how much to bid
      *                   and {@link BidderBot#name}.
      * @return new instance of {@link BidderBot}.
      */
@@ -59,10 +59,10 @@ public class BidderBot extends AbstractBidder {
     /**
      * Method for getting bot's ext bid.
      *
-     * @return next bif of a bot according to it's {@link com.nathan22177.strategies.BiddingStrategy}.
+     * @return next bif of a bot according to it's strategy.
      */
     public int getNextBid() {
-        return this.bot.getStrategy().getBiddingAmount(this);
+        return this.bot.getStrategy().apply(this);
     }
 
     /**

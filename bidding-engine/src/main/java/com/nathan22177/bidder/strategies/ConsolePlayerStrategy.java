@@ -1,18 +1,16 @@
-package com.nathan22177.strategies.impl;
+package com.nathan22177.bidder.strategies;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import com.nathan22177.bidder.BidderBot;
-import com.nathan22177.strategies.BiddingStrategy;
 
 /**
  * For manual testing trough terminal.
  * */
-public class ConsolePlayerStrategy implements BiddingStrategy {
+public class ConsolePlayerStrategy {
 
-    @Override
-    public int getBiddingAmount(BidderBot bidder) {
+    public static int getBiddingAmount(BidderBot bidder) {
         System.out.println("Current balance: " + bidder.getBalance());
         System.out.println("Acquired QU: " + bidder.getAcquiredAmount());
         System.out.println("Please enter the amount of MU you would liker to place" + "\n");
