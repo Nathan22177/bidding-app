@@ -62,7 +62,6 @@
             }
 
             function updateGameInfo(data) {
-                state = $.get('/updateGameState/' + state.gameId + '/' + state.side);
                 if (data.active) {
                     switch (data.status) {
                         case 'WAITING_FOR_BIDS' :

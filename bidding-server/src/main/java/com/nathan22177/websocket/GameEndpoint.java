@@ -54,8 +54,10 @@ public class GameEndpoint {
         GameSession newGameSession = new GameSession(gameId, session, name, player.getSide());
         if (player.getSide() == Side.BLUE) {
             broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.WAITING_FOR_OPPONENT));
-        } else {
+        } else if  (player.getSide() == Side.RED){
             broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.PLAYER_JOINED, new StateDTO(game, player.getSide())));
+        } else {
+            throw new IllegalArgumentException("A player has joined and does not have a side.");
         }
         gameSessions.add(newGameSession);
     }

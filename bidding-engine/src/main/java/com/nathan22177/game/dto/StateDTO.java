@@ -81,6 +81,11 @@ public class StateDTO {
     private boolean active;
 
     /**
+     * Addressee's side in the game.
+     */
+    private Side side;
+
+    /**
      * Constructor that we use to pass a state to the client.
      *
      * @param game current game.
@@ -107,6 +112,7 @@ public class StateDTO {
      * @param game current game.
      */
     public StateDTO(PlayerVersusPlayerGame game, Side side) {
+        this.side = side;
         BidderPlayer player = side == Side.BLUE
                 ? game.getBluePlayer()
                 : game.getRedPlayer();
