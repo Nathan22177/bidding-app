@@ -25,7 +25,7 @@
 
         require(['jquery'], function ($) {
             socket.onmessage = function (message) {
-                let data = JSON.parse(message.data)
+                let data = JSON.parse(message.data);
                 state = data.state;
                 switch (data.type) {
                     case 'PLAYER_JOINED' :
@@ -197,12 +197,12 @@
             }
 
             $("#bidBtn").click(function () {
-                checkIfGameHasEnded($.get('/updateGameState/' + state.gameId + '/' + state.side));
+                checkIfGameHasEnded($.get('/updateGameState/' + state.gameId + '/' + side));
                 placeBid();
             });
 
             $(document).ready(function () {
-                checkIfGameHasEnded($.get('/updateGameState/' + state.gameId + '/' + state.side));
+                checkIfGameHasEnded($.get('/updateGameState/' + state.gameId + '/' + side));
                 $("#bid").val(0);
                 $(".mask").inputmask('numeric', {rightAlign: false, min: 0, max: upperLimit});
                 resolveRoundsCountdown(state);
