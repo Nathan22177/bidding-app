@@ -13,9 +13,7 @@ import com.nathan22177.game.dto.GamesDTO;
 import com.nathan22177.game.dto.StateDTO;
 import com.nathan22177.repositories.VersusBotRepository;
 import com.nathan22177.repositories.VersusPlayerRepository;
-import com.nathan22177.util.NewGameUtil;
-
-import lombok.extern.slf4j.Slf4j;
+import com.nathan22177.game.resolvers.NewGameResolver;
 
 @Service
 @Transactional
@@ -30,7 +28,7 @@ public class VersusBotService {
     }
 
     public Long createNewGameAgainstTheBot(Bot bot) {
-        PlayerVersusBotGame game = NewGameUtil.createNewGameAgainstTheBot(bot);
+        PlayerVersusBotGame game = NewGameResolver.createNewGameAgainstTheBot(bot);
         versusBotRepository.saveAndFlush(game);
         return game.getId();
     }

@@ -13,7 +13,10 @@ import com.nathan22177.bidder.BidderBot;
 import com.nathan22177.collections.BiddingRound;
 
 /**
- * Class with methods to use while implementing the strategy.
+ *  Helps formulate a strategy to evaluate bidding amount.
+ *
+ * @author Valery Kokorev
+ * @author https://github.com/Nathan22177
  */
 public class StrategyUtil {
 
@@ -149,10 +152,6 @@ public class StrategyUtil {
         return bidder.getBiddingHistory() == null  || bidder.getBiddingHistory().size() == 0
                 ? bidder.getConditions().getWinnableQuantity() / 2
                 : (bidder.getConditions().getWinnableQuantity() / 2) - bidder.getBiddingHistory().size();
-    }
-
-    public static int getRoundsToWin(BidderBot bidder) {
-        return (bidder.getConditions().getWinnableQuantity() / 4) + 1;
     }
 
     /**

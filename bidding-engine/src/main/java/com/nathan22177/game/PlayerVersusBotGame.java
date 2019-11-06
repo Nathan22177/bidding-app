@@ -11,7 +11,7 @@ import com.nathan22177.collections.Conditions;
 import com.nathan22177.enums.Bot;
 import com.nathan22177.enums.Side;
 import com.nathan22177.enums.Status;
-import com.nathan22177.util.EndGameUtil;
+import com.nathan22177.game.resolvers.EndGameResolver;
 
 import lombok.Setter;
 
@@ -57,9 +57,17 @@ public class PlayerVersusBotGame extends AbstractGame {
     public void playerPlacesBidVersusBot(Integer bluesBid) {
         int redsBid = getRedPlayer().getNextBid();
         resolveBiddingRound(bluesBid, redsBid);
-        if (EndGameUtil.theGameHasEnded(this)) {
-            EndGameUtil.resolveGamesEnd(this);
+        if (theGameHasEnded()) {
+            EndGameResolver.resolveGamesEnd(this);
         }
+    }
+
+    /**
+     * Checks if all pf the QUs were won.
+     */
+    private boolean theGameHasEnded() {
+        return getRedPlayer().getAcquiredAmount() + getBluePlayer().getAcquiredAmount()
+                == getConditions().getWinnableQuantity();
     }
 
     /**

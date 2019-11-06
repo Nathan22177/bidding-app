@@ -13,7 +13,7 @@ import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.game.dto.StateDTO;
 import com.nathan22177.services.VersusBotService;
 import com.nathan22177.services.VersusPlayerService;
-import com.nathan22177.util.NewGameUtil;
+import com.nathan22177.game.resolvers.NewGameResolver;
 
 @Controller
 public class BiddingController {
@@ -29,7 +29,7 @@ public class BiddingController {
     @GetMapping("/start_new_game_vs_bot/{bot}")
     public String startVersusBotGame(Model model, @PathVariable String bot) {
         if (bot.contains("RANDOM")) {
-            bot = NewGameUtil.getRandomBot();
+            bot = NewGameResolver.getRandomBot();
         }
         Long gameId = vsBotService.createNewGameAgainstTheBot(Bot.valueOf(bot));
         model.addAttribute("gameId", gameId);
@@ -88,7 +88,7 @@ public class BiddingController {
 
     @GetMapping("/")
     public String menu(Model model) {
-        model.addAttribute("bots", NewGameUtil.getAvailableBots());
+        model.addAttribute("bots", NewGameResolver.getAvailableBots());
         model.addAttribute("listOfGamesVersusBots", vsBotService.getStartedGamesVersusBots());
         model.addAttribute("listOfGamesVersusPlayers", vsPlayerService.getPendingGamesVersusPlayers());
 

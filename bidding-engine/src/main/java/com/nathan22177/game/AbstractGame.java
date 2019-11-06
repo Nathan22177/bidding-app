@@ -55,6 +55,8 @@ public abstract class AbstractGame {
     @Embedded
     Conditions conditions;
 
+
+
     /**
      * Player or bot-controlled participant should be accessible for every game.
      */

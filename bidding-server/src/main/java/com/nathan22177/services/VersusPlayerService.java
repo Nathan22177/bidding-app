@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.game.dto.GamesDTO;
 import com.nathan22177.repositories.VersusPlayerRepository;
-import com.nathan22177.util.NewGameUtil;
+import com.nathan22177.game.resolvers.NewGameResolver;
 
 @Service
 @Transactional
@@ -24,7 +24,7 @@ public class VersusPlayerService {
     }
 
     public Long getNewGameVsPlayer(String name) {
-        PlayerVersusPlayerGame game = NewGameUtil.createNewGameAgainstThePlayer(name);
+        PlayerVersusPlayerGame game = NewGameResolver.createNewGameAgainstThePlayer(name);
         versusPlayerRepository.saveAndFlush(game);
         return game.getId();
     }

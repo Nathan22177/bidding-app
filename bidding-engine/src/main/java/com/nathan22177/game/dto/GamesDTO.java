@@ -41,7 +41,7 @@ public class GamesDTO {
     private String status;
 
     /**
-     * Constructor that we use to make a list of available games.
+     * Constructor that we use to make a list of joinable {@link PlayerVersusBotGame}.
      *
      * @param game current game.
      */
@@ -54,6 +54,11 @@ public class GamesDTO {
         this.status = game.getStatus().toString();
     }
 
+    /**
+     * Constructor that we use to make a list of joinable {@link PlayerVersusPlayerGame}.
+     *
+     * @param game current game.
+     */
     public GamesDTO(PlayerVersusPlayerGame game) {
         this.gameId = game.getId();
         this.opponent = game.getBluePlayer().getName();
