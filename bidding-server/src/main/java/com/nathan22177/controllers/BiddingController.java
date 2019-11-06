@@ -11,9 +11,9 @@ import com.nathan22177.enums.Side;
 import com.nathan22177.game.PlayerVersusBotGame;
 import com.nathan22177.game.PlayerVersusPlayerGame;
 import com.nathan22177.game.dto.StateDTO;
+import com.nathan22177.game.resolvers.NewGameResolver;
 import com.nathan22177.services.VersusBotService;
 import com.nathan22177.services.VersusPlayerService;
-import com.nathan22177.game.resolvers.NewGameResolver;
 
 @Controller
 public class BiddingController {
@@ -67,7 +67,7 @@ public class BiddingController {
     }
 
     @GetMapping("/join_pvp_game/{gameId}/{name}")
-    public String startVersusPlayerGame(Model model,@PathVariable Long gameId, @PathVariable String name) {
+    public String startVersusPlayerGame(Model model, @PathVariable Long gameId, @PathVariable String name) {
         vsPlayerService.redPlayerJoined(gameId, name);
         return "redirect:/vs_player/" + gameId + "/" + name;
     }
@@ -91,7 +91,6 @@ public class BiddingController {
         model.addAttribute("bots", NewGameResolver.getAvailableBots());
         model.addAttribute("listOfGamesVersusBots", vsBotService.getStartedGamesVersusBots());
         model.addAttribute("listOfGamesVersusPlayers", vsPlayerService.getPendingGamesVersusPlayers());
-
         return "index";
     }
 }
