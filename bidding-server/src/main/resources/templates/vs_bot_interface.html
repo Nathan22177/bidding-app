@@ -18,7 +18,10 @@
     <script type='text/javascript'
             src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
     <script type="text/javascript" th:inline="javascript">
-        let upperLimit = [[${blue.balance}]];
+        let upperLimit = [[${player.balance}]];
+        let state = [[${state}]];
+        let winnableQU = [[${blue.conditions.winnableQuantity}]];
+        let path = '/vs_player/' + [[${gameId}]] + '/';
     </script>
     <script th:src="@{/js/pve.js}"></script>
 

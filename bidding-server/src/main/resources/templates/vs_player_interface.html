@@ -21,6 +21,8 @@
         let upperLimit = [[${player.balance}]];
         let state = [[${state}]];
         let side = [[${side}]];
+        let winnableQU = [[${player.conditions.winnableQuantity}]];
+        let path = '/vs_player/' + [[${gameId}]] + '/';
     </script>
     <script th:src="@{/js/pvp.js}"></script>
     <style>

@@ -15,7 +15,7 @@ require(['jquery'], function ($) {
                 case 'BLUE_WON':
                     window.alert('VICTORY! \n' +
                         '\nAcquired ' + data.acquiredAmount +
-                        'QUs out of ' + [[${blue.conditions.winnableQuantity}]] + '\n' +
+                        'QUs out of ' + winnableQU + '\n' +
                         'Money left: ' + data.balance + '\n' +
                         '\nOpponent lost with ' + data.opponentAcquiredAmount + ' QUs and ' +
                         data.opponentBalance + ' money.' +
@@ -25,7 +25,7 @@ require(['jquery'], function ($) {
                 case 'RED_WON':
                     window.alert('DEFEAT! \n' +
                         '\nAcquired ' + data.acquiredAmount +
-                        'QUs out of ' + [[${blue.conditions.winnableQuantity}]] + '\n' +
+                        'QUs out of ' + winnableQU + '\n' +
                         'Money left: ' + data.balance + '\n' +
                         '\nOpponent won with ' + data.opponentAcquiredAmount + ' QUs and ' +
                         data.opponentBalance + ' money.' +
@@ -35,7 +35,7 @@ require(['jquery'], function ($) {
                 case 'DRAW':
                     window.alert('DRAW! \n' +
                         '\nBoth acquired ' + data.acquiredAmount +
-                        'QUs out of ' + [[${blue.conditions.winnableQuantity}]] + '\n' +
+                        'QUs out of ' + winnableQU + '\n' +
                         'Both left with ' + data.balnce + ' of money.' +
                         '\nYou will now be redirected to the menu.');
                     window.location.replace('/');
@@ -65,7 +65,7 @@ require(['jquery'], function ($) {
             $("#bid").val(0);
             return;
         }
-        let mapping = '/vs_bot/' + [[${gameId}]] + '/' + bid;
+        let mapping = path + bid;
         $.get(mapping, function (data) {
             if (data) {
                 $("#balance").text(data.balance);
@@ -84,12 +84,11 @@ require(['jquery'], function ($) {
     }
 
     $("#bidBtn").click(function () {
-        checkIfGameHasEnded([[${state}]]);
+        checkIfGameHasEnded(state);
         placeBid();
     });
 
     $(document).ready(function () {
-        let state = [[${state}]];
         checkIfGameHasEnded(state);
         $("#bid").val(0);
         $(".mask").inputmask('numeric', {rightAlign: false, min: 0, max: upperLimit});

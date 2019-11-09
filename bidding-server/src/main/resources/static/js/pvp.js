@@ -93,7 +93,7 @@ require(['jquery'], function ($) {
     function resolveWin(data) {
         window.alert('VICTORY! \n' +
             '\nAcquired ' + data.acquiredAmount +
-            'QUs out of ' + [[${player.conditions.winnableQuantity}]] + '\n' +
+            'QUs out of ' + winnableQU + '\n' +
             'Money left: ' + data.balance + '\n' +
             '\nOpponent lost with ' + data.opponentAcquiredAmount + ' QUs and ' +
             data.opponentBalance + ' money.' +
@@ -104,7 +104,7 @@ require(['jquery'], function ($) {
     function resolveDefeat(data) {
         window.alert('DEFEAT! \n' +
             '\nAcquired ' + data.acquiredAmount +
-            'QUs out of ' + [[${player.conditions.winnableQuantity}]] + '\n' +
+            'QUs out of ' + winnableQU + '\n' +
             'Money left: ' + data.balance + '\n' +
             '\nOpponent won with ' + data.opponentAcquiredAmount + ' QUs and ' +
             data.opponentBalance + ' money.' +
@@ -115,7 +115,7 @@ require(['jquery'], function ($) {
     function resolveDraw() {
         window.alert('DRAW! \n' +
             '\nBoth acquired ' + data.acquiredAmount +
-            'QUs out of ' + [[${player.conditions.winnableQuantity}]] + '\n' +
+            'QUs out of ' + winnableQU + '\n' +
             'Both left with ' + data.balnce + ' of money.' +
             '\nYou will now be redirected to the menu.');
         window.location.replace('/');
