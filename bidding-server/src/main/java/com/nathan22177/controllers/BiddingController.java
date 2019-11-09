@@ -26,7 +26,7 @@ public class BiddingController {
         this.vsPlayerService = vsPlayerService;
     }
 
-    @GetMapping("/start_new_game_vs_bot/{bot}")
+    @GetMapping(value = "/start_new_game_vs_bot/{bot}")
     public String startVersusBotGame(Model model, @PathVariable String bot) {
         if (bot.contains("RANDOM")) {
             bot = NewGameResolver.getRandomBot();
@@ -36,7 +36,7 @@ public class BiddingController {
         return "redirect:/vs_bot/" + gameId;
     }
 
-    @GetMapping("/vs_bot/{gameId}")
+    @GetMapping(value = "/vs_bot/{gameId}")
     public String loadVersusBotGame(Model model, @PathVariable Long gameId) {
         PlayerVersusBotGame game = vsBotService.loadVersusBotGame(gameId);
         model.addAttribute("red", game.getRedPlayer());
@@ -47,32 +47,32 @@ public class BiddingController {
         return "vs_bot_interface";
     }
 
-    @GetMapping("/vs_bot/{gameId}/{bid}")
+    @GetMapping(value = "/vs_bot/{gameId}/{bid}")
     @ResponseBody
     public StateDTO placeBidVersusBot(@PathVariable Long gameId, @PathVariable Integer bid) {
         return vsBotService.placeBidVersusBot(gameId, bid);
     }
 
-    @GetMapping("/updateGameState/{gameId}/{side}")
+    @GetMapping(value = "/updateGameState/{gameId}/{side}")
     @ResponseBody
     public StateDTO updateGameState(@PathVariable Long gameId, @PathVariable String side) {
         return new StateDTO(vsPlayerService.loadVersusPlayerGame(gameId), Side.valueOf(side));
     }
 
-    @GetMapping("/start_new_game_vs_another_player/{name}")
+    @GetMapping(value = "/start_new_game_vs_another_player/{name}")
     public String startVersusPlayerGame(Model model, @PathVariable String name) {
         Long gameId = vsPlayerService.getNewGameVsPlayer(name);
         model.addAttribute("gameId", gameId);
         return "redirect:/vs_player/" + gameId + "/" + name;
     }
 
-    @GetMapping("/join_pvp_game/{gameId}/{name}")
+    @GetMapping(value = "/join_pvp_game/{gameId}/{name}")
     public String startVersusPlayerGame(Model model, @PathVariable Long gameId, @PathVariable String name) {
         vsPlayerService.redPlayerJoined(gameId, name);
         return "redirect:/vs_player/" + gameId + "/" + name;
     }
 
-    @GetMapping("/vs_player/{gameId}/{name}")
+    @GetMapping(value = "/vs_player/{gameId}/{name}")
     public String loadVersusPlayerGame(Model model, @PathVariable Long gameId, @PathVariable String name) {
         PlayerVersusPlayerGame game = vsPlayerService.loadVersusPlayerGame(gameId);
         Side side = game.getBluePlayer().getName().equals(name) ? Side.BLUE : Side.RED;
@@ -86,7 +86,7 @@ public class BiddingController {
         return "vs_player_interface";
     }
 
-    @GetMapping("/")
+    @GetMapping(value = "/")
     public String menu(Model model) {
         model.addAttribute("bots", NewGameResolver.getAvailableBots());
         model.addAttribute("listOfGamesVersusBots", vsBotService.getStartedGamesVersusBots());

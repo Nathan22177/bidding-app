@@ -1,6 +1,3 @@
-let upperLimit = [[${player.balance}]];
-let state = [[${state}]];
-let side = [[${side}]];
 socket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/pvp/" + state.gameId + "/" + state.ownName);
 
 require(['jquery'], function ($) {

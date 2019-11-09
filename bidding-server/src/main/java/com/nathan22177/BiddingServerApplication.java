@@ -11,9 +11,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 @EnableJpaRepositories("com.nathan22177.repositories")
 @EnableWebSocket
 public class BiddingServerApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(BiddingServerApplication.class, args);
 	}
-
 }

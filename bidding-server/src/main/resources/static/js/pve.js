@@ -1,5 +1,3 @@
-let upperLimit = [[${blue.balance}]];
-
 require(['jquery'], function ($) {
     function resolveRoundsCountdown(data) {
         let color;

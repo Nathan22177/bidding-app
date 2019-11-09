@@ -26,9 +26,12 @@ public class ThymeleafConfig {
 
     @Bean
     public ThymeleafViewResolver viewResolver() {
+        String[] excludedViews = new String[]{
+                "/resources/static/*"};
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
         viewResolver.setTemplateEngine(templateEngine());
         viewResolver.setOrder(1);
+        viewResolver.setExcludedViewNames(excludedViews);
         return viewResolver;
     }
 }

@@ -52,14 +52,14 @@ public class GameEndpoint {
         PlayerVersusPlayerGame game = vsPlayerService.loadVersusPlayerGame(gameId);
         BidderPlayer player = game.getPlayerByName(name);
         GameSession newGameSession = new GameSession(gameId, session, name, player.getSide());
+        gameSessions.add(newGameSession);
         if (player.getSide() == Side.BLUE) {
             broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.WAITING_FOR_OPPONENT));
-        } else if  (player.getSide() == Side.RED){
+        } else if (player.getSide() == Side.RED) {
             broadcastStatusChange(new OutgoingMessage(newGameSession.getGameId(), MessageType.PLAYER_JOINED, new StateDTO(game, player.getSide())));
         } else {
             throw new IllegalArgumentException("A player has joined and does not have a side.");
         }
-        gameSessions.add(newGameSession);
     }
 
     @OnMessage
@@ -98,7 +98,6 @@ public class GameEndpoint {
                         e.printStackTrace();
                     }
                 });
-
     }
 
     private void broadcastBids(IncomingMessage blueBid, IncomingMessage redBid) {
